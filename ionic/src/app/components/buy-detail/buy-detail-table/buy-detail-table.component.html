@@ -1,0 +1,132 @@
+<div class="float-xl-right form-group">
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text">
+        <mdb-icon fas icon="search"></mdb-icon>
+      </span>
+    </div>
+    <input type="search" class="form-control" id="search" name="search" [(ngModel)]="buydetail.search"
+      placeholder="Buscar detalles de compra" (change)="method_searchBuyDetails()">
+    <div class="input-group-append">
+      <button mdbBtn type="button" size="md" color="primary" class="m-0 waves-light" mdbWavesEffect
+        (click)="searchAdvancedBuyDetails.toggle()">
+        <mdb-icon fas icon="search-plus"></mdb-icon>
+        <span class="d-none d-xl-inline"> Búsqueda de detalles de compra</span>
+      </button>
+    </div>
+  </div>
+  <div class="" mdbCollapse #searchAdvancedBuyDetails="bs-collapse">
+    <mdb-card>
+      <mdb-card-body>
+        <form class="form-xl-inline" (ngSubmit)="method_searchAdvancedBuyDetails()">
+          <div class="md-form md-outline">
+            <input mdbInput type="number" class="form-control" id="limit" name="limit" [(ngModel)]="buydetail.limit">
+            <label for="limit">Registros</label>
+          </div>
+          <div class="md-form md-outline">
+            <input mdbInput type="number" class="form-control" id="cost" name="cost" [(ngModel)]="buydetail.cost">
+            <label for="cost">Costo</label>
+          </div>
+          <div class="md-form md-outline">
+            <input mdbInput type="number" class="form-control" id="quantity" name="quantity"
+              [(ngModel)]="buydetail.quantity">
+            <label for="quantity">Cantidad</label>
+          </div>
+          <div class="md-form md-outline">
+            <input mdbInput type="number" class="form-control" id="density" name="density"
+              [(ngModel)]="buydetail.density">
+            <label for="density">Densidad</label>
+          </div>
+          <div class="md-form md-outline">
+            <input mdbInput type="number" class="form-control" id="conversion" name="conversion"
+              [(ngModel)]="buydetail.conversion">
+            <label for="conversion">Conversion</label>
+          </div>
+          <div class="md-form md-outline">
+            <input mdbInput type="number" class="form-control" id="amount" name="amount" [(ngModel)]="buydetail.amount">
+            <label for="amount">Monto</label>
+          </div>
+          <button mdbBtn type="submit" size="md" color="primary" class="mt-0 waves-light text-nowrap float-right"
+            mdbWavesEffect [disabled]="isLoading">
+            <mdb-icon fas icon="search"></mdb-icon>
+            <span> Buscar</span>
+            <span class="spinner-border spinner-border-sm" role="status" *ngIf="isLoading">
+              <span class="sr-only">Cargando...</span>
+            </span>
+          </button>
+        </form>
+      </mdb-card-body>
+    </mdb-card>
+  </div>
+</div>
+<div class="table-responsive">
+  <table mdbTable striped="true" hover="true" #tableEl="mdbTable" id="tableSortExample">
+    <thead>
+      <tr>
+        <th class="text-nowrap" *ngFor="let head of heads; let i = index" aria-controls="tableSortExample"
+          [mdbTableSort]="buyDetails" [sortBy]="headsSort[i]">
+          <span>{{ head }} </span>
+          <mdb-icon fas icon="sort"></mdb-icon>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr mdbTableCol *ngFor="let element of buyDetails; let i = index">
+        <td *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+        </td>
+        <td class="text-nowrap" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+          {{ element.name }}
+        </td>
+        <td class="text-nowrap text-right" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+          {{ element.cost | currency }} MXN
+        </td>
+        <td class="text-nowrap text-right text-success" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+          {{ element.quantity | number }} {{ element.unit }}
+        </td>
+        <td class="text-nowrap text-right text-success" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+          {{ element.density | number }} Volumen
+        </td>
+        <td class="text-nowrap text-right text-success" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+          {{ element.conversion | number }} {{ element.unit }}/Volumen
+        </td>
+        <td class="text-nowrap text-right text-danger" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+          {{ element.amount | currency }} MXN
+        </td>
+        <td class="text-nowrap" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+          {{ element.created_at | date:'d/M/yy h:mm a' }}
+        </td>
+        <td class="text-nowrap" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+          {{ element.updated_at | date:'d/M/yy h:mm a' }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<mdb-table-pagination [tableEl]="tableEl" [searchDataSource]="buyDetails"></mdb-table-pagination>

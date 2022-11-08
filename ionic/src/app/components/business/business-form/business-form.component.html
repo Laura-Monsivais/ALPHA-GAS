@@ -1,0 +1,68 @@
+<div *ngIf="rol.key === 'Super' || rol.key === 'Director'">
+  <div class="md-form form-group">
+    <input mdbInput mdbValidate type="text" [id]="'name'+business.id" class="form-control" [name]="'name'+business.id" [(ngModel)]="business.name"
+      #nameValidation="ngModel" required />
+    <label class="font-weight-bold" [for]="'name'+business.id">Nombre:</label>
+    <mdb-error *ngIf="
+        nameValidation.invalid &&
+        (nameValidation.dirty || nameValidation.touched)
+      ">Campo requerido</mdb-error>
+    <mdb-success *ngIf="
+        nameValidation.valid &&
+        (nameValidation.dirty || nameValidation.touched)
+      "></mdb-success>
+  </div>
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'enterpriseId'+business.id">Empresa:</label>
+        <select class="browser-default custom-select"
+          [id]="'enterpriseId'+business.id"
+          [name]="'enterpriseId'+business.id"
+          [(ngModel)]="business.enterprise_id"
+          #enterpriseIdValidation="ngModel"
+          required
+          [disabled]="rol.key === 'Director'"
+        >
+          <option [ngValue]="0" [selected]="business.enterprise_id == 0">Selecciona una empresa</option>
+          <option *ngFor="let element of enterprises" [ngValue]="element.id" [selected]="business.enterprise_id == element.id">
+            {{ element.name }}
+          </option>
+        </select>
+        <mdb-error *ngIf="
+            enterpriseIdValidation.invalid &&
+            (enterpriseIdValidation.dirty || enterpriseIdValidation.touched)
+          ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+            enterpriseIdValidation.valid &&
+            (enterpriseIdValidation.dirty || enterpriseIdValidation.touched)
+          "></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'attentionId'+business.id">Atención:</label>
+        <select class="browser-default custom-select"
+          [id]="'attentionId'+business.id"
+          [name]="'attentionId'+business.id"
+          [(ngModel)]="business.attention_id"
+          #attentionIdValidation="ngModel"
+          required
+        >
+          <option [ngValue]="0" [selected]="business.attention_id == 0">Selecciona una atención</option>
+          <option *ngFor="let element of attentions" [ngValue]="element.id" [selected]="business.attention_id == element.id">
+            {{ element.name }}
+          </option>
+        </select>
+        <mdb-error *ngIf="
+            attentionIdValidation.invalid &&
+            (attentionIdValidation.dirty || attentionIdValidation.touched)
+          ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+            attentionIdValidation.valid &&
+            (attentionIdValidation.dirty || attentionIdValidation.touched)
+          "></mdb-success>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,121 @@
+<div *ngIf="rol.key !== 'Client'">
+  <!-- Actions General -->
+  <div class="form-group mb-0 input-group"> 
+    <div class="input-group-prepend">
+      <span class="input-group-text">
+        <mdb-icon fas icon="search"></mdb-icon>
+      </span>
+    </div>
+    <input 
+      mdbInput
+      type="search" 
+      class="form-control"
+      [id]="'searchServices'" 
+      [name]="'searchServices'" 
+      [(ngModel)]="service.search" 
+      placeholder="Buscar servicios" 
+      (change)="method_searchAdvancedServices()"/>    
+    <!--@todo Falta búsqueda avanzada-->
+  </div> 
+  <!-- List -->
+  <div class="list-group">
+    <div class="list-group-item" *ngFor="let element of services; let i = index">
+      <div class="d-flex w-100 justify-content-between">
+        <app-service-info [onlyIcon]="true" [service]="element"></app-service-info>
+      </div>
+      <div class="row">
+        <div class="col-xl-12">
+          <div *ngIf="addBy !== 'quantity'">
+            <span class="d-block d-lg-inline">Cantidad: </span>
+            <span>{{ element.quantity | number }}</span>
+          </div>
+          <div class="form-group mb-0 row" *ngIf="addBy === 'quantity'">
+            <label [for]="'quantity' + element.id" class="col-sm-3 col-form-label">Cantidad:</label>   
+            <div class="input-group col-sm-9">
+              <input 
+                mdbInput 
+                type="number" 
+                class="form-control"
+                [id]="'quantity' + element.id" 
+                [name]="'quantity' + element.id"          
+                [(ngModel)]="element.quantity"
+                required
+                (change)="method_changeService(i, element)"/>     
+            </div>
+          </div>
+          <div class="text-danger" *ngIf="element.quantity <= 0">
+            Debe ser mayor a cero
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-10">
+          <div *ngIf="buy">
+            <div *ngIf="addBy === 'quantity'">
+              <span class="d-block d-lg-inline">Monto: </span>
+              <span>{{ element.amountCost | currency }} MXN</span>
+            </div>
+            <div class="form-group mb-0 row" *ngIf="addBy === 'amountCost'">
+              <label [for]="'amountCost' + element.id" class="col-sm-3 col-form-label">Monto:</label>  
+              <div class="input-group col-sm-9">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">$</span>
+                </div>
+                <input
+                  mdbInput 
+                  type="number"
+                  class="form-control"
+                  [id]="'amountCost' + element.id" 
+                  [name]="'amountCost' + element.id"    
+                  [(ngModel)]="element.amountCost"
+                  (change)="method_changeService(i, element)"/>
+                <div class="input-group-apend">
+                  <span class="input-group-text">MXN</span>
+                </div>                
+              </div>
+            </div>
+          </div>
+          <div *ngIf="sale">
+            <div *ngIf="addBy === 'quantity'">
+              <span class="d-block d-lg-inline">Monto: </span>
+              <span>{{ element.amountPrice | currency }} MXN</span>
+            </div>
+            <div class="form-group mb-0 row" *ngIf="addBy === 'amountPrice'">
+              <label [for]="'amountPrice' + element.id" class="col-sm-3 col-form-label">Monto:</label>  
+              <div class="input-group col-sm-9">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">$</span>
+                </div>
+                <input
+                  mdbInput 
+                  type="number"
+                  class="form-control"
+                  [id]="'amountPrice' + element.id" 
+                  [name]="'amountPrice' + element.id"    
+                  [(ngModel)]="element.amountPrice"
+                  (change)="method_changeService(i, element)"/>
+                <div class="input-group-apend">
+                  <span class="input-group-text">MXN</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> 
+        <div class="col-xl-2">
+          <button
+            mdbBtn
+            type="button"
+            size="md"
+            color="info"
+            outline="true" class="mb-0 waves-dark" block="true"
+            mdbTooltip="Agregar servicio"
+            mdbWavesEffect
+            (click)="method_addServiceDetail(element)">
+            <mdb-icon fas icon="plus-circle"></mdb-icon>
+            <span class="d-none d-xl-inline"> Agregar servicio</span>
+          </button>
+        </div> 
+      </div> 
+    </div>
+  </div>
+</div>

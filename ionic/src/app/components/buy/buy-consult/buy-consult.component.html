@@ -1,0 +1,100 @@
+<div
+  mdbModal
+  #buyConsult="mdbModal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myBuyConsultLabel"
+  aria-hidden="true"
+  [config]="{ backdrop: false, ignoreBackdropClick: true }"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="buyConsult.hide()"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myBuyConsultLabel">
+          Ver compra
+        </h4>
+      </div>
+      <div class="modal-body bg-white">        
+        <mat-tab-group>
+          <mat-tab label="General">
+            <div class="row">
+              <div class="col-xl-3">
+                <b>Factura:</b>
+                <p>
+                  {{ buy.name }}
+                </p>
+              </div>
+              <div class="col-xl-3">
+                <b>Origen:</b>
+                <p>
+                  {{ buy.provenance }}
+                </p>
+              </div>
+              <div class="col-xl-3">
+                <b>Transporte:</b>
+                <p>
+                  {{ buy.transport }}
+                </p>
+              </div>
+              <div class="col-xl-3">
+                <b>Embarcada:</b>
+                <p>
+                  {{ buy.embarked_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>  
+            </div>
+            <div class="row">
+              <div class="col-xl-4">
+                <b>Empresa:</b>
+                <p>
+                  {{ buy.enterpriseName }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Negocio:</b>
+                <p>
+                  {{ buy.businessName }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Destino esperado:</b>
+                <p>
+                  {{ buy.expectedDestinationName }}
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Destino:</b>
+                <p>
+                  {{ buy.destinationName }}
+                </p>
+              </div>
+              <div class="col-xl-6">
+                <b>Descargada:</b>
+                <p>
+                  {{ buy.downloaded_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>
+            </div>
+            <h5 class="text-right"><b>Total: </b><span class="text-danger">{{ buy.total | currency }} MXN</span></h5>
+          </mat-tab>
+          <mat-tab label="Detalles">
+            <app-buy-detail-table 
+              [buyId]="buy.id"
+            ></app-buy-detail-table>
+          </mat-tab>
+        </mat-tab-group>       
+      </div>
+    </div>
+  </div>
+</div>

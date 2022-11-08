@@ -1,0 +1,16 @@
+<footer class="bg-light navbarBottom clearfix" style="flex-shrink: 0;">
+  <div *ngIf="rol">    
+    <a class="float-left text-primary" [href]="method_sanitize(getLogs)" target="_BLANK" *ngIf="rol.key === 'Super'">
+      <mdb-icon fas icon="server"></mdb-icon>
+      <span> Logs</span>
+    </a>
+  </div>
+  <span class="float-right text-muted">
+    <mdb-icon fas icon="copyright"></mdb-icon>
+    <span> 2021</span><span *ngIf="year != 2021"> - {{year}}</span>
+    <a class="text-muted" href="http://www.max4technologies.com/" target="_BLANK">
+      <span> Max4 TECHNOLOGIES </span>
+      <mdb-icon fas icon="registered"></mdb-icon>
+    </a>
+  </span>
+</footer>

@@ -1,0 +1,306 @@
+<div *ngIf="rol.key === 'Super' || rol.key === 'Director'  || (rol.key === 'Manager' && subsidiary.id != 0)">
+  <div class="row">
+    <div class="col-xl-8">
+      <div class="md-form form-group">
+        <div class="md-form">
+          <input mdbInput type="text" class="form-control" [id]="'subsidiaryName'+subsidiary.id"
+            [name]="'subsidiaryName'+subsidiary.id" [(ngModel)]="subsidiary.name" mdbValidate
+            #subsidiaryNameValidation="ngModel" required />
+          <label class="font-weight-bold" [for]="'subsidiaryName'+subsidiary.id">Nombre:</label>
+          <mdb-error
+            *ngIf="subsidiaryNameValidation.invalid && (subsidiaryNameValidation.dirty || subsidiaryNameValidation.touched)">
+            Campo requerido
+          </mdb-error>
+          <mdb-success
+            *ngIf="subsidiaryNameValidation.valid && (subsidiaryNameValidation.dirty || subsidiaryNameValidation.touched)">
+          </mdb-success>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4">     
+      <p class="font-weight-bold">¿Es central?</p>
+      <div class="form-check form-check-inline">
+        <input 
+          type="radio" 
+          class="form-check-input" 
+          id="isCentralNon" 
+          name="isCentral" 
+          mdbInput 
+          [value]="false"
+          [(ngModel)]="subsidiary.is_central">
+        <label class="form-check-label" for="isCentralNon">No</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input 
+          type="radio" 
+          class="form-check-input" 
+          id="isCentralYes" 
+          name="isCentral" 
+          mdbInput
+          [value]="true" 
+          [(ngModel)]="subsidiary.is_central">
+        <label class="form-check-label" for="isCentralYes">Si</label>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label class="font-weight-bold" for="logo">Logo:</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <app-subsidiary-logo [subsidiaryLogo]="subsidiary.logo" [subsidiaryLogoFile]="subsidiary.logoFile">
+            </app-subsidiary-logo>
+          </div>
+          <input mdbInput type="file" class="form-control is-valid" [id]="'subsidiaryLogo'+subsidiary.id"
+            [name]="'subsidiaryLogo'+subsidiary.id" [(ngModel)]="subsidiary.logoFile"
+            (change)="methods_getSubsidiaryLogoFile($event)" />
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label class="font-weight-bold" for="overlay">Fondo:</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <app-subsidiary-overlay [subsidiaryOverlay]="subsidiary.overlay"
+              [subsidiaryOverlayFile]="subsidiary.overlayFile"></app-subsidiary-overlay>
+          </div>
+          <input mdbInput type="file" class="form-control is-valid" [id]="'subsidiaryOverlay'+subsidiary.id"
+            [name]="'subsidiaryOverlay'+subsidiary.id" [(ngModel)]="subsidiary.overlayFile"
+            (change)="methods_getOverlayFile($event)" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <input mdbInput mdbValidate type="text" [id]="'street' + subsidiary.id" class="form-control"
+          [name]="'street' + subsidiary.id" [(ngModel)]="subsidiary.street" #streetValidation="ngModel" required />
+        <label class="font-weight-bold" [for]="'street' + subsidiary.id">Calle:</label>
+        <mdb-error *ngIf="
+            streetValidation.invalid &&
+            (streetValidation.dirty || streetValidation.touched)
+          ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+            streetValidation.valid && (streetValidation.dirty || streetValidation.touched)
+          "></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <input mdbInput mdbValidate type="text" [id]="'exterior' + subsidiary.id" class="form-control"
+          [name]="'exterior' + subsidiary.id" [(ngModel)]="subsidiary.exterior" #exteriorValidation="ngModel"
+          required />
+        <label class="font-weight-bold" [for]="'exterior' + subsidiary.id">Exterior:</label>
+        <mdb-error *ngIf="
+            exteriorValidation.invalid &&
+            (exteriorValidation.dirty || exteriorValidation.touched)
+          ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+            exteriorValidation.valid && (exteriorValidation.dirty || exteriorValidation.touched)
+          "></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <input mdbInput mdbValidate type="text" [id]="'interior' + subsidiary.id" class="form-control is-valid"
+          [name]="'interior' + subsidiary.id" [(ngModel)]="subsidiary.interior" #interiorValidation="ngModel" />
+        <label class="font-weight-bold" [for]="'interior' + subsidiary.id">Interior:</label>
+        <mdb-error *ngIf="
+            interiorValidation.invalid &&
+            (interiorValidation.dirty || interiorValidation.touched)
+          ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+            interiorValidation.valid && (interiorValidation.dirty || interiorValidation.touched)
+          "></mdb-success>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <input mdbInput mdbValidate type="search" [id]="'postal_code' + subsidiary.id" class="form-control"
+          [name]="'postal_code' + subsidiary.id" [(ngModel)]="subsidiary.postal_code" #postalCodeValidation="ngModel"
+          list="postalCodes" (change)="method_apiGetAddresses()" required />
+        <datalist id="postalCodes">
+          <option *ngFor="let element of postalCodes" [ngValue]="element">
+            {{ element }}
+          </option>
+        </datalist>
+        <label class="font-weight-bold" [for]="'postal_code' + subsidiary.id">Código postal:</label>
+        <mdb-error *ngIf="
+            postalCodeValidation.invalid &&
+            (postalCodeValidation.dirty || postalCodeValidation.touched)
+          ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+            postalCodeValidation.valid && (postalCodeValidation.dirty || postalCodeValidation.touched)
+          "></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <input mdbInput mdbValidate type="search" [id]="'neighborhood' + subsidiary.id" class="form-control"
+          [name]="'neighborhood' + subsidiary.id" [(ngModel)]="subsidiary.neighborhood"
+          #neighborhoodValidation="ngModel" list="neighborhoods" required />
+        <datalist id="neighborhoods">
+          <option *ngFor="let element of neighborhoods" [ngValue]="element">
+            {{ element }}
+          </option>
+        </datalist>
+        <label class="font-weight-bold" [for]="'neighborhood' + subsidiary.id">Colonia:</label>
+        <mdb-error *ngIf="
+            neighborhoodValidation.invalid &&
+            (neighborhoodValidation.dirty || neighborhoodValidation.touched)
+          ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+            neighborhoodValidation.valid && (neighborhoodValidation.dirty || neighborhoodValidation.touched)
+          "></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <input mdbInput mdbValidate type="search" [id]="'city' + subsidiary.id" class="form-control"
+          [name]="'city' + subsidiary.id" [(ngModel)]="subsidiary.city" #cityValidation="ngModel" list="cities"
+          required />
+        <datalist id="cities">
+          <option *ngFor="let element of cities" [ngValue]="element">
+            {{ element }}
+          </option>
+        </datalist>
+        <label class="font-weight-bold" [for]="'city' + subsidiary.id">Ciudad:</label>
+        <mdb-error *ngIf="
+            cityValidation.invalid &&
+            (cityValidation.dirty || cityValidation.touched)
+          ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+            cityValidation.valid && (cityValidation.dirty || cityValidation.touched)
+          "></mdb-success>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <input mdbInput mdbValidate type="search" [id]="'municipality' + subsidiary.id" class="form-control"
+          [name]="'municipality' + subsidiary.id" [(ngModel)]="subsidiary.municipality" #municipalityValidation="ngModel"
+          list="municipalities" (change)="method_apiGetNeighborhoods()" required />
+        <datalist id="municipalities">
+          <option *ngFor="let element of municipalities" [ngValue]="element">
+            {{ element }}
+          </option>
+        </datalist>
+        <label class="font-weight-bold" [for]="'municipality' + subsidiary.id">Municipio:</label>
+        <mdb-error *ngIf="
+            municipalityValidation.invalid &&
+            (municipalityValidation.dirty || municipalityValidation.touched)
+          ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+            municipalityValidation.valid && (municipalityValidation.dirty || municipalityValidation.touched)
+          "></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <input mdbInput mdbValidate type="search" [id]="'state' + subsidiary.id" class="form-control"
+          [name]="'state' + subsidiary.id" [(ngModel)]="subsidiary.state" #stateValidation="ngModel" list="states"
+          (change)="method_changeMunicipality()" required />
+        <datalist id="states">
+          <option *ngFor="let element of states" [ngValue]="element">
+            {{ element }}
+          </option>
+        </datalist>
+        <label class="font-weight-bold" [for]="'state' + subsidiary.id">Estado:</label>
+        <mdb-error *ngIf="
+            stateValidation.invalid &&
+            (stateValidation.dirty || stateValidation.touched)
+          ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+            stateValidation.valid && (stateValidation.dirty || stateValidation.touched)
+          "></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <input mdbInput mdbValidate type="text" [id]="'country' + subsidiary.id" class="form-control"
+          [name]="'country' + subsidiary.id" [(ngModel)]="subsidiary.country" #countryValidation="ngModel"
+          (change)="method_apiGetStates()" required />
+        <label class="font-weight-bold" [for]="'country' + subsidiary.id">País:</label>
+        <mdb-error *ngIf="
+            countryValidation.invalid &&
+            (countryValidation.dirty || countryValidation.touched)
+          ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+            countryValidation.valid && (countryValidation.dirty || countryValidation.touched)
+          "></mdb-success>
+      </div>
+    </div>
+  </div>
+  <div class="md-form form-group">
+    <textarea mdbInput mdbValidate type="text" class="md-textarea form-control is-valid"
+      [id]="'references'+subsidiary.id" [name]="'references'+subsidiary.id" [(ngModel)]="subsidiary.references"
+      #referencesValidation="ngModel"></textarea>
+    <label class="font-weight-bold" [for]="'references'+subsidiary.id">Referencias:</label>
+    <mdb-error *ngIf="
+        referencesValidation.invalid &&
+        (referencesValidation.dirty || referencesValidation.touched)
+      ">Campo requerido</mdb-error>
+    <mdb-success *ngIf="
+        referencesValidation.valid &&
+        (referencesValidation.dirty || referencesValidation.touched)
+      "></mdb-success>
+  </div>
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label [for]="'enterpriseId'+subsidiary.id">Empresa:</label>
+        <select
+          [id]="'enterpriseId'+subsidiary.id"
+          class="browser-default custom-select"
+          [name]="'enterpriseId'+subsidiary.id"
+          [(ngModel)]="subsidiary.enterpriseId"
+          #enterpriseIdValidation="ngModel"
+          (change)="method_getBusinesses()"
+          required
+          [disabled]="rol.key !== 'Super'"
+        >
+          <option [ngValue]="0" [selected]="subsidiary.enterpriseId == 0">
+            Selecciona una empresa
+          </option>
+          <option *ngFor="let element of enterprises" [ngValue]="element.id" [selected]="subsidiary.enterpriseId == element.id">
+            {{ element.name }}
+          </option>
+        </select>
+        <mdb-error *ngIf="
+            enterpriseIdValidation.invalid &&
+            (enterpriseIdValidation.dirty || enterpriseIdValidation.touched)
+          ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+            enterpriseIdValidation.valid &&
+            (enterpriseIdValidation.dirty || enterpriseIdValidation.touched)
+          "></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'businessId' + subsidiary.id">Negocio:</label>
+        <select
+          class="browser-default custom-select"
+          [id]="'businessId' + subsidiary.id"
+          [name]="'businessId' + subsidiary.id"
+          [(ngModel)]="subsidiary.business_id"
+          [disabled]="rol.key === 'Manager'"
+          required>
+          <option [ngValue]="0" [selected]="subsidiary.business_id == 0">
+            Selecciona un negocio
+          </option>
+          <option *ngFor="let element of businesses" [ngValue]="element.id"
+            [selected]="subsidiary.business_id == element.id">
+            {{ element.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>

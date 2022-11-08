@@ -1,0 +1,335 @@
+<div *ngIf="rol.key === 'Client'">
+  <div class="md-form form-group">
+    <input
+      mdbInput
+      mdbValidate
+      type="text"
+      [id]="'name' + address.id"
+      class="form-control"
+      [name]="'name' + address.id"
+      [(ngModel)]="address.name"
+      #nameValidation="ngModel"
+      required
+    />
+    <label [for]="'name' + address.id">Nombre:</label>
+    <mdb-error
+      *ngIf="
+        nameValidation.invalid &&
+        (nameValidation.dirty || nameValidation.touched)
+      "
+      >Campo requerido</mdb-error
+    >
+    <mdb-success
+      *ngIf="
+        nameValidation.valid && (nameValidation.dirty || nameValidation.touched)
+      "
+    ></mdb-success>
+  </div>
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <input
+          mdbInput
+          mdbValidate
+          type="text"
+          [id]="'street' + address.id"
+          class="form-control"
+          [name]="'street' + address.id"
+          [(ngModel)]="address.street"
+          #streetValidation="ngModel"
+          required
+        />
+        <label [for]="'street' + address.id">Calle:</label>
+        <mdb-error
+          *ngIf="
+            streetValidation.invalid &&
+            (streetValidation.dirty || streetValidation.touched)
+          "
+          >Campo requerido</mdb-error
+        >
+        <mdb-success
+          *ngIf="
+            streetValidation.valid && (streetValidation.dirty || streetValidation.touched)
+          "
+        ></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <input
+          mdbInput
+          mdbValidate
+          type="text"
+          [id]="'exterior' + address.id"
+          class="form-control"
+          [name]="'exterior' + address.id"
+          [(ngModel)]="address.exterior"
+          #exteriorValidation="ngModel"
+          required
+        />
+        <label [for]="'exterior' + address.id">Exterior:</label>
+        <mdb-error
+          *ngIf="
+            exteriorValidation.invalid &&
+            (exteriorValidation.dirty || exteriorValidation.touched)
+          "
+          >Campo requerido</mdb-error
+        >
+        <mdb-success
+          *ngIf="
+            exteriorValidation.valid && (exteriorValidation.dirty || exteriorValidation.touched)
+          "
+        ></mdb-success>
+      </div>  
+    </div>
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <input
+          mdbInput
+          mdbValidate
+          type="text"
+          [id]="'interior' + address.id"
+          class="form-control is-valid"
+          [name]="'interior' + address.id"
+          [(ngModel)]="address.interior"
+          #interiorValidation="ngModel"
+        />
+        <label [for]="'interior' + address.id">Interior:</label>
+        <mdb-error
+          *ngIf="
+            interiorValidation.invalid &&
+            (interiorValidation.dirty || interiorValidation.touched)
+          "
+          >Campo requerido</mdb-error
+        >
+        <mdb-success
+          *ngIf="
+            interiorValidation.valid && (interiorValidation.dirty || interiorValidation.touched)
+          "
+        ></mdb-success>
+      </div>  
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <input
+          mdbInput
+          mdbValidate
+          type="search"
+          [id]="'postal_code' + address.id"
+          class="form-control"
+          [name]="'postal_code' + address.id"
+          [(ngModel)]="address.postal_code"
+          #postalCodeValidation="ngModel"
+          list="postalCodes"
+          (change)="method_apiGetAddresses()"
+          required
+        />
+        <datalist id="postalCodes">
+          <option *ngFor="let element of postalCodes" [ngValue]="element">
+            {{ element }}
+          </option>
+        </datalist>
+        <label [for]="'postal_code' + address.id">Código postal:</label>
+        <mdb-error
+          *ngIf="
+            postalCodeValidation.invalid &&
+            (postalCodeValidation.dirty || postalCodeValidation.touched)
+          "
+          >Campo requerido</mdb-error
+        >
+        <mdb-success
+          *ngIf="
+            postalCodeValidation.valid && (postalCodeValidation.dirty || postalCodeValidation.touched)
+          "
+        ></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <input
+          mdbInput
+          mdbValidate
+          type="search"
+          [id]="'neighborhood' + address.id"
+          class="form-control"
+          [name]="'neighborhood' + address.id"
+          [(ngModel)]="address.neighborhood"
+          #neighborhoodValidation="ngModel"
+          list="neighborhoods"
+          required
+        />
+        <datalist id="neighborhoods">
+          <option *ngFor="let element of neighborhoods" [ngValue]="element">
+            {{ element }}
+          </option>
+        </datalist>
+        <label [for]="'neighborhood' + address.id">Colonia:</label>
+        <mdb-error
+          *ngIf="
+            neighborhoodValidation.invalid &&
+            (neighborhoodValidation.dirty || neighborhoodValidation.touched)
+          "
+          >Campo requerido</mdb-error
+        >
+        <mdb-success
+          *ngIf="
+            neighborhoodValidation.valid && (neighborhoodValidation.dirty || neighborhoodValidation.touched)
+          "
+        ></mdb-success>
+      </div>  
+    </div>
+    <div class="col-xl-4">      
+      <div class="md-form form-group">
+        <input
+          mdbInput
+          mdbValidate
+          type="search"
+          [id]="'city' + address.id"
+          class="form-control"
+          [name]="'city' + address.id"
+          [(ngModel)]="address.city"
+          #cityValidation="ngModel"
+          list="cities"
+          required
+        />
+        <datalist id="cities">
+          <option *ngFor="let element of cities" [ngValue]="element">
+            {{ element }}
+          </option>
+        </datalist>
+        <label [for]="'city' + address.id">Ciudad:</label>
+        <mdb-error
+          *ngIf="
+            cityValidation.invalid &&
+            (cityValidation.dirty || cityValidation.touched)
+          "
+          >Campo requerido</mdb-error
+        >
+        <mdb-success
+          *ngIf="
+            cityValidation.valid && (cityValidation.dirty || cityValidation.touched)
+          "
+        ></mdb-success>
+      </div> 
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <input
+          mdbInput
+          mdbValidate
+          type="search"
+          [id]="'municipality' + address.id"
+          class="form-control"
+          [name]="'municipality' + address.id"
+          [(ngModel)]="address.municipality"
+          #postalCodeValidation="ngModel"
+          list="municipalities"
+          (change)="method_apiGetNeighborhoods()"
+          required
+        />
+        <datalist id="municipalities">
+          <option *ngFor="let element of municipalities" [ngValue]="element">
+            {{ element }}
+          </option>
+        </datalist>
+        <label [for]="'municipality' + address.id">Municipio:</label>
+        <mdb-error
+          *ngIf="
+            postalCodeValidation.invalid &&
+            (postalCodeValidation.dirty || postalCodeValidation.touched)
+          "
+          >Campo requerido</mdb-error
+        >
+        <mdb-success
+          *ngIf="
+            postalCodeValidation.valid && (postalCodeValidation.dirty || postalCodeValidation.touched)
+          "
+        ></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <input
+          mdbInput
+          mdbValidate
+          type="search"
+          [id]="'state' + address.id"
+          class="form-control"
+          [name]="'state' + address.id"
+          [(ngModel)]="address.state"
+          #stateValidation="ngModel"
+          list="states"
+          (change)="method_changeMunicipality()"
+          required
+        />
+        <datalist id="states">
+          <option *ngFor="let element of states" [ngValue]="element">
+            {{ element }}
+          </option>
+        </datalist>
+        <label [for]="'state' + address.id">Estado:</label>
+        <mdb-error
+          *ngIf="
+            stateValidation.invalid &&
+            (stateValidation.dirty || stateValidation.touched)
+          "
+          >Campo requerido</mdb-error
+        >
+        <mdb-success
+          *ngIf="
+            stateValidation.valid && (stateValidation.dirty || stateValidation.touched)
+          "
+        ></mdb-success>
+      </div>  
+    </div>
+    <div class="col-xl-4">      
+      <div class="md-form form-group">
+        <input
+          mdbInput
+          mdbValidate
+          type="text"
+          [id]="'country' + address.id"
+          class="form-control"
+          [name]="'country' + address.id"
+          [(ngModel)]="address.country"
+          #countryValidation="ngModel"
+          (change)="method_apiGetStates()"
+          required
+        />
+        <label [for]="'country' + address.id">País:</label>
+        <mdb-error
+          *ngIf="
+            countryValidation.invalid &&
+            (countryValidation.dirty || countryValidation.touched)
+          "
+          >Campo requerido</mdb-error
+        >
+        <mdb-success
+          *ngIf="
+            countryValidation.valid && (countryValidation.dirty || countryValidation.touched)
+          "
+        ></mdb-success>
+      </div> 
+    </div>
+  </div>
+  <div class="md-form form-group">
+    <textarea mdbInput mdbValidate type="text" class="md-textarea form-control is-valid" 
+      [id]="'references'+address.id" 
+      [name]="'references'+address.id" 
+      [(ngModel)]="address.references"
+      #referencesValidation="ngModel"></textarea>
+    <label [for]="'references'+address.id">Referencias:</label>
+    <mdb-error *ngIf="
+        referencesValidation.invalid &&
+        (referencesValidation.dirty || referencesValidation.touched)
+      ">Campo requerido</mdb-error>
+    <mdb-success *ngIf="
+        referencesValidation.valid &&
+        (referencesValidation.dirty || referencesValidation.touched)
+      "></mdb-success>
+  </div>
+</div>

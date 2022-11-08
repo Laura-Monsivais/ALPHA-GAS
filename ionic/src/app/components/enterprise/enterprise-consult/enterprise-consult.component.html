@@ -1,0 +1,80 @@
+<div
+  mdbModal
+  #enterpriseConsult="mdbModal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myEnterpriseConsultLabel"
+  aria-hidden="true"
+  [config]="{ backdrop: false, ignoreBackdropClick: true }"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="enterpriseConsult.hide()"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myEnterpriseConsultLabel">
+          Ver empresa
+        </h4>
+      </div>
+      <div class="modal-body bg-white">        
+        <mat-tab-group>
+          <mat-tab label="General">
+            <div>
+              <b>Nombre:</b>
+              <p>
+                {{ enterprise.name }}
+              </p>
+            </div>
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Logo:</b>
+                <app-enterprise-logo
+                  [enterpriseLogo]="enterprise.logo"
+                  [enterpriseLogoFile]="null"
+                ></app-enterprise-logo>
+              </div>
+              <div class="col-xl-6">
+                <b>Fondo:</b>
+                <app-enterprise-overlay
+                  [enterpriseOverlay]="enterprise.overlay"
+                  [enterpriseOverlayFile]="null"
+                ></app-enterprise-overlay>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Creado:</b>
+                <p>
+                  {{ enterprise.created_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>
+              <div class="col-xl-6">
+                <b>Modificado:</b>
+                <p>
+                  {{ enterprise.updated_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>  
+            </div>
+          </mat-tab>
+          <mat-tab label="Negocios">
+            <app-business-table 
+              [enterpriseId]="enterprise.id"
+            ></app-business-table>
+          </mat-tab>
+          <mat-tab label="Sucursales">
+            <app-subsidiary-table 
+              [enterpriseId]="enterprise.id"
+            ></app-subsidiary-table>            
+          </mat-tab>
+        </mat-tab-group>      
+      </div>
+    </div>
+  </div>
+</div>

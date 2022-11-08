@@ -1,0 +1,99 @@
+<div
+  mdbModal
+  #userConsult="mdbModal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myUserConsultLabel"
+  aria-hidden="true"
+  [config]="{ backdrop: false, ignoreBackdropClick: true }"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="userConsult.hide()"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myUserConsultLabel">
+          Ver usuario
+        </h4>
+      </div>
+      <div class="modal-body bg-white">        
+        <mat-tab-group>
+          <mat-tab label="General">
+            <div class="row">
+              <div class="col-xl-4">
+                <b>Nombre:</b>
+                <p>
+                  {{ user.name }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Primer apellido:</b>
+                <p>
+                  {{ user.lastname1 }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Segundo apellido:</b>
+                <p>
+                  {{ user.lastname2 }}
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-4">
+                <b>Celular:</b>
+                <p>
+                  {{ user.cellphone }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Avatar:</b>
+                <app-user-avatar
+                  [userAvatar]="user.avatar"
+                  [userAvatarFile]="null"
+                ></app-user-avatar>
+              </div>
+              <div class="col-xl-4">
+                <b>Portada:</b>
+                <app-user-cover
+                  [userCover]="user.cover"
+                  [userCoverFile]="null"
+                ></app-user-cover>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Creado:</b>
+                <p>
+                  {{ user.created_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>
+              <div class="col-xl-6">
+                <b>Modificado:</b>
+                <p>
+                  {{ user.updated_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>  
+            </div>
+          </mat-tab>
+          <mat-tab label="Sesiones">
+            <app-session-table 
+              [general]="false"
+              [userId]="user.id"
+            ></app-session-table>
+          </mat-tab>
+          <!-- @todo Mostrar ventas del usuario
+            mat-tab label="Ventas">
+          </mat-tab-->
+        </mat-tab-group>      
+      </div>
+    </div>
+  </div>
+</div>

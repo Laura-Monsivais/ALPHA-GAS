@@ -1,0 +1,364 @@
+<div>
+  <!-- Actions General -->
+  <div class="clearfix">
+    <div class="float-xl-left"> 
+      <!--
+        @todo Agregar por pasos crear pedido para centro de atención
+        button 
+        mdbBtn 
+        type="button" 
+        size="md" 
+        color="info" 
+        class="m-0 waves-light" 
+        mdbTooltip="Crear pedido"
+        mdbWavesEffect        
+        *ngIf="rol.key === 'Call_Center'">
+        <mdb-icon fas icon="pen"></mdb-icon>
+        <span class="d-none d-xl-inline"> Crear pedido</span>
+      </button-->     
+      <button
+        mdbBtn
+        type="button"
+        size="md" 
+        color="success" 
+        class="m-0 waves-light d-none d-xl-inline"
+        mdbTooltip="Exportar pedidos"
+        mdbWavesEffect
+        (click)="method_exportOrders()"
+        [disabled]="isLoading"
+      >
+        <mdb-icon fas icon="file-excel"></mdb-icon>
+        <span class="d-none d-xl-inline"> Exportar pedidos</span>
+      </button>
+    </div>
+    <div class="float-xl-right form-group">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">
+            <mdb-icon fas icon="search"></mdb-icon>
+          </span>
+        </div>
+        <input type="search" class="form-control" id="search" name="search" 
+          [(ngModel)]="order.search" placeholder="Buscar pedidos" (change)="method_searchOrders()">
+        <div class="input-group-append">
+          <button
+            mdbBtn
+            type="button"
+            size="md" 
+            color="primary" 
+            class="m-0 waves-light"
+            mdbTooltip="Búsqueda de pedidos"
+            mdbWavesEffect
+            (click)="searchAdvancedOrders.toggle()"
+          >
+            <mdb-icon fas icon="search-plus"></mdb-icon>
+            <span class="d-none d-xl-inline"> Búsqueda de pedidos</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>  
+  <div class="" mdbCollapse #searchAdvancedOrders="bs-collapse">
+    <blockquote class="blockquote">
+      <b class="bq-title">Búsqueda de pedidos</b>   
+      <form class="form-xl-inline" (ngSubmit)="method_searchAdvancedOrders()">        
+        <div class="md-form md-outline">
+          <input mdbInput type="number" class="form-control" id="limit" name="limit" [(ngModel)]="order.limit">
+          <label for="limit">Registros</label>
+        </div>
+        <div class="md-form">
+          <select
+            class="browser-default custom-select"
+            [id]="'enterpriseId'"
+            [name]="'enterpriseId'"
+            [(ngModel)]="order.enterpriseId"
+            (change)="method_getBusinesses()">
+            <option [ngValue]="null" [selected]="order.enterpriseId === null">
+              Todas las empresas
+            </option>
+            <option *ngFor="let element of enterprises" [ngValue]="element.id" [selected]="order.enterpriseId == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>
+        <div class="md-form">
+          <select
+            class="browser-default custom-select"
+            [id]="'businessId'"
+            [name]="'businessId'"
+            [(ngModel)]="order.businessId"
+            (change)="method_getSubsidiaries()">
+            <option [ngValue]="null" [selected]="order.businessId === null">
+              Todos los negocios
+            </option>
+            <option *ngFor="let element of businesses" [ngValue]="element.id" [selected]="order.businessId == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>
+        <div class="md-form">
+          <select
+            class="browser-default custom-select"
+            [id]="'subsidiaryId'"
+            [name]="'subsidiaryId'"
+            [(ngModel)]="order.subsidiaryId">
+            <option [ngValue]="null" [selected]="order.subsidiaryId === null">
+              Todas las sucursales
+            </option>
+            <option *ngFor="let element of subsidiaries" [ngValue]="element.id" [selected]="order.subsidiaryId == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>  
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="client" name="client" [(ngModel)]="order.client">
+          <label for="client">Cliente</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="observation" name="observation" [(ngModel)]="order.observation">
+          <label for="observation">Observación</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="address" name="address" [(ngModel)]="order.address">
+          <label for="address">Dirección</label>
+        </div>   
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="deliverAtStart" name="deliverAtStart" [(ngModel)]="order.deliverAtStart">
+          <label for="deliverAtStart">Entrega</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="deliverAtEnd" name="deliverAtEnd" [(ngModel)]="order.deliverAtEnd">
+          <label for="deliverAtEnd"></label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="number" class="form-control" id="total" name="total" [(ngModel)]="order.total">
+          <label for="total">Total</label>
+        </div>
+        <div class="md-form">
+          <select
+            class="browser-default custom-select"
+            [id]="'status'"
+            [name]="'status'"
+            [(ngModel)]="order.status">
+            <option [ngValue]="null" [selected]="order.status === null">
+              Todos los estatus
+            </option>
+            <option [ngValue]="'Pendiente'">
+              Pendiente
+            </option>
+            <option [ngValue]="'Atendiendo'">
+              Atendiendo
+            </option>
+            <option [ngValue]="'Entregado'">
+              Entregado
+            </option>
+          </select>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="code" name="code" [(ngModel)]="order.code">
+          <label for="code">Código</label>
+        </div>   
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="createdAtStart" name="createdAtStart" [(ngModel)]="order.createdAtStart">
+          <label for="createdAtStart">Creado</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="createdAtEnd" name="createdAtEnd" [(ngModel)]="order.createdAtEnd">
+          <label for="createdAtEnd"></label>
+        </div>
+        <button
+          mdbBtn
+          type="submit"
+          size="md" 
+          color="primary" 
+          class="mt-0 waves-light text-nowrap float-right"
+          mdbWavesEffect
+          [disabled]="isLoading"
+        >
+          <mdb-icon fas icon="search"></mdb-icon>
+          <span> Buscar</span>
+          <span class="spinner-border spinner-border-sm" role="status" *ngIf="isLoading">
+            <span class="sr-only">Cargando...</span>
+          </span>
+        </button> 
+      </form>
+    </blockquote>
+  </div>
+  <!-- Table -->
+  <div class="table-responsive">
+    <table
+      mdbTable
+      striped="true"
+      hover="true"
+      small="true"
+      #tableEl="mdbTable"
+      id="tableSortExample"
+    >
+      <thead>
+        <tr>
+          <th
+            class="text-nowrap"
+            *ngFor="let head of heads; let i = index"
+            aria-controls="tableSortExample"
+            [mdbTableSort]="orders"
+            [sortBy]="headsSort[i]"
+          >
+            <span>{{ head }} </span>
+            <mdb-icon fas icon="sort"></mdb-icon>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr mdbTableCol *ngFor="let element of orders; let i = index">
+          <td
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            <div class="btn-group" mdbDropdown>
+              <button 
+                mdbBtn 
+                type="button" 
+                size="md" 
+                color="light" 
+                class="m-0 waves-light text-nowrap"
+                mdbWavesEffect
+                mdbTooltip="Opciones pedido"
+                mdbDropdownToggle>
+                <mdb-icon fas icon="ellipsis-v"></mdb-icon>
+                <span class="d-none d-xl-inline"> Opciones pedido</span>
+              </button>
+              <div class="dropdown-menu">  
+                <app-sale-do-link [saleId]="0" [order]="element" *ngIf="element.status === 'Pendiente'"></app-sale-do-link>
+                <button
+                  mdbBtn
+                  type="button"
+                  size="md" 
+                  color="primary" 
+                  class="m-0 waves-light text-nowrap dropdown-item"
+                  mdbWavesEffect
+                  (click)="method_showModalOrderConsult(element.id)">
+                    <mdb-icon fas icon="eye"></mdb-icon>
+                    <span> Ver pedido</span>
+                </button>
+                <button
+                  mdbBtn
+                  type="button"
+                  size="md" 
+                  color="warning" 
+                  class="m-0 waves-light text-nowrap dropdown-item"
+                  mdbWavesEffect
+                  (click)="method_goToCart(element.id)"
+                  *ngIf="(rol.key === 'Call_Center' || rol.key === 'Client') && element.status === 'Pendiente'">
+                  <!-- @todo Agregar por pasos modificar pedido para centro de atención -->
+                  <mdb-icon fas icon="edit"></mdb-icon
+                  ><span> Modificar pedido</span>
+                </button>
+              </div>
+            </div>         
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.code }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.status }}
+            <mdb-badge pill="true" danger="true"
+              mdbTooltip="Pedido pendiente de venta" 
+              *ngIf="element.status === 'Pendiente'">
+              <mdb-icon
+                fas
+                icon="exclamation-circle"
+              ></mdb-icon>
+            </mdb-badge>
+            <mdb-badge pill="true" warning="true"
+              mdbTooltip="Pedido atendiendo para llevar" 
+              *ngIf="element.status === 'Atendiendo'">
+              <mdb-icon
+                fas
+                icon="exclamation-triangle"
+              ></mdb-icon>
+            </mdb-badge>
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.clientNameComplete }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.addressName }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.deliver_at | date:'d/M/yy h:mm a' }}
+          </td>
+          <td
+            class="text-nowrap text-right"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.total | currency }} MXN
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.created_at | date:'d/M/yy h:mm a' }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.updated_at | date:'d/M/yy h:mm a' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Table Pagination -->
+  <mdb-table-pagination
+    [tableEl]="tableEl"
+    [searchDataSource]="orders"
+  ></mdb-table-pagination>
+  <!-- Actions Particular -->
+  <app-order-consult
+    [orderId]="orderId" 
+    [showedModalOrderConsult]="showedModalOrderConsult"
+    (emitter_gotOrderInConsult)="method_detectIfGotOrderInConsult($event)"
+  ></app-order-consult> 
+</div>

@@ -1,0 +1,266 @@
+<div>
+  <!-- Actions General -->
+  <div class="clearfix">
+    <div class="float-xl-left">
+      <app-transfer-insert (emitter_insertedTransfer)="method_insertedTransfer($event)"
+        [gotTransfersInInsert]="gotTransfersInInsert"></app-transfer-insert>
+      <button mdbBtn type="button" size="md" color="success" class="m-0 waves-light d-none d-xl-inline"
+        mdbTooltip="Exportar traspasos" mdbWavesEffect (click)="method_exportTransfers()" [disabled]="isLoading">
+        <mdb-icon fas icon="file-excel"></mdb-icon>
+        <span class="d-none d-xl-inline"> Exportar traspasos</span>
+      </button>
+    </div>
+    <div class="float-xl-right form-group">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">
+            <mdb-icon fas icon="search"></mdb-icon>
+          </span>
+        </div>
+        <input type="search" class="form-control" id="search" name="search" [(ngModel)]="transfer.search"
+          placeholder="Buscar traspasos" (change)="method_searchTransfers()">
+        <div class="input-group-append">
+          <button mdbBtn type="button" size="md" color="primary" class="m-0 waves-light"
+            mdbTooltip="Búsqueda de traspasos" mdbWavesEffect (click)="searchAdvancedTransfers.toggle()">
+            <mdb-icon fas icon="search-plus"></mdb-icon>
+            <span class="d-none d-xl-inline"> Búsqueda de traspasos</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="" mdbCollapse #searchAdvancedTransfers="bs-collapse">
+    <blockquote class="blockquote">
+      <b class="bq-title">Búsqueda de traspasos</b>
+      <form class="form-xl-inline" (ngSubmit)="method_searchAdvancedTransfers()">
+        <div class="md-form md-outline">
+          <input mdbInput type="number" class="form-control" id="limit" name="limit" [(ngModel)]="transfer.limit">
+          <label for="limit">Registros</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="name" name="name" [(ngModel)]="transfer.name">
+          <label for="name">Nombre</label>
+        </div>
+        <div class="md-form">
+          <select class="browser-default custom-select" [id]="'enterpriseId'" [name]="'enterpriseId'"
+            [(ngModel)]="transfer.enterpriseId" (change)="method_getBusinesses()">
+            <option [ngValue]="null" [selected]="transfer.enterpriseId === null">
+              Todas las empresas
+            </option>
+            <option *ngFor="let element of enterprises" [ngValue]="element.id"
+              [selected]="transfer.enterpriseId == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>
+        <div class="md-form">
+          <select class="browser-default custom-select" [id]="'businessId'" [name]="'businessId'"
+            [(ngModel)]="transfer.businessId" (change)="method_chageBusiness()">
+            <option [ngValue]="null" [selected]="transfer.businessId === null">
+              Todos los negocios
+            </option>
+            <option *ngFor="let element of businesses" [ngValue]="element.id"
+              [selected]="transfer.businessId == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>
+        <div class="md-form">
+          <select class="browser-default custom-select" [id]="'originId'" [name]="'originId'"
+            [(ngModel)]="transfer.originId">
+            <option [ngValue]="null" [selected]="transfer.originId === null">
+              Todas los origenes
+            </option>
+            <option *ngFor="let element of origins" [ngValue]="element.id" [selected]="transfer.originId == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>
+        <div class="md-form">
+          <select class="browser-default custom-select" [id]="'categoryId'" [name]="'categoryId'"
+            [(ngModel)]="transfer.categoryId" (change)="method_getProducts()">
+            <option [ngValue]="null" [selected]="transfer.categoryId === null">
+              Todas las categorías
+            </option>
+            <option *ngFor="let element of categories" [ngValue]="element.id"
+              [selected]="transfer.categoryId == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>
+        <div class="md-form">
+          <select class="browser-default custom-select" [id]="'productId'" [name]="'productId'"
+            [(ngModel)]="transfer.productId">
+            <option [ngValue]="null" [selected]="transfer.productId === null">
+              Todos los productos
+            </option>
+            <option *ngFor="let element of products" [ngValue]="element.id"
+              [selected]="transfer.productId == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="number" class="form-control" id="quantity" name="quantity"
+            [(ngModel)]="transfer.quantity">
+          <label for="quantity">Cantidad</label>
+        </div>
+        <div class="md-form">
+          <select class="browser-default custom-select" [id]="'destinationId'" [name]="'destinationId'"
+            [(ngModel)]="transfer.destination_id">
+            <option [ngValue]="null" [selected]="transfer.destination_id === null">
+              Todas los destinos
+            </option>
+            <option *ngFor="let element of destinations" [ngValue]="element.id"
+              [selected]="transfer.destination_id == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="createdAtStart" name="createdAtStart"
+            [(ngModel)]="transfer.createdAtStart">
+          <label for="createdAtStart">Creado</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="createdAtEnd" name="createdAtEnd"
+            [(ngModel)]="transfer.createdAtEnd">
+          <label for="createdAtEnd"></label>
+        </div>        
+        <button mdbBtn type="submit" size="md" color="primary" class="mt-0 waves-light text-nowrap float-right"
+          mdbWavesEffect [disabled]="isLoading">
+          <mdb-icon fas icon="search"></mdb-icon>
+          <span> Buscar</span>
+          <span class="spinner-border spinner-border-sm" role="status" *ngIf="isLoading">
+            <span class="sr-only">Cargando...</span>
+          </span>
+        </button>
+      </form>
+    </blockquote>
+  </div>
+  <!-- Table -->
+  <div class="table-responsive">
+    <table mdbTable striped="true" hover="true" small="true" #tableEl="mdbTable" id="tableSortExample">
+      <thead>
+        <tr>
+          <th class="text-nowrap" *ngFor="let head of heads; let i = index" aria-controls="tableSortExample"
+            [mdbTableSort]="transfers" [sortBy]="headsSort[i]">
+            <span>{{ head }} </span>
+            <mdb-icon fas icon="sort"></mdb-icon>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr mdbTableCol *ngFor="let element of transfers; let i = index">
+          <td *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+            <div class="btn-group" mdbDropdown>
+              <button mdbBtn type="button" size="md" color="light" class="m-0 waves-light text-nowrap" mdbWavesEffect
+                mdbTooltip="Opciones traspaso" mdbDropdownToggle>
+                <mdb-icon fas icon="ellipsis-v"></mdb-icon>
+                <span class="d-none d-xl-inline"> Opciones traspaso</span>
+              </button>
+              <div class="dropdown-menu">
+                <button mdbBtn type="button" size="md" color="primary" class="m-0 waves-light text-nowrap dropdown-item"
+                  mdbWavesEffect (click)="method_showTransferConsult(element.id)"
+                  *ngIf="rol.key === 'Super' || rol.key === 'Director' || rol.key === 'Manager'">
+                  <mdb-icon fas icon="eye"></mdb-icon>
+                  <span> Ver traspaso</span>
+                </button>
+                <button mdbBtn type="button" size="md" color="warning" class="m-0 waves-light text-nowrap dropdown-item"
+                  mdbWavesEffect (click)="method_showTransferUpdate(element.id)"
+                  *ngIf="rol.key === 'Super' || rol.key === 'Director' || rol.key === 'Manager'"
+                  [hidden]="element.status==='Aceptado'">
+                  <mdb-icon fas icon="edit"></mdb-icon>
+                  <span> Modificar traspaso</span>
+                </button>
+                <button mdbBtn type="button" size="md" color="dark" class="m-0 waves-light text-nowrap dropdown-item"
+                  mdbWavesEffect (click)="method_AcceptTransfer(element.id)" [hidden]="element.status==='Aceptado'"
+                  *ngIf="rol.key === 'Super' || rol.key === 'Director' || rol.key === 'Manager' && subsidiary.name == element.destinationName">
+                  <mdb-icon fas icon="edit"></mdb-icon>
+                  <span> Aceptar traspaso</span>
+                </button>
+              </div>
+            </div>
+          </td>
+          <td class="text-nowrap" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex">
+            {{ element.changeKey }} {{ element.name }}
+          </td>
+          <td class="text-nowrap" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+            {{ element.enterpriseName }}
+          </td>
+          <td class="text-nowrap" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+            {{ element.businessName }}
+          </td>
+          <td class="text-nowrap" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+            {{ element.originName }}
+          </td>
+          <td class="text-nowrap" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+            {{ element.productName }}
+          </td>
+          <td class="text-nowrap text-right text-danger" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            " [ngClass]="{'text-success': element.key === 'Input'}">
+            {{ element.quantity | number }} {{ element.productUnit }}
+          </td>
+          <td class="text-nowrap" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+            {{ element.destinationName }}
+          </td>
+          <td class="text-nowrap" *ngIf="
+            i + 1 >= mdbTablePagination.firstItemIndex &&
+            i < mdbTablePagination.lastItemIndex
+          ">
+            {{ element.status }}
+            <mdb-badge pill="true" danger="true" mdbTooltip="Traspaso pendiente" *ngIf="element.status === 'Pendiente'">
+              <mdb-icon fas icon="exclamation-circle"></mdb-icon>
+            </mdb-badge>
+            <mdb-badge pill="true" success="true" mdbTooltip="Traspaso aceptado" *ngIf="element.status === 'Aceptado'">
+              <mdb-icon fas icon="check-circle"></mdb-icon>
+            </mdb-badge>
+          </td>
+          <td class="text-nowrap" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+            {{ element.created_at | date:'d/M/yy h:mm a' }}
+          </td>
+          <td class="text-nowrap" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+            {{ element.updated_at | date:'d/M/yy h:mm a' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Table Pagination -->
+  <mdb-table-pagination [tableEl]="tableEl" [searchDataSource]="transfers"></mdb-table-pagination>
+  <!-- Actions Particular -->
+  <app-transfer-consult [transferId]="transferId" [showedTransferInConsult]="showedTransferInConsult"
+    (emitter_gotTransferInConsult)="method_gotTransferInConsult($event)"></app-transfer-consult>
+  <app-transfer-update [transferId]="transferId" [showedTransferInUpdate]="showedTransferInUpdate"
+    (emitter_gotTransferInUpdate)="method_gotTransferInUpdate($event)"
+    (emitter_updatedTransfer)="method_updatedTransfer($event)" [gotTransfersInUpdate]="gotTransfersInUpdate">
+  </app-transfer-update>
+</div>

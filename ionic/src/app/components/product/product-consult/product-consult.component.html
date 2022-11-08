@@ -1,0 +1,118 @@
+<div
+  mdbModal
+  #productConsult="mdbModal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myProductConsultLabel"
+  aria-hidden="true"
+  [config]="{ backdrop: false, ignoreBackdropClick: true }"
+  *ngIf="rol.key !== 'Client'"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="productConsult.hide()"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myProductConsultLabel">
+          Ver producto
+        </h4>
+      </div>
+      <div class="modal-body bg-white">
+        <mat-tab-group>
+          <mat-tab label="General">
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Nombre:</b>
+                <p>
+                  {{ product.name }}
+                </p>
+              </div>
+              <div class="col-xl-6">
+                <b>Imagen:</b>
+                <app-product-image
+                [productImage]="product.image"
+                [productImageFile]="null"
+              ></app-product-image>
+              </div>
+            </div>
+            <div>
+              <b>Descripción:</b>
+              <p>
+                {{ product.description }}
+              </p>
+            </div>
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Contenido:</b>
+                <p>
+                  {{ product.content | number }}
+                </p>
+              </div>
+              <div class="col-xl-6">
+                <b>Unidad:</b>
+                <p>
+                  {{ product.unit }}
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Costo:</b>
+                <p>
+                  {{ product.cost | currency }} MXN
+                </p>
+              </div>
+              <div class="col-xl-6">
+                <b>Precio:</b>
+                <p>
+                  {{ product.price | currency }} MXN
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-4">
+                <b>Empresa:</b>
+                <p>
+                  {{ product.enterpriseName }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Negocio:</b>
+                <p>
+                  {{ product.businessName }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Categoría:</b>
+                <p>
+                  {{ product.categoryName }}
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Creado:</b>
+                <p>
+                  {{ product.created_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>
+              <div class="col-xl-6">
+                <b>Modificado:</b>
+                <p>
+                  {{ product.updated_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>  
+            </div>   
+          </mat-tab>
+        </mat-tab-group>        
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+<mdb-card>
+  <mdb-card-header>
+    <mdb-card-title>     
+      <span *ngIf="rol.key === 'Seller' || rol.key === 'Client'">Mis ventas </span>
+      <span *ngIf="rol.key !== 'Seller' && rol.key !== 'Client'">Ventas en </span>
+      <span *ngIf="rol.key === 'Super' || rol.key === 'Director'"> sucursales </span>
+      <span *ngIf="rol.key === 'Manager' || rol.key === 'Call_Center'"> sucursal </span>
+      por mes ({{year}})
+    </mdb-card-title>          
+  </mdb-card-header>
+  <mdb-card-body>
+    <div *ngIf="customerBarChartData">
+      <canvas mdbChart [chartType]="chartType" [datasets]="dashboard.chartDatasets" [labels]="dashboard.chartLabels"
+        [colors]="dashboard.chartColors" [options]="chartOptions" [legend]="true" (chartHover)="chartHovered($event)"
+        (chartClick)="chartClicked($event)">
+      </canvas>
+    </div>
+  </mdb-card-body>
+</mdb-card>

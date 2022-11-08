@@ -1,0 +1,83 @@
+<div class="bg-white content-page">
+  <app-navbar-top></app-navbar-top>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item" routerLink="/buys">Compras</li>
+    <li class="breadcrumb-item active" routerLink="/buy-do" *ngIf="buy.id == 0">Crear compra</li>
+    <li class="breadcrumb-item active" routerLink="/buy-do" *ngIf="buy.id != 0">Modificar compra</li>
+  </ol>
+  <div class="d-flex justify-content-center">
+    <h1 [hidden]="buy.id > 0">Crear compra</h1>
+    <h1 *ngIf="buy.id > 0">Modificar compra</h1>
+  </div>
+  <div class="container-fluid">
+    <mat-horizontal-stepper [linear]="!isLinear" #stepper>
+      <mat-step [stepControl]="firstFormGroup" label="">
+        <form [formGroup]="firstFormGroup">
+          <app-buy-do-step-first [buy]="buy" [enterprises]="enterprises" [businesses]="businesses"
+            [expectedDestinations]="expectedDestinations" [destinations]="destinations"
+            [buyDetailsProducts]="buyDetailsProducts" [buyDetailsServices]="buyDetailsServices"
+            (emitter_changedBuy)="method_changedBuy($event)">
+          </app-buy-do-step-first>
+          <div class="d-flex justify-content-between">
+            <div></div>
+            <button mdbBtn type="button" class="rounded-pill" color="primary" outline="true"
+              [ngClass]="{'waves-dark': true, 'btn-outline-info': buy.id <= 0, 'btn-outline-warning': buy.id > 0}"
+              (click)="method_nextStepperSecond(stepper)" mdbWavesEffect>
+              <mdb-icon fas icon="chevron-right"></mdb-icon>
+              <span class="d-none d-xl-inline"> Siguiente</span>
+            </button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="secondFormGroup" label="">
+        <form [formGroup]="secondFormGroup">
+          <app-buy-do-step-second [buy]="buy" [buyDetailsProducts]="buyDetailsProducts"
+            [buyDetailsServices]="buyDetailsServices" (emitter_changedBuy)="method_changedBuy($event)"
+            *ngIf="buy.expected_destination_id != 0">
+          </app-buy-do-step-second>
+          <div class="d-flex justify-content-between">
+            <button mdbBtn type="button"
+              [ngClass]="{'rounded-pill waves-dark': true, 'btn-outline-info': buy.id == 0, 'btn-outline-warning': buy.id != 0}"
+              mdbWavesEffect mdbTooltip="Anterior" (click)="method_previousStepperFirst(stepper)">
+              <mdb-icon fas icon="chevron-left"></mdb-icon>
+              <span class="d-none d-xl-inline"> Anterior</span>
+            </button>
+            <button mdbBtn type="button"
+              [ngClass]="{'rounded-pill waves-dark': true, 'btn-outline-info': buy.id == 0, 'btn-outline-warning': buy.id != 0}"
+              mdbWavesEffect mdbTooltip="Siguiente" (click)="method_nextStepperThird(stepper)">
+              <mdb-icon fas icon="chevron-right"></mdb-icon>
+              <span class="d-none d-xl-inline"> Siguiente</span>
+            </button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="thirdFormGroup" label="">
+        <app-buy-do-step-third [buy]="buy" [detailBuyQuantity]="detailBuyQuantity">
+        </app-buy-do-step-third>
+        <div class="d-flex justify-content-between">
+          <button mdbBtn type="button"
+            [ngClass]="{'rounded-pill waves-dark': true, 'btn-outline-info': buy.id == 0, 'btn-outline-warning': buy.id != 0}"
+            mdbWavesEffect mdbTooltip="Anterior" (click)="method_previousStepperSecond(stepper)">
+            <mdb-icon fas icon="chevron-left"></mdb-icon>
+            <span class="d-none d-xl-inline"> Anterior</span>
+          </button>
+          <div role='alert' [ngClass]="{'alert': buy.id != 0, 'alert alert-warning': buy.id != 0}">
+            <mdb-icon fas icon="exclamation-triangle" [hidden]="buy.id == 0"></mdb-icon>
+            <p class="d-inline" [hidden]="buy.id == 0"> Estas a punto de modificar a esta compra, ¿estas seguro?</p>
+            <button mdbBtn type="button" [ngClass]="{'btn-info': buy.id == 0, 'btn-warning': buy.id != 0}"
+              mdbWavesEffect (click)="method_doBuy(stepper)" [disabled]="isLoading">
+              <mdb-icon fas icon="save"></mdb-icon>
+              <span class="d-none d-xl-inline" *ngIf="buy.id == 0"> Guardar </span>
+              <span class="d-none d-xl-inline" *ngIf="buy.id != 0"> Sí, estoy seguro </span>
+              <span class="spinner-border spinner-border-sm" role="status" *ngIf="isLoading">
+                <span class="sr-only">Cargando...</span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </div>
+  <app-navbar-left></app-navbar-left>
+</div>
+<app-navbar-bottom></app-navbar-bottom>

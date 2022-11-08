@@ -1,0 +1,199 @@
+<div>
+  <!-- Actions General -->
+  <div class="clearfix">
+    <div class="float-xl-left">
+      <button
+        mdbBtn
+        type="button"
+        size="md" 
+        color="success" 
+        class="m-0 waves-light d-none d-xl-inline"
+        mdbTooltip="Exportar sesiones"
+        mdbWavesEffect
+        (click)="method_exportSessions()"
+        [disabled]="isLoading"
+        *ngIf="general"
+      >
+        <mdb-icon fas icon="file-excel"></mdb-icon>
+        <span class="d-none d-xl-inline"> Exportar sesiones</span>
+      </button>
+    </div>
+    <div class="float-xl-right form-group">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">
+            <mdb-icon fas icon="search"></mdb-icon>
+          </span>
+        </div>
+        <input type="search" class="form-control" id="search" name="search" 
+          [(ngModel)]="session.search" placeholder="Buscar sesiones" (change)="method_searchSessions()">
+        <div class="input-group-append">
+          <button
+            mdbBtn
+            type="button"
+            size="md" 
+            color="primary" 
+            class="m-0 waves-light"
+            mdbTooltip="Búsqueda de sesiones"
+            mdbWavesEffect
+            (click)="searchAdvancedSessions.toggle()"
+            *ngIf="general"
+          >
+            <mdb-icon fas icon="search-plus"></mdb-icon>
+            <span class="d-none d-xl-inline"> Búsqueda de sesiones</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="" mdbCollapse #searchAdvancedSessions="bs-collapse">
+    <blockquote class="blockquote">
+      <b class="bq-title">Búsqueda de sesiones</b>    
+      <form class="form-xl-inline" (ngSubmit)="method_searchAdvancedSessions()">        
+        <!--@todo Falta búsqueda avanzada-->
+      </form> 
+    </blockquote>
+  </div>
+  <!-- Table -->
+  <div class="table-responsive">
+    <table
+      mdbTable
+      striped="true"
+      hover="true"
+      small="true"
+      #tableEl="mdbTable"
+      id="tableSortExample"
+    >
+      <thead>
+        <tr>
+          <th
+            class="text-nowrap"
+            *ngFor="let head of heads; let i = index"
+            aria-controls="tableSortExample"
+            [mdbTableSort]="sessions"
+            [sortBy]="headsSort[i]"
+          >
+            <span>{{ head }} </span>
+            <mdb-icon fas icon="sort"></mdb-icon>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr mdbTableCol *ngFor="let element of sessions; let i = index">
+          <td
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            <div class="btn-group" mdbDropdown *ngIf="false">
+              <button 
+                mdbBtn 
+                type="button" 
+                size="md" 
+                color="light" 
+                class="m-0 waves-light text-nowrap"
+                mdbWavesEffect
+                mdbTooltip="Opciones sesión"
+                mdbDropdownToggle>
+                <mdb-icon fas icon="ellipsis-v"></mdb-icon>
+                <span class="d-none d-xl-inline"> Opciones sesión</span>
+              </button>
+              <div class="dropdown-menu">                  
+                <button
+                  mdbBtn
+                  type="button"
+                  size="md" 
+                  color="primary" 
+                  class="m-0 waves-light text-nowrap dropdown-item"
+                  mdbWavesEffect
+                  (click)="method_showModalSessionConsult(element.id)">
+                  <mdb-icon fas icon="eye"></mdb-icon>
+                  <span> Ver sesión</span>
+                </button>   
+              </div>
+            </div>  
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.userNameComplete }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.userCellphone }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.enterpriseName }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.businessName }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.subsidiaryName }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.rolName }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.created_at | date:'d/M/yy h:mm a' }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.updated_at | date:'d/M/yy h:mm a' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Table Pagination -->
+  <mdb-table-pagination
+    [tableEl]="tableEl"
+    [searchDataSource]="sessions"
+  ></mdb-table-pagination>
+  <!-- Actions Particular -->
+</div>

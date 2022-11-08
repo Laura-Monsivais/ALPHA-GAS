@@ -1,0 +1,52 @@
+<div *ngIf="rol.key === 'Super' || rol.key === 'Director' || rol.key === 'Seller'">
+  <!-- Actions General -->
+  <div class="input-group"> 
+    <div class="input-group-prepend">
+      <span class="input-group-text">
+        <mdb-icon fas icon="search"></mdb-icon>
+      </span>
+    </div>
+    <input type="search" class="form-control" id="search" name="search" 
+      [(ngModel)]="order.search" placeholder="Buscar pedidos" (change)="method_searchAdvancedOrders()">    
+    <!--@todo Falta búsqueda avanzada-->
+  </div>  
+  <!-- List -->
+  <div class="list-group">
+    <div class="list-group-item" *ngFor="let element of orders; let i = index">
+      <div class="d-flex w-100 justify-content-between">
+        <div>
+          <app-order-info [onlyIcon]="true" [order]="element"></app-order-info>
+        </div>
+        <button
+          mdbBtn
+          type="button"
+          size="md"
+          color="info"
+          outline="true" class="m-0 waves-dark"
+          mdbTooltip="Agregar pedido"
+          mdbWavesEffect
+          (click)="method_addOrder(element)"
+          *ngIf="sale.order_id == 0">
+          <mdb-icon fas icon="plus-circle"></mdb-icon>
+          <span class="d-none d-xl-inline"> Agregar pedido</span>
+        </button>
+        <button
+          mdbBtn
+          type="button"
+          size="md"
+          color="danger"
+          outline="true"
+          class="m-0 waves-dark"
+          mdbTooltip="Quitar pedido"
+          mdbWavesEffect
+          (click)="method_removeOrderSale()"
+          *ngIf="sale.order_id == element.id">
+          <mdb-icon fas icon="minus-circle"></mdb-icon
+          ><span class="d-none d-xl-inline"> Quitar pedido</span>
+        </button>
+      </div>  
+    </div>
+  </div>
+</div>
+
+         

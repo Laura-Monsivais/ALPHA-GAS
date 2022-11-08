@@ -1,0 +1,261 @@
+<div>
+  <!-- Actions General -->
+  <div class="clearfix">
+    <div class="float-xl-left">      
+      <app-sale-do-link [saleId]="0"></app-sale-do-link>
+      <button
+        mdbBtn
+        type="button"
+        size="md" 
+        color="success" 
+        class="m-0 waves-light d-none d-xl-inline"
+        mdbTooltip="Exportar ventas"
+        mdbWavesEffect
+        (click)="method_exportSales()"
+        [disabled]="isLoading"
+      >
+        <mdb-icon fas icon="file-excel"></mdb-icon>
+        <span class="d-none d-xl-inline"> Exportar ventas</span>
+      </button>
+    </div>
+    <div class="float-xl-right form-group">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">
+            <mdb-icon fas icon="search"></mdb-icon>
+          </span>
+        </div>
+        <input type="search" class="form-control" id="search" name="search" 
+          [(ngModel)]="sale.search" placeholder="Buscar ventas" (change)="method_searchSales()">
+        <div class="input-group-append">
+          <button 
+            mdbBtn
+            type="button"
+            size="md" 
+            color="primary" 
+            class="m-0 waves-light"
+            mdbTooltip="Búsqueda de usuarios"
+            mdbWavesEffect
+            (click)="searchAdvancedSales.toggle()"
+          >
+            <mdb-icon fas icon="search-plus"></mdb-icon>
+            <span class="d-none d-xl-inline"> Búsqueda de ventas</span>
+          </button>
+        </div>
+      </div>    
+    </div>  
+  </div>
+  <div class="" mdbCollapse #searchAdvancedSales="bs-collapse">
+    <blockquote class="blockquote">
+      <b class="bq-title">Búsqueda de ventas</b> 
+      <form class="form-xl-inline" (ngSubmit)="method_searchAdvancedSales()">        
+        <div class="md-form">
+          <select
+            class="browser-default custom-select"
+            [id]="'enterpriseId'"
+            [name]="'enterpriseId'"
+            [(ngModel)]="sale.enterpriseId"
+            (change)="method_getBusinesses()">
+            <option [ngValue]="null" [selected]="sale.enterpriseId === null">
+              Todas las empresas
+            </option>
+            <option *ngFor="let element of enterprises" [ngValue]="element.id" [selected]="sale.enterpriseId == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>
+        <div class="md-form">
+          <select
+            class="browser-default custom-select"
+            [id]="'businessId'"
+            [name]="'businessId'"
+            [(ngModel)]="sale.businessId"
+            (change)="method_getSubsidiaries()">
+            <option [ngValue]="null" [selected]="sale.businessId === null">
+              Todos los negocios
+            </option>
+            <option *ngFor="let element of businesses" [ngValue]="element.id" [selected]="sale.businessId == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>
+        <div class="md-form">
+          <select
+            class="browser-default custom-select"
+            [id]="'subsidiaryId'"
+            [name]="'subsidiaryId'"
+            [(ngModel)]="sale.subsidiaryId"
+            (change)="method_getSessions()">
+            <option [ngValue]="null" [selected]="sale.subsidiaryId === null">
+              Todas las sucursales
+            </option>
+            <option *ngFor="let element of subsidiaries" [ngValue]="element.id" [selected]="sale.subsidiaryId == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>
+        <div class="md-form">
+          <select
+            class="browser-default custom-select"
+            [id]="'sellerId'"
+            [name]="'sellerId'"
+            [(ngModel)]="sale.seller_id">
+            <option [ngValue]="null" [selected]="sale.seller_id === null">
+              Todos los vendedores
+            </option>
+            <option *ngFor="let element of sessions" [ngValue]="element.id" [selected]="sale.seller_id == element.id">
+              {{ element.userNameComplete }}
+            </option>
+          </select>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="number" class="form-control" id="total" name="total" [(ngModel)]="sale.total">
+          <label for="total">Total</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="createdAtStart" name="createdAtStart" [(ngModel)]="sale.createdAtStart">
+          <label for="createdAtStart">Creado</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="createdAtEnd" name="createdAtEnd" [(ngModel)]="sale.createdAtEnd">
+          <label for="createdAtEnd"></label>
+        </div>       
+        <button
+          mdbBtn
+          type="submit"
+          size="md" 
+          color="primary" 
+          class="mt-0 waves-light text-nowrap float-right"
+          mdbWavesEffect
+          [disabled]="isLoading"
+        >
+          <mdb-icon fas icon="search"></mdb-icon>
+          <span> Buscar</span>
+          <span class="spinner-border spinner-border-sm" role="status" *ngIf="isLoading">
+            <span class="sr-only">Cargando...</span>
+          </span>
+        </button>   
+      </form>  
+    </blockquote>
+  </div>
+  <!-- Table -->
+  <div class="table-responsive">
+    <table
+      mdbTable
+      striped="true"
+      hover="true"
+      small="true"
+      #tableEl="mdbTable"
+      id="tableSortExample"
+    >
+      <thead>
+        <tr>
+          <th class="text-nowrap" 
+            *ngFor="let head of heads; let i = index" 
+            aria-controls="tableSortExample"
+            [mdbTableSort]="sales" 
+            [sortBy]="headsSort[i]"
+          >
+            <span>{{ head }} </span>
+            <mdb-icon fas icon="sort"></mdb-icon>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr mdbTableCol *ngFor="let element of sales; let i = index">
+          <td
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            <div class="btn-group" mdbDropdown>
+              <button 
+                mdbBtn 
+                type="button" 
+                size="md" 
+                color="light" 
+                class="m-0 waves-light text-nowrap"
+                mdbWavesEffect
+                mdbTooltip="Opciones venta"
+                mdbDropdownToggle>
+                <mdb-icon fas icon="ellipsis-v"></mdb-icon>
+                <span class="d-none d-xl-inline"> Opciones venta</span>
+              </button>
+              <div class="dropdown-menu">                  
+                <button
+                  mdbBtn
+                  type="button"
+                  size="md" 
+                  color="primary" 
+                  class="m-0 waves-light text-nowrap dropdown-item"
+                  mdbWavesEffect
+                  (click)="method_showModalSaleConsult(element.id)">
+                  <mdb-icon fas icon="eye"></mdb-icon>
+                  <span> Ver venta</span>
+                </button>             
+                <app-sale-do-link [saleId]="element.id"></app-sale-do-link>
+              </div>
+            </div>
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          > 
+            {{ element.sellerNameComplete }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          > 
+            {{ element.clientNameComplete }}
+          </td>
+          <td
+            class="text-nowrap text-right text-success"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          > 
+            {{ element.total | currency }} MXN
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          > 
+            {{ element.created_at | date:'d/M/yy h:mm a' }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          > 
+            {{ element.updated_at | date:'d/M/yy h:mm a' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Table Pagination -->
+  <mdb-table-pagination
+    [tableEl]="tableEl"
+    [searchDataSource]="sales"
+  ></mdb-table-pagination>
+  <!-- Actions Particular -->
+  <app-sale-consult
+    [saleId]="saleId"
+    [showedModalSaleConsult]="showedModalSaleConsult"
+    (emitter_gotSaleInConsult)="method_detectIfGotSaleInConsult($event)"
+  ></app-sale-consult>
+</div>

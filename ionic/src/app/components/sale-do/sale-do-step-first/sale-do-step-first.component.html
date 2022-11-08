@@ -1,0 +1,130 @@
+
+<div class="row">
+  <div class="col-xl-3">
+    <div class="form-group">
+      <label [for]="'enterpriseId' + sale.id">Empresa:</label>
+      <select
+        [id]="'enterpriseId' + sale.id"
+        class="browser-default custom-select"
+        [name]="'enterpriseId' + sale.id"
+        [(ngModel)]="sale.enterpriseId"
+        #enterpriseIdValidation="ngModel"
+        required
+        [disabled]="(rol.key === 'Director' || rol.key === 'Seller') || sale.client_id !== 0"
+        (change)="method_getBusinesses()"
+      >
+        <option [ngValue]="0" [selected]="sale.enterpriseId == 0">
+          Selecciona una empresa
+        </option>
+        <option
+          *ngFor="let element of enterprises"
+          [ngValue]="element.id"
+          [selected]="sale.enterpriseId == element.id"
+        >
+          {{ element.name }}
+        </option>
+      </select>
+      <mdb-error
+        *ngIf="
+          enterpriseIdValidation.invalid &&
+          (enterpriseIdValidation.dirty || enterpriseIdValidation.touched)
+        "
+        >Campo requerido</mdb-error
+      >
+      <mdb-success
+        *ngIf="
+          enterpriseIdValidation.valid &&
+          (enterpriseIdValidation.dirty || enterpriseIdValidation.touched)
+        "
+      ></mdb-success>
+    </div>
+  </div>
+  <div class="col-xl-3">
+    <div class="form-group">
+      <label [for]="'businessId' + sale.id">Negocio:</label>
+      <select
+        [id]="'businessId' + sale.id"
+        class="browser-default custom-select"
+        [name]="'businessId' + sale.id"
+        [(ngModel)]="sale.businessId"
+        (change)="method_getSubsidiaries()"
+        [disabled]="(rol.key === 'Seller') || sale.client_id !== 0"
+      >
+        <option [ngValue]="0" [selected]="sale.businessId == 0">
+          Selecciona un negocio
+        </option>
+        <option
+          *ngFor="let element of businesses"
+          [ngValue]="element.id"
+          [selected]="sale.businessId == element.id"
+        >
+          {{ element.name }}
+        </option>
+      </select>
+    </div>
+  </div>
+  <div class="col-xl-3">
+    <div class="form-group">
+      <label [for]="'subsidiaryId' + sale.id">Sucursal:</label>
+      <select
+        [id]="'subsidiaryId' + sale.id"
+        class="browser-default custom-select"
+        [name]="'subsidiaryId' + sale.id"
+        [(ngModel)]="sale.subsidiaryId"
+        [disabled]="(rol.key === 'Seller') || sale.client_id !== 0"
+        (change)="method_getSessions()"
+      >
+        <option [ngValue]="0" [selected]="sale.subsidiaryId == 0">
+          Selecciona una sucursal
+        </option>
+        <option
+          *ngFor="let element of subsidiaries"
+          [ngValue]="element.id"
+          [selected]="sale.subsidiaryId == element.id"
+        >
+          {{ element.type }} {{ element.name }}
+        </option>
+      </select>
+    </div>
+  </div>
+  <div class="col-xl-3">
+    <div class="form-group">
+      <label class="font-weight-bold" [for]="'sellerId' + sale.id">Vendedor:</label>
+      <select
+        [id]="'sellerId' + sale.id"
+        class="browser-default custom-select"
+        [name]="'sellerId' + sale.id"
+        [(ngModel)]="sale.seller_id"
+        [disabled]="rol.key === 'Seller'"
+      >
+        <option [ngValue]="0" [selected]="sale.seller_id == 0">
+          Selecciona un vendedor
+        </option>
+        <option
+          *ngFor="let element of sessions"
+          [ngValue]="element.id"
+          [selected]="sale.seller_id == element.id"
+        >
+          {{ element.userNameComplete }}
+        </option>
+      </select>
+    </div>
+  </div>
+</div>
+<mat-tab-group *ngIf="sale.subsidiaryId !== 0">
+  <mat-tab label="Cliente">
+    <app-session-list 
+      [sale]="sale" 
+      (emitter_addedClient)="method_addedClient($event)" 
+    ></app-session-list>
+  </mat-tab>
+  <mat-tab label="Pedido" *ngIf="(rol.key === 'Super' || attention.key === 'Order') && sale.client_id != 0">
+    <app-order-list 
+      [sale]="sale" 
+      [saleDetailsNotInventories]="saleDetailsNotInventories"
+      [saleDetailsPromotions]="saleDetailsPromotions"
+      [saleDetailsProducts]="saleDetailsProducts"
+      (emitter_addedOrder)="method_addedOrder($event)" 
+    ></app-order-list>
+  </mat-tab>
+</mat-tab-group>

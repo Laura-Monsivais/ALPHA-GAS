@@ -1,0 +1,72 @@
+.toggleNavbarLeft {
+    height: 72px;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 72px;
+    z-index: 4000;
+}
+.navbarLeft { 
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    display: block !important;
+    height: 100%;
+    left: 0px;
+    position: fixed;
+    transition: 0.6s;
+    -webkit-transition: 0.6s;
+    -moz-transition: 0.6s;
+    top: 0px;
+    z-index: 3000;
+}
+@media (max-width: 575px) { 
+    .navbarLeft {
+        width: 100%;
+    }
+}
+@media (min-width: 576px) { 
+    .navbarLeft {
+        width: 100%;
+    }
+}
+@media (min-width: 768px) { 
+    .navbarLeft {
+        width: 50%;
+    }
+}
+@media (min-width: 992px) { 
+    .navbarLeft {
+        width: 40%;
+    }
+}
+@media (min-width: 1200px) { 
+    .navbarLeft {
+        width: 30%;
+    }
+}
+@media (min-width: 2200px) { 
+    .navbarLeft {
+        width: 20%;
+    }
+}
+.menu {
+    background-color: rgba(0,0,0,0.9) !important;
+    font-size: 1.5rem;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+.navbarLeftClose{
+    left: -100% !important;
+}
+.backdrop {
+    background-color: rgba(0,0,0,0.5) !important;
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100%;
+    z-index: 2000;
+}

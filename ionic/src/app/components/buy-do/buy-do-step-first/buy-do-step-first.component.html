@@ -1,0 +1,160 @@
+<div class="row">
+  <div class="col-xl-3">
+    <div class="md-form form-group">
+      <input
+        mdbInput
+        mdbValidate
+        type="text"
+        [id]="'name'+buy.id" 
+        class="form-control" 
+        [name]="'name'+buy.id"
+        [(ngModel)]="buy.name" 
+        #nameValidation="ngModel" 
+        required/>
+      <label class="font-weight-bold" [for]="'name'+buy.id">Factura:</label>
+      <mdb-error 
+        *ngIf="nameValidation.invalid &&
+          (nameValidation.dirty || nameValidation.touched)">
+        Campo requerido
+      </mdb-error>
+      <mdb-success 
+        *ngIf="nameValidation.valid &&
+          (nameValidation.dirty || nameValidation.touched)">
+      </mdb-success>
+    </div>
+  </div>
+  <div class="col-xl-3">
+    <div class="md-form form-group">      
+      <input
+        mdbInput
+        type="text"
+        [id]="'provenance'+buy.id" 
+        class="form-control is-valid" 
+        [name]="'provenance'+buy.id"
+        [(ngModel)]="buy.provenance"/>
+      <label class="font-weight-bold" [for]="'provenance'+buy.id">Origen:</label>
+    </div>
+  </div>
+  <div class="col-xl-3">
+    <div class="md-form form-group">    
+      <input 
+        mdbInput 
+        type="text" 
+        [id]="'transport'+buy.id" 
+        class="form-control is-valid" 
+        [name]="'transport'+buy.id"
+        [(ngModel)]="buy.transport"/>
+      <label class="font-weight-bold" [for]="'transport'+buy.id">Transporte:</label>
+    </div>
+  </div>
+  <div class="col-xl-3">
+    <div class="md-form form-group">
+      <input 
+        mdbInput 
+        type="date" 
+        [id]="'embarkedAt'+buy.id" 
+        class="form-control is-valid" 
+        [name]="'embarkedAt'+buy.id"
+        [(ngModel)]="buy.embarked_at"/>
+      <label class="font-weight-bold" [for]="'embarkedAt'+buy.id">Embarcada:</label>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xl-4">
+    <div class="form-group">
+      <label [for]="'enterpriseId' + buy.id">Empresa:</label>
+      <select 
+        [id]="'enterpriseId' + buy.id" 
+        class="browser-default custom-select" 
+        [name]="'enterpriseId' + buy.id"
+        [(ngModel)]="buy.enterpriseId" 
+        #enterpriseIdValidation="ngModel" 
+        [disabled]="rol.key === 'Director'" 
+        (change)="method_getBusinesses()"
+        required>
+        <option [ngValue]="0" [selected]="buy.enterpriseId == 0">
+          Selecciona una empresa
+        </option>
+        <option *ngFor="let element of enterprises" [ngValue]="element.id" [selected]="buy.enterpriseId == element.id">
+          {{ element.name }}
+        </option>
+      </select>
+      <mdb-error *ngIf="
+        enterpriseIdValidation.invalid &&
+        (enterpriseIdValidation.dirty || enterpriseIdValidation.touched)
+      ">Campo requerido</mdb-error>
+      <mdb-success *ngIf="
+        enterpriseIdValidation.valid &&
+        (enterpriseIdValidation.dirty || enterpriseIdValidation.touched)
+      "></mdb-success>
+    </div>
+  </div>
+  <div class="col-xl-4">
+    <div class="form-group">
+      <label [for]="'businessId' + buy.id">Negocio:</label>
+      <select 
+        [id]="'businessId' + buy.id" 
+        class="browser-default custom-select" 
+        [name]="'businessId' + buy.id"
+        [(ngModel)]="buy.businessId" 
+        (change)="method_getSubsidiaries()">
+        <option [ngValue]="0" [selected]="buy.businessId == 0">
+          Selecciona un negocio
+        </option>
+        <option *ngFor="let element of businesses" [ngValue]="element.id" [selected]="buy.businessId == element.id">
+          {{ element.name }}
+        </option>
+      </select>
+    </div>
+  </div>
+  <div class="col-xl-4">
+    <div class="form-group">
+      <label class="font-weight-bold" [for]="'expectedDestinationId' + buy.id">Destino esperado:</label>
+      <select 
+        [id]="'expectedDestinationId' + buy.id" 
+        class="browser-default custom-select" 
+        [name]="'expectedDestinationId' + buy.id"
+        [(ngModel)]="buy.expected_destination_id">
+        <option [ngValue]="0" [selected]="buy.expected_destination_id == 0">
+          Selecciona un destino esperado
+        </option>
+        <option *ngFor="let element of expectedDestinations" [ngValue]="element.id" [selected]="buy.expected_destination_id == element.id">                    
+          {{ element.type }} {{ element.name }}
+        </option>
+      </select>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xl-6">
+    <div class="form-group">
+      <label class="font-weight-bold" [for]="'destinationId' + buy.id">Destino:</label>
+      <select 
+        [id]="'destinationId' + buy.id" 
+        class="browser-default custom-select is-valid" 
+        [name]="'destinationId' + buy.id"
+        [(ngModel)]="buy.destination_id">
+        <option [ngValue]="0" [selected]="buy.destination_id == 0">
+          Selecciona un destino
+        </option>
+        <option *ngFor="let element of destinations" [ngValue]="element.id"
+          [selected]="buy.destination_id == element.id" >          
+          {{ element.type }} {{ element.name }}
+        </option>
+      </select>
+    </div>
+  </div>
+  <div class="col-xl-6">
+    <div class="md-form form-group">
+      <input 
+        mdbInput 
+        type="date" 
+        [id]="'downloadedAt'+buy.id" 
+        class="form-control is-valid"
+        [name]="'downloadedAt'+buy.id" 
+        [(ngModel)]="buy.downloaded_at"/>
+      <label class="font-weight-bold" [for]="'downloadedAt'+buy.id">Descargada:</label>
+    </div>
+  </div>
+</div>

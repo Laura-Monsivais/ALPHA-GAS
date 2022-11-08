@@ -1,0 +1,92 @@
+<div class="bg-white content-page">
+  <app-navbar-top></app-navbar-top>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item" routerLink="/sales">Ventas</li>
+    <li class="breadcrumb-item active" routerLink="/sale-do" *ngIf="sale.id == 0">Crear venta</li>
+    <li class="breadcrumb-item active" routerLink="/sale-do" *ngIf="sale.id != 0">Modificar venta</li>
+  </ol>
+  <div class="d-flex justify-content-center">
+    <h1 *ngIf="sale.id == 0">Crear venta</h1>
+    <h1 *ngIf="sale.id != 0">Modificar venta</h1>
+  </div>
+  <div class="container-fluid">
+    <mat-horizontal-stepper [linear]="!isLinear" #stepper>
+      <mat-step [stepControl]="firstFormGroup" label="">
+        <form [formGroup]="firstFormGroup">
+          <app-sale-do-step-first [sale]="sale" 
+            [enterprises]="enterprises" 
+            [businesses]="businesses"
+            [subsidiaries]="subsidiaries" 
+            [sessions]="sessions" 
+            [saleDetailsNotInventories]="saleDetailsNotInventories"
+            [saleDetailsPromotions]="saleDetailsPromotions"
+            [saleDetailsProducts]="saleDetailsProducts" 
+            (emitter_changedSale)="method_changedSale($event)">
+          </app-sale-do-step-first>
+          <div class="d-flex justify-content-between">
+            <div></div>
+            <button mdbBtn type="button"
+              [ngClass]="{'rounded-pill waves-dark': true, 'btn-outline-info': sale.id == 0, 'btn-outline-warning': sale.id != 0}"
+              mdbWavesEffect mdbTooltip="Siguiente" (click)="method_nextStepperSecond(stepper)">
+              <mdb-icon fas icon="chevron-right"></mdb-icon>
+              <span class="d-none d-xl-inline"> Siguiente</span>
+            </button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="secondFormGroup" label="">
+        <form [formGroup]="secondFormGroup">
+          <app-sale-do-step-second 
+            [sale]="sale" 
+            [saleDetailsNotInventories]="saleDetailsNotInventories"
+            [saleDetailsPromotions]="saleDetailsPromotions"
+            [saleDetailsProducts]="saleDetailsProducts" 
+            [saleDetailsServices]="saleDetailsServices"
+            (emitter_changedSale)="method_changedSale($event)" *ngIf="sale.subsidiaryId != 0">
+          </app-sale-do-step-second>
+          <div class="d-flex justify-content-between">
+            <button mdbBtn type="button"
+              [ngClass]="{'rounded-pill waves-dark': true, 'btn-outline-info': sale.id == 0, 'btn-outline-warning': sale.id != 0}"
+              mdbWavesEffect mdbTooltip="Anterior" (click)="method_previousStepperFirst(stepper)">
+              <mdb-icon fas icon="chevron-left"></mdb-icon>
+              <span class="d-none d-xl-inline"> Anterior</span>
+            </button>
+            <button mdbBtn type="button"
+              [ngClass]="{'rounded-pill waves-dark': true, 'btn-outline-info': sale.id == 0, 'btn-outline-warning': sale.id != 0}"
+              mdbWavesEffect mdbTooltip="Siguiente" (click)="method_nextStepperThird(stepper)">
+              <mdb-icon fas icon="chevron-right"></mdb-icon>
+              <span class="d-none d-xl-inline"> Siguiente</span>
+            </button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="thirdFormGroup" label="">
+        <app-sale-do-step-third [sale]="sale" [detailSaleQuantity]="detailSaleQuantity"></app-sale-do-step-third>
+        <div class="d-flex justify-content-between">
+          <button mdbBtn type="button"
+            [ngClass]="{'rounded-pill waves-dark': true, 'btn-outline-info': sale.id == 0, 'btn-outline-warning': sale.id != 0}"
+            mdbWavesEffect mdbTooltip="Anterior" (click)="method_previousStepperSecond(stepper)">
+            <mdb-icon fas icon="chevron-left"></mdb-icon>
+            <span class="d-none d-xl-inline"> Anterior</span>
+          </button>
+          <div role='alert'[ngClass]="{'alert': sale.id != 0, 'alert alert-warning': sale.id != 0}">
+            <mdb-icon fas icon="exclamation-triangle" [hidden]="sale.id == 0"></mdb-icon>
+            <p class="d-inline" [hidden]="sale.id == 0"> Estas a punto de modificar a esta venta, ¿estas seguro?</p>
+            <button mdbBtn type="button"
+              [ngClass]="{'btn-info': sale.id == 0, 'btn-warning': sale.id != 0}" mdbWavesEffect
+              (click)="method_doSale(stepper)" [disabled]="isLoading">
+              <mdb-icon fas icon="save"></mdb-icon>
+              <span class="d-none d-xl-inline" *ngIf="sale.id == 0"> Guardar </span>
+              <span class="d-none d-xl-inline" *ngIf="sale.id != 0"> Sí, estoy seguro </span>
+              <span class="spinner-border spinner-border-sm" role="status" *ngIf="isLoading">
+                <span class="sr-only">Cargando...</span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </div>
+  <app-navbar-left></app-navbar-left>
+</div>
+<app-navbar-bottom></app-navbar-bottom>

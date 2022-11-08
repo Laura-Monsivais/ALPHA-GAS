@@ -1,0 +1,140 @@
+<div mdbModal #subsidiaryConsult="mdbModal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="mySubsidiaryConsultLabel" aria-hidden="true"
+  [config]="{ backdrop: false, ignoreBackdropClick: true }" *ngIf="rol.key === 'Super' || rol.key === 'Director'">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="subsidiaryConsult.hide()">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="mySubsidiaryConsultLabel">
+          Ver sucursal
+        </h4>
+      </div>
+      <div class="modal-body bg-white">
+        <mat-tab-group>
+          <mat-tab label="General">
+            <div>
+              <b>Nombre:</b>
+              <p>
+                {{ subsidiary.name }}
+              </p>
+            </div>
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Logo:</b>
+                <app-subsidiary-logo [subsidiaryLogo]="subsidiary.logo" [subsidiaryLogoFile]="null">
+                </app-subsidiary-logo>
+              </div>
+              <div class="col-xl-6">
+                <b>Fondo:</b>
+                <app-subsidiary-overlay [subsidiaryOverlay]="subsidiary.overlay" [subsidiaryOverlayFile]="null">
+                </app-subsidiary-overlay>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-4">
+                <b>Calle:</b>
+                <p>
+                  {{ subsidiary.street }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Exterior:</b>
+                <p>
+                  {{ subsidiary.exterior }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Interior:</b>
+                <p>
+                  {{ subsidiary.interior }}
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-4">
+                <b>Código postal:</b>
+                <p>
+                  {{ subsidiary.postal_code }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Colonia:</b>
+                <p>
+                  {{ subsidiary.neighborhood }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Ciudad:</b>
+                <p>
+                  {{ subsidiary.city }}
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-4">
+                <b>Municipio:</b>
+                <p>
+                  {{ subsidiary.municipality }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Estado:</b>
+                <p>
+                  {{ subsidiary.state }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>País:</b>
+                <p>
+                  {{ subsidiary.country }}
+                </p>
+              </div>
+            </div>
+            <div>
+              <b>Referencias:</b>
+              <p>
+                {{ subsidiary.references }}
+              </p>
+            </div>
+            <div class="row">
+              <div class="col-xl-4">
+                <b>Empresa:</b>
+                <p>
+                  {{ subsidiary.enterpriseName }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Negocio:</b>
+                <p>
+                  {{ subsidiary.businessName }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Es central:</b>
+                <p>
+                  {{ subsidiary.isCentral }}
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Creado:</b>
+                <p>
+                  {{ subsidiary.created_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>
+              <div class="col-xl-6">
+                <b>Modificado:</b>
+                <p>
+                  {{ subsidiary.updated_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</div>

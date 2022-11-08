@@ -1,0 +1,67 @@
+<button
+  mdbBtn
+  type="button"
+  size="md" 
+  color="info"
+  class="waves-light m-0"
+  mdbTooltip="Crear promoción"
+  mdbWavesEffect
+  (click)="method_getPromotion()"
+  *ngIf="rol.key === 'Super' || rol.key === 'Director'"
+>
+  <mdb-icon fas icon="pen"></mdb-icon
+  ><span class="d-none d-xl-inline"> Crear promoción</span>
+</button>
+<div        
+  mdbModal
+  #promotionInsert="mdbModal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myPromotionInsertLabel"
+  aria-hidden="true"
+  [config]="{ backdrop: false, ignoreBackdropClick: true }"
+  *ngIf="rol.key === 'Super' || rol.key === 'Director'"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="promotionInsert.hide()"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myPromotionInsertLabel">
+          Crear promoción
+        </h4>
+      </div>
+      <div class="modal-body bg-white">
+        <form (ngSubmit)="method_insertPromotion()">
+          <app-promotion-form
+            [promotion]="promotion"
+            [enterprises]="enterprises"
+            [businesses]="businesses"
+            [subsidiaries]="subsidiaries"
+          ></app-promotion-form>
+          <button
+            mdbBtn
+            type="submit"
+            color="info"
+            class="waves-light" block="true"
+            mdbWavesEffect
+            [disabled]="isLoading"
+          >
+            <mdb-icon fas icon="save"></mdb-icon>
+            <span> Guardar </span>
+            <span class="spinner-border spinner-border-sm" role="status" *ngIf="isLoading">
+              <span class="sr-only">Cargando...</span>
+            </span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

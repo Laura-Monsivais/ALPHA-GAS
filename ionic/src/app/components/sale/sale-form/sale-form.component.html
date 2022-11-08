@@ -1,0 +1,8 @@
+<div class="alert alert-primary text-center" role="alert">
+  {{detailSaleQuantity}}
+  <span *ngIf="detailSaleQuantity > 1"> artículos</span>
+  <span *ngIf="detailSaleQuantity == 1"> artículo</span>
+</div>
+<div class="text-right">
+  <h5>Total: <b>{{ sale.total | currency }} MXN</b></h5>
+</div>

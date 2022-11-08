@@ -1,0 +1,69 @@
+<div
+  mdbModal
+  #businessConsult="mdbModal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myBusinessConsultLabel"
+  aria-hidden="true"
+  [config]="{ backdrop: false, ignoreBackdropClick: true }"
+  *ngIf="rol.key === 'Super' || rol.key === 'Director'"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="businessConsult.hide()"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myBusinessConsultLabel">
+          Ver negocio
+        </h4>
+      </div>
+      <div class="modal-body bg-white">        
+        <mat-tab-group>
+          <mat-tab label="General">
+            <div>
+              <b>Nombre:</b>
+              <p>
+                {{ business.name }}
+              </p>
+            </div>
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Empresa:</b>
+                <p>
+                  {{ business.enterpriseName }}
+                </p>
+              </div>
+              <div class="col-xl-6">
+                <b>Atención:</b>
+                <p>
+                  {{ business.attentionName }}
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Creado:</b>
+                <p>
+                  {{ business.created_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>
+              <div class="col-xl-6">
+                <b>Modificado:</b>
+                <p>
+                  {{ business.updated_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>  
+            </div>
+          </mat-tab>
+        </mat-tab-group>      
+      </div>
+    </div>
+  </div>
+</div>

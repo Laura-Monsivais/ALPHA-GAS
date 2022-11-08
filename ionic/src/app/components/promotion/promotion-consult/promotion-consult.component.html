@@ -1,0 +1,103 @@
+<div
+  mdbModal
+  #promotionConsult="mdbModal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myPromotionConsultLabel"
+  aria-hidden="true"
+  [config]="{ backdrop: false, ignoreBackdropClick: true }"
+  *ngIf="rol.key !== 'Client'"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="promotionConsult.hide()"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myPromotionConsultLabel">
+          Ver promoción
+        </h4>
+      </div>
+      <div class="modal-body bg-white">
+        <mat-tab-group>
+          <mat-tab label="General">
+            <div>
+              <b>Nombre:</b>
+              <p>
+                {{ promotion.name }}
+              </p>
+            </div>
+            <div class="row">
+              <div class="col-xl-4">
+                <b>Expira:</b>
+                <p>
+                  {{ promotion.expires_at | date:'d/M/yy' }}
+                  <mdb-badge pill="true" danger="true"
+                    mdbTooltip="Promoción expiró" 
+                    *ngIf="method_diffDays(promotion.expires_at) < 0">
+                    <mdb-icon
+                      far
+                      icon="calendar-times"
+                    ></mdb-icon>
+                  </mdb-badge>
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Costo:</b>
+                <p>
+                  {{ promotion.cost | currency }} MXN
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Precio:</b>
+                <p>
+                  {{ promotion.price | currency }} MXN
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-4">
+                <b>Empresa:</b>
+                <p>
+                  {{ promotion.enterpriseName }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Negocio:</b>
+                <p>
+                  {{ promotion.businessName }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Sucursal:</b>
+                <p>
+                  {{ promotion.subsidiaryName }}
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Creado:</b>
+                <p>
+                  {{ promotion.created_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>
+              <div class="col-xl-6">
+                <b>Modificado:</b>
+                <p>
+                  {{ promotion.updated_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>  
+            </div>  
+          </mat-tab>
+        </mat-tab-group>      
+      </div>
+    </div>
+  </div>
+</div>

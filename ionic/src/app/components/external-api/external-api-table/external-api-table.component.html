@@ -1,0 +1,251 @@
+<div>
+  <!-- Actions General -->
+  <div class="clearfix">
+    <div class="float-xl-left">
+      <app-external-api-insert
+        (emitter_insertedExternalApi)="method_insertedExternalApi($event)"
+        [gotExternalApisInInsert]="gotExternalApisInInsert"
+      ></app-external-api-insert>
+      <button
+        mdbBtn
+        type="button"
+        size="md"
+        color="success"
+        class="m-0 waves-light d-none d-xl-inline"
+        mdbTooltip="Exportar API's"       
+        mdbWavesEffect
+        (click)="method_exportExternalApis()"
+        [disabled]="isLoading"
+      >
+        <mdb-icon fas icon="file-excel"></mdb-icon>
+        <span class="d-none d-xl-inline"> Exportar API's</span>
+      </button>
+    </div>
+    <div class="float-xl-right form-group">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">
+            <mdb-icon fas icon="search"></mdb-icon>
+          </span>
+        </div>
+        <input type="search" class="form-control" id="search" name="search" 
+          [(ngModel)]="externalApi.search" placeholder="Buscar API's" (change)="method_searchExternalApis()">
+        <div class="input-group-append">
+          <button
+            mdbBtn
+            type="button"
+            size="md"
+            color="primary"
+            class="m-0 waves-light"
+            mdbTooltip="Búsqueda de API´s"
+            mdbWavesEffect
+            (click)="searchAdvancedExternalApis.toggle()"
+          >
+            <mdb-icon fas icon="search-plus"></mdb-icon>
+            <span class="d-none d-xl-inline"> Búsqueda de API's</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="" mdbCollapse #searchAdvancedExternalApis="bs-collapse">
+    <blockquote class="blockquote">    
+      <b class="bq-title">Búsqueda de API's</b> 
+      <form class="form-xl-inline" (ngSubmit)="method_searchAdvancedExternalApis()">
+        <div class="md-form md-outline">
+          <input mdbInput type="number" class="form-control" id="limit" name="limit" [(ngModel)]="externalApi.limit">
+          <label for="limit">Registros</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="url" name="url" [(ngModel)]="externalApi.url">
+          <label for="url">Url</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="method" name="method" [(ngModel)]="externalApi.method">
+          <label for="method">Método</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="token" name="token" [(ngModel)]="externalApi.token">
+          <label for="token">Token</label>
+        </div>
+        <div class="md-form">
+          <select
+            class="browser-default custom-select"
+            [id]="'enterpriseId'"
+            [name]="'enterpriseId'"
+            [(ngModel)]="externalApi.enterprise_id">
+            <option [ngValue]="null" [selected]="externalApi.enterprise_id === null">
+              Todas las empresas
+            </option>
+            <option *ngFor="let element of enterprises" [ngValue]="element.id" [selected]="externalApi.enterprise_id == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="createdAtStart" name="createdAtStart" [(ngModel)]="externalApi.createdAtStart">
+          <label for="createdAtStart">Creado</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="createdAtEnd" name="createdAtEnd" [(ngModel)]="externalApi.createdAtEnd">
+          <label for="createdAtEnd"></label>
+        </div>
+        <button
+          mdbBtn
+          type="submit"
+          size="md" 
+          color="primary" 
+          class="mt-0 waves-light text-nowrap float-right"
+          mdbWavesEffect
+          [disabled]="isLoading"
+        >
+          <mdb-icon fas icon="search"></mdb-icon>
+          <span> Buscar</span>
+          <span class="spinner-border spinner-border-sm" role="status" *ngIf="isLoading">
+            <span class="sr-only">Cargando...</span>
+          </span>
+        </button>   
+      </form>  
+    </blockquote>
+  </div>
+  <!-- Table -->
+  <div class="table-responsive">
+    <table
+      mdbTable
+      striped="true"
+      hover="true"
+      small="true"
+      #tableEl="mdbTable"
+      id="tableSortExample"
+    >
+      <thead>
+        <tr>
+          <th
+            class="text-nowrap"
+            *ngFor="let head of heads; let i = index"
+            aria-controls="tableSortExample"
+            [mdbTableSort]="externalApis"
+            [sortBy]="headsSort[i]"
+          >
+            <span>{{ head }} </span>
+            <mdb-icon fas icon="sort"></mdb-icon>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr mdbTableCol *ngFor="let element of externalApis; let i = index">
+          <td
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            <div class="btn-group" mdbDropdown>
+              <button 
+                mdbBtn 
+                type="button" 
+                size="md" 
+                color="light" 
+                class="m-0 waves-light text-nowrap"
+                mdbWavesEffect
+                mdbTooltip="Opciones API"
+                mdbDropdownToggle>
+                <mdb-icon fas icon="ellipsis-v"></mdb-icon>
+                <span class="d-none d-xl-inline"> Opciones API</span>
+              </button>
+              <div class="dropdown-menu">                  
+                <button
+                  mdbBtn
+                  type="button"
+                  size="md"
+                  color="primary"
+                  class="m-0 waves-light text-nowrap dropdown-item"
+                  mdbWavesEffect
+                  (click)="method_showlExternalApiConsult(element.id)"
+                  *ngIf="rol.key === 'Super' || rol.key === 'Director'">
+                  <mdb-icon fas icon="eye"></mdb-icon>
+                  <span> Ver API</span>
+                </button>
+                <button
+                  mdbBtn
+                  type="button"
+                  size="md" 
+                  color="warning" 
+                  class="m-0 waves-light text-nowrap dropdown-item"
+                  mdbWavesEffect
+                  (click)="method_showlExternalApiUpdate(element.id)"
+                  *ngIf="rol.key === 'Super' || rol.key === 'Director'">
+                  <mdb-icon fas icon="edit"></mdb-icon>
+                  <span> Modificar API</span>
+                </button>
+              </div>
+            </div>
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.url }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            <span> {{ element.method }}</span>
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.enterpriseName }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.created_at | date:'d/M/yy h:mm a' }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.updated_at | date:'d/M/yy h:mm a' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Table Pagination -->
+  <mdb-table-pagination
+    [tableEl]="tableEl"
+    [searchDataSource]="externalApis"
+  ></mdb-table-pagination>
+  <!-- Actions Particular -->
+  <app-external-api-consult
+    [externalApiId]="externalApiId"
+    [showedlExternalApiInConsult]="showedlExternalApiInConsult"
+    (emitter_gotExternalApiInConsult)="method_gotExternalApiInConsult($event)"
+  ></app-external-api-consult>
+  <app-external-api-update
+    [externalApiId]="externalApiId"
+    [showedExternalApiInUpdate]="showedExternalApiInUpdate"
+    (emitter_gotExternalApiInUpdate)="method_gotExternalApiInUpdate($event)"
+    (emitter_updatedExternalApi)="method_updatedExternalApi($event)"
+    [gotExternalApisInUpdate]="gotExternalApisInUpdate"
+  ></app-external-api-update>
+</div>

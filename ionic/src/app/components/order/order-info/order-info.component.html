@@ -1,0 +1,54 @@
+<button
+  mdbBtn
+  type="button"
+  size="md" 
+  color="link" 
+  class="waves-light m-0 p-0"
+  mdbTooltip="Información del pedido"
+  mdbWavesEffect
+  (click)="orderDownload.show()"
+  *ngIf="rol.key !== 'Client'"
+>
+  <h3 class="m-0" *ngIf="!onlyIcon">
+    <mdb-icon fas icon="info-circle" size="2x"></mdb-icon> {{order.code}}
+  </h3>
+  <h6 class="m-0" *ngIf="onlyIcon">
+    <mdb-icon fas icon="info-circle"></mdb-icon> {{order.code}}
+  </h6>
+</button>
+<div
+  mdbModal
+  #orderDownload="mdbModal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myPromotionDownloadLabel"
+  aria-hidden="true"
+  [config]="{ backdrop: false, ignoreBackdropClick: true }"
+  *ngIf="rol.key !== 'Client'"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="orderDownload.hide()"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myPromotionDownloadLabel">
+          Información del pedido
+        </h4>
+      </div>
+      <div class="modal-body bg-white">
+        <!--@todo Completar la información-->
+        <div>
+          <b>Código:</b>
+          <p>{{ order.code }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

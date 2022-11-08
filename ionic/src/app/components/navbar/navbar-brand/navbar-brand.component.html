@@ -1,0 +1,8 @@
+<mdb-navbar-brand>
+  <div class="navbar-brand navbarBrand">      
+    <mdb-icon fas icon="bars"></mdb-icon>
+    <img [src]="method_sanitize(getEnterpriseLogoUrl)" class="logo img-fluid img-thumbnail rounded-circle m-1"/>
+    <span *ngIf="rol.key !== 'Super'">{{ enterprise.name }}</span>
+    <span *ngIf="rol.key === 'Super'">Grupo EMURCIA</span>
+  </div>
+</mdb-navbar-brand>

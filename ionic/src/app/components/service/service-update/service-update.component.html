@@ -1,0 +1,56 @@
+
+<div
+  mdbModal
+  #serviceUpdate="mdbModal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myServiceUpdateLabel"
+  aria-hidden="true"
+  [config]="{ backdrop: false, ignoreBackdropClick: true }"
+  *ngIf="rol.key === 'Super' || rol.key === 'Director'"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-white">
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="serviceUpdate.hide()"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myServiceUpdateLabel">
+          Modificar servicio
+        </h4>
+      </div>
+      <div class="modal-body bg-white">
+        <form (ngSubmit)="method_updateService()">
+          <app-service-form
+            [service]="service"
+            [enterprises]="enterprises"
+          ></app-service-form>
+          <div class="alert alert-warning" role="alert">
+            <mdb-icon fas icon="exclamation-triangle"></mdb-icon>
+            <p class="d-inline"> Estas a punto de modificar este servicio, ¿estas seguro?</p>
+            <button
+              mdbBtn
+              type="submit"
+              color="warning"
+              class="waves-light" block="true"
+              mdbWavesEffect
+              [disabled]="isLoading"
+            >
+              <mdb-icon fas icon="save"></mdb-icon
+              ><span> Si, estoy seguro </span>
+              <span class="spinner-border spinner-border-sm" role="status" *ngIf="isLoading">
+                <span class="sr-only">Cargando...</span>
+              </span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,257 @@
+<div>
+  <!-- Actions General -->
+  <div class="clearfix">
+    <div class="float-xl-left">
+      <app-business-insert
+      (emitter_insertedBusiness)="method_insertedBusiness($event)" 
+      [gotBusinessesInInsert]="gotBusinessesInInsert"
+    ></app-business-insert>
+      <button
+        mdbBtn
+        type="button"
+        size="md"
+        color="success"
+        class="m-0 waves-light d-none d-xl-inline"
+        mdbTooltip="Exportar negocios"       
+        mdbWavesEffect
+        (click)="method_exportBusinesses()"
+        [disabled]="isLoading"
+      >
+        <mdb-icon fas icon="file-excel"></mdb-icon>
+        <span class="d-none d-xl-inline"> Exportar negocios</span>
+      </button>
+    </div>
+    <div class="float-xl-right form-group">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">
+            <mdb-icon fas icon="search"></mdb-icon>
+          </span>
+        </div>
+        <input type="search" class="form-control" id="search" name="search" 
+          [(ngModel)]="business.search" placeholder="Buscar negocios" (change)="method_searchBusinesses()">
+        <div class="input-group-append">
+          <button
+            mdbBtn
+            type="button"
+            size="md"
+            color="primary"
+            class="m-0 waves-light"
+            mdbTooltip="Búsqueda de negocios"
+            mdbWavesEffect
+            (click)="searchAdvancedBusinesses.toggle()"
+          >
+            <mdb-icon fas icon="search-plus"></mdb-icon>
+            <span class="d-none d-xl-inline"> Búsqueda de negocios</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="" mdbCollapse #searchAdvancedBusinesses="bs-collapse">
+    <blockquote class="blockquote">
+      <b class="bq-title">Búsqueda de negocios</b> 
+      <form class="form-xl-inline" (ngSubmit)="method_searchAdvancedBusinesses()">
+        <div class="md-form md-outline">
+          <input mdbInput type="number" class="form-control" id="limit" name="limit" [(ngModel)]="business.limit">
+          <label for="limit">Registros</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="name" name="name" [(ngModel)]="business.name">
+          <label for="name">Nombre</label>
+        </div>
+        <div class="md-form">
+          <select
+            class="browser-default custom-select"
+            [id]="'enterpriseId'"
+            [name]="'enterpriseId'"
+            [(ngModel)]="business.enterprise_id">
+            <option [ngValue]="null" [selected]="business.enterprise_id === null">
+              Todas las empresas
+            </option>
+            <option *ngFor="let element of enterprises" [ngValue]="element.id" [selected]="business.enterprise_id == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>
+        <div class="md-form">
+          <select
+            class="browser-default custom-select"
+            [id]="'attentionId'"
+            [name]="'attentionId'"
+            [(ngModel)]="business.attention_id">
+            <option [ngValue]="null" [selected]="business.attention_id === null">
+              Todas las atenciones
+            </option>
+            <option *ngFor="let element of attentions" [ngValue]="element.id" [selected]="business.attention_id == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="createdAtStart" name="createdAtStart" [(ngModel)]="business.createdAtStart">
+          <label for="createdAtStart">Creado</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="createdAtEnd" name="createdAtEnd" [(ngModel)]="business.createdAtEnd">
+          <label for="createdAtEnd"></label>
+        </div>
+        <button
+          mdbBtn
+          type="submit"
+          size="md" 
+          color="primary" 
+          class="mt-0 waves-light text-nowrap float-right"
+          mdbWavesEffect
+          [disabled]="isLoading"
+        >
+          <mdb-icon fas icon="search"></mdb-icon>
+          <span> Buscar</span>
+          <span class="spinner-border spinner-border-sm" role="status" *ngIf="isLoading">
+            <span class="sr-only">Cargando...</span>
+          </span>
+        </button>   
+      </form>  
+    </blockquote>
+  </div>
+  <!-- Table -->
+  <div class="table-responsive">
+    <table
+      mdbTable
+      striped="true"
+      hover="true"
+      small="true"
+      #tableEl="mdbTable"
+      id="tableSortExample"
+    >
+      <thead>
+        <tr>
+          <th
+            class="text-nowrap"
+            *ngFor="let head of heads; let i = index"
+            aria-controls="tableSortExample"
+            [mdbTableSort]="businesses"
+            [sortBy]="headsSort[i]"
+          >
+            <span>{{ head }} </span>
+            <mdb-icon fas icon="sort"></mdb-icon>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr mdbTableCol *ngFor="let element of businesses; let i = index">
+          <td
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            <div class="btn-group" mdbDropdown>
+              <button 
+                mdbBtn 
+                type="button" 
+                size="md" 
+                color="light" 
+                class="m-0 waves-light text-nowrap"
+                mdbWavesEffect
+                mdbTooltip="Opciones negocio"
+                mdbDropdownToggle>
+                <mdb-icon fas icon="ellipsis-v"></mdb-icon>
+                <span class="d-none d-xl-inline"> Opciones negocio</span>
+              </button>
+              <div class="dropdown-menu">                  
+                <button
+                  mdbBtn
+                  type="button"
+                  size="md"
+                  color="primary"
+                  class="m-0 waves-light text-nowrap dropdown-item"
+                  mdbWavesEffect
+                  (click)="method_showBusinessConsult(element.id)"
+                  *ngIf="rol.key === 'Super' || rol.key === 'Director'">
+                  <mdb-icon fas icon="eye"></mdb-icon>
+                  <span> Ver negocio</span>
+                </button>
+                <button
+                  mdbBtn
+                  type="button"
+                  size="md" 
+                  color="warning" 
+                  class="m-0 waves-light text-nowrap dropdown-item"
+                  mdbWavesEffect
+                  (click)="method_showBusinessUpdate(element.id)"
+                  *ngIf="rol.key === 'Super' || rol.key === 'Director'">
+                  <mdb-icon fas icon="edit"></mdb-icon>
+                  <span> Modificar negocio</span>
+                </button>
+              </div>
+            </div>
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.name }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.enterpriseName }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            <span> {{ element.attentionName }}</span>
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.created_at | date:'d/M/yy h:mm a' }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.updated_at | date:'d/M/yy h:mm a' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Table Pagination -->
+  <mdb-table-pagination
+    [tableEl]="tableEl"
+    [searchDataSource]="businesses"
+  ></mdb-table-pagination>
+  <!-- Actions Particular -->
+  <app-business-consult
+    [businessId]="businessId"
+    [showedBusinessInConsult]="showedBusinessInConsult"
+    (emitter_gotBusinessInConsult)="method_gotBusinessInConsult($event)"
+  ></app-business-consult>
+  <app-business-update
+    [businessId]="businessId"
+    [showedBusinessInUpdate]="showedBusinessInUpdate"
+    (emitter_gotBusinessInUpdate)="method_gotBusinessInUpdate($event)"
+    (emitter_updatedBusiness)="method_updatedBusiness($event)"
+    [gotBusinessesInUpdate]="gotBusinessesInUpdate"
+  ></app-business-update>
+</div>

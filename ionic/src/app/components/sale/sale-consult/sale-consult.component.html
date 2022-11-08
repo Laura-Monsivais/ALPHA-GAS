@@ -1,0 +1,80 @@
+<div
+  mdbModal
+  #saleConsult="mdbModal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="mySaleConsultLabel"
+  aria-hidden="true"
+  [config]="{ backdrop: false, ignoreBackdropClick: true }"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="saleConsult.hide()"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="mySaleConsultLabel">
+          Ver venta
+        </h4>
+      </div>
+      <div class="modal-body bg-white">        
+        <mat-tab-group>
+          <mat-tab label="General">
+            <div class="row">
+              <div class="col-xl-4">
+                <b>Vendedor:</b>
+                <p>
+                  {{ sale.sellerNameComplete }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Creado:</b>
+                <p>
+                  {{ sale.created_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Modificado:</b>
+                <p>
+                  {{ sale.updated_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>  
+            </div>
+            <div class="row">
+              <div class="col-xl-4">
+                <b>Sucursal:</b>
+                <p>
+                  {{ sale.subsidiaryName }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Cliente:</b>
+                <p>
+                  {{ sale.clientNameComplete }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Celular:</b>
+                <p>
+                  {{ sale.clientCellphone }}
+                </p>
+              </div>
+            </div>
+            <h5 class="text-right"><b>Total: </b><span class="text-danger">{{ sale.total | currency }} MXN</span></h5>
+          </mat-tab>
+          <mat-tab label="Detalles">
+            <app-sale-detail-table 
+              [saleId]="sale.id"
+            ></app-sale-detail-table>
+          </mat-tab>
+        </mat-tab-group>       
+      </div>
+    </div>
+  </div>
+</div>

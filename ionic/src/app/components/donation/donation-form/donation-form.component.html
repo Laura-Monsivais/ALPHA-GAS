@@ -1,0 +1,352 @@
+<div *ngIf="rol.key === 'Super' || rol.key === 'Director'">
+  <div class="row">
+    <div class="col-xl-8">
+      <div class="md-form form-group">
+        <input
+          mdbInput
+          mdbValidate
+          type="text"
+          [id]="'name' + donation.id"
+          class="form-control"
+          [name]="'name' + donation.id"
+          [(ngModel)]="donation.name"
+          #nameValidation="ngModel"
+          required
+        />
+        <label class="font-weight-bold" [for]="'name' + donation.id">Nombre:</label>
+        <mdb-error
+          *ngIf="
+            nameValidation.invalid &&
+            (nameValidation.dirty || nameValidation.touched)
+          "
+          >Campo requerido</mdb-error
+        >
+        <mdb-success
+          *ngIf="
+            nameValidation.valid && (nameValidation.dirty || nameValidation.touched)
+          "
+        ></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">      
+      <div class="md-form form-group">
+        <input
+          mdbInput
+          mdbValidate
+          type="date"
+          class="form-control"
+          [id]="'realizedAt' + donation.id"
+          [name]="'realizedAt' + donation.id"
+          [(ngModel)]="donation.realized_at"
+          #realizedAtValidation="ngModel"
+          required
+        />
+        <label class="font-weight-bold" [for]="'realizedAt' + donation.id">Realizada:</label>
+        <mdb-error
+          *ngIf="
+            realizedAtValidation.invalid &&
+            (realizedAtValidation.dirty || realizedAtValidation.touched)
+          "
+          >Campo requerido</mdb-error
+        >
+        <mdb-success
+          *ngIf="
+            realizedAtValidation.valid &&
+            (realizedAtValidation.dirty || realizedAtValidation.touched)
+          "
+        ></mdb-success>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label [for]="'enterpriseId' + donation.id">Empresa:</label>
+        <select
+          [id]="'enterpriseId' + donation.id"
+          class="browser-default custom-select"
+          [name]="'enterpriseId' + donation.id"
+          [(ngModel)]="donation.enterpriseId"
+          #enterpriseIdValidation="ngModel"
+          required
+          [disabled]="rol.key === 'Director'"
+          (change)="method_getBusinesses()"
+        >
+          <option [ngValue]="0" [selected]="donation.enterpriseId == 0">
+            Selecciona una empresa
+          </option>
+          <option
+            *ngFor="let element of enterprises"
+            [ngValue]="element.id"
+            [selected]="donation.enterpriseId == element.id"
+          >
+            {{ element.name }}
+          </option>
+        </select>
+        <mdb-error
+          *ngIf="
+            enterpriseIdValidation.invalid &&
+            (enterpriseIdValidation.dirty || enterpriseIdValidation.touched)
+          "
+          >Campo requerido</mdb-error
+        >
+        <mdb-success
+          *ngIf="
+            enterpriseIdValidation.valid &&
+            (enterpriseIdValidation.dirty || enterpriseIdValidation.touched)
+          "
+        ></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label [for]="'businessId' + donation.id">Negocio:</label>
+        <select
+          [id]="'businessId' + donation.id"
+          class="browser-default custom-select"
+          [name]="'businessId' + donation.id"
+          [(ngModel)]="donation.businessId"
+          (change)="method_chageBusiness()"
+        >
+          <option [ngValue]="0" [selected]="donation.businessId == 0">
+            Selecciona un negocio
+          </option>
+          <option
+            *ngFor="let element of businesses"
+            [ngValue]="element.id"
+            [selected]="donation.businessId == element.id"
+          >
+            {{ element.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label [for]="'subsidiaryId' + donation.id">Sucursal:</label>
+        <select
+          [id]="'subsidiaryId' + donation.id"
+          class="browser-default custom-select"
+          [name]="'subsidiaryId' + donation.id"
+          [(ngModel)]="donation.subsidiaryId"
+          (change)="method_getInventory()"
+        >
+          <option [ngValue]="0" [selected]="donation.subsidiaryId == 0">
+            Selecciona una sucursal
+          </option>
+          <option
+            *ngFor="let element of subsidiaries"
+            [ngValue]="element.id"
+            [selected]="donation.subsidiaryId == element.id"
+          >
+            {{ element.type }} {{ element.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label [for]="'categoryId'+donation.id">Categoría:</label>
+        <select
+          [id]="'categoryId'+donation.id"
+          class="browser-default custom-select"
+          [name]="'categoryId'+donation.id"
+          [(ngModel)]="donation.categoryId"
+          #categoryIdValidation="ngModel"
+          required
+          (change)="method_getProducts()"
+        >
+          <option [ngValue]="0" [selected]="donation.categoryId  == 0">
+            Selecciona una categoría
+          </option>
+          <option *ngFor="let element of categories" [ngValue]="element.id" [selected]="donation.categoryId == element.id">
+            {{ element.name }}
+          </option>
+        </select>
+        <mdb-error
+          *ngIf="
+            categoryIdValidation.invalid &&
+            (categoryIdValidation.dirty || categoryIdValidation.touched)
+          "
+          >Campo requerido</mdb-error
+        >
+        <mdb-success
+          *ngIf="
+            categoryIdValidation.valid &&
+            (categoryIdValidation.dirty || categoryIdValidation.touched)
+          "
+        ></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label [for]="'productId'+donation.id">Producto:</label>
+        <select
+          [id]="'productId'+donation.id"
+          class="browser-default custom-select"
+          [name]="'productId'+donation.id"
+          [(ngModel)]="donation.productId"
+          #productIdValidation="ngModel"
+          required
+          (change)="method_getInventory()"
+        >
+          <option [ngValue]="0" [selected]="donation.productId  == 0">
+            Selecciona un producto
+          </option>
+          <option *ngFor="let element of products" [ngValue]="element.id" [selected]="donation.productId == element.id">
+            {{ element.name }}
+          </option>
+        </select>
+        <mdb-error
+          *ngIf="
+            productIdValidation.invalid &&
+            (productIdValidation.dirty || productIdValidation.touched)
+          "
+          >Campo requerido</mdb-error
+        >
+        <mdb-success
+          *ngIf="
+            productIdValidation.valid &&
+            (productIdValidation.dirty || productIdValidation.touched)
+          "
+        ></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label [for]="'inventoryTheoretical' + donation.id">Inventario teórico:</label>
+        <div class="input-group">
+          <input
+            mdbInput
+            type="number"
+            [id]="'inventoryTheoretical' + donation.id"
+            class="form-control"
+            [name]="'inventoryTheoretical' + donation.id"
+            [(ngModel)]="donation.inventoryTheoretical"
+            disabled
+          />
+          <div class="input-group-append">
+            <span class="input-group-text">{{unit}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'cost' + donation.id">Costo:</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">$</span>
+          </div>
+          <input
+            mdbInput
+            mdbValidate
+            type="number"
+            [id]="'cost' + donation.id"
+            class="form-control"
+            [name]="'cost' + donation.id"
+            [(ngModel)]="donation.cost"
+            #costValidation="ngModel"
+            required
+            (change)="method_calculateTotal()"
+          />
+          <div class="input-group-append">
+            <span class="input-group-text">MXN</span>
+          </div>
+          <mdb-error
+            *ngIf="
+              costValidation.invalid &&
+              (costValidation.dirty || costValidation.touched)
+            "
+            >Campo requerido</mdb-error
+          >
+          <mdb-success
+            *ngIf="
+              costValidation.valid &&
+              (costValidation.dirty || costValidation.touched)
+            "
+          ></mdb-success>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'quantity' + donation.id">Cantidad:</label>
+        <div class="input-group">
+          <input
+            mdbInput            
+            type="number"
+            [id]="'quantity' + donation.id"
+            [ngClass]="{'form-control': true, 
+              'validate-error ng-invalid': (quantityValidation.invalid || quantityValidation.value > donation.inventoryTheoretical) &&
+                (quantityValidation.dirty || quantityValidation.touched), 
+              'validate-success ng-valid': quantityValidation.valid &&
+                (quantityValidation.dirty || quantityValidation.touched)}"
+            [name]="'quantity' + donation.id"
+            [(ngModel)]="donation.quantity"
+            #quantityValidation="ngModel"
+            required
+            (change)="method_calculateTotal()"
+          />
+          <div class="input-group-append">
+            <span class="input-group-text">{{unit}}</span>
+          </div>
+          <mdb-error
+            *ngIf="
+              (quantityValidation.invalid || quantityValidation.value > donation.inventoryTheoretical) &&
+              (quantityValidation.dirty || quantityValidation.touched)">
+            <span *ngIf="quantityValidation.invalid">Campo requerido</span>
+            <span *ngIf="quantityValidation.value > donation.inventoryTheoretical">Debe ser menor o igual al inventario teórico</span>            
+          </mdb-error >
+          <mdb-success
+            *ngIf="
+              quantityValidation.valid &&
+              (quantityValidation.dirty || quantityValidation.touched)
+            "
+          ></mdb-success>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'total' + donation.id">Total:</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">$</span>
+          </div>
+          <input
+            mdbInput
+            mdbValidate
+            type="number"
+            [id]="'total' + donation.id"
+            class="form-control"
+            [name]="'total' + donation.id"
+            [(ngModel)]="donation.total"
+            #totalValidation="ngModel"
+            required
+          />
+          <div class="input-group-append">
+            <span class="input-group-text">MXN</span>
+          </div>
+          <mdb-error
+            *ngIf="
+              totalValidation.invalid &&
+              (totalValidation.dirty || totalValidation.touched)
+            "
+            >Campo requerido</mdb-error
+          >
+          <mdb-success
+            *ngIf="
+              totalValidation.valid &&
+              (totalValidation.dirty || totalValidation.touched)
+            "
+          ></mdb-success>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

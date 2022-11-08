@@ -1,0 +1,295 @@
+<div *ngIf="rol.key === 'Super' || rol.key === 'Director'">
+  <div class="md-form form-group">
+    <input mdbInput mdbValidate type="text" [id]="'name'+transfer.id" class="form-control" [name]="'name'+transfer.id" [(ngModel)]="transfer.name"
+      #nameValidation="ngModel" required />
+    <label class="font-weight-bold" [for]="'name'+transfer.id">Nombre:</label>
+    <mdb-error *ngIf="
+        nameValidation.invalid &&
+        (nameValidation.dirty || nameValidation.touched)
+      ">Campo requerido</mdb-error>
+    <mdb-success *ngIf="
+        nameValidation.valid &&
+        (nameValidation.dirty || nameValidation.touched)
+      "></mdb-success>
+  </div>
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label [for]="'enterpriseId' + transfer.id">Empresa:</label>
+        <select
+          [id]="'enterpriseId' + transfer.id"
+          class="browser-default custom-select"
+          [name]="'enterpriseId' + transfer.id"
+          [(ngModel)]="transfer.enterpriseId"
+          #enterpriseIdValidation="ngModel"
+          required
+          [disabled]="rol.key === 'Director'"
+          (change)="method_getBusinesses()"
+        >
+          <option [ngValue]="0" [selected]="transfer.enterpriseId == 0">
+            Selecciona una empresa
+          </option>
+          <option
+            *ngFor="let element of enterprises"
+            [ngValue]="element.id"
+            [selected]="transfer.enterpriseId == element.id"
+          >
+            {{ element.name }}
+          </option>
+        </select>
+        <mdb-error
+          *ngIf="
+            enterpriseIdValidation.invalid &&
+            (enterpriseIdValidation.dirty || enterpriseIdValidation.touched)
+          "
+          >Campo requerido</mdb-error
+        >
+        <mdb-success
+          *ngIf="
+            enterpriseIdValidation.valid &&
+            (enterpriseIdValidation.dirty || enterpriseIdValidation.touched)
+          "
+        ></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label [for]="'businessId' + transfer.id">Negocio:</label>
+        <select
+          [id]="'businessId' + transfer.id"
+          class="browser-default custom-select"
+          [name]="'businessId' + transfer.id"
+          [(ngModel)]="transfer.businessId"
+          #businessIdValidation="ngModel"
+          required
+          (change)="method_chageBusiness()"
+        >
+          <option [ngValue]="0" [selected]="transfer.businessId == 0">
+            Selecciona un negocio
+          </option>
+          <option
+            *ngFor="let element of businesses"
+            [ngValue]="element.id"
+            [selected]="transfer.businessId == element.id"
+          >
+            {{ element.name }}
+          </option>
+        </select>
+        <mdb-error
+          *ngIf="
+            businessIdValidation.invalid &&
+            (businessIdValidation.dirty || businessIdValidation.touched)
+          "
+          >Campo requerido</mdb-error
+        >
+        <mdb-success
+          *ngIf="
+            businessIdValidation.valid &&
+            (businessIdValidation.dirty || businessIdValidation.touched)
+          "
+        ></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label [for]="'originId' + transfer.id">Origen:</label>
+        <select
+          [id]="'originId' + transfer.id"
+          class="browser-default custom-select"
+          [name]="'originId' + transfer.id"
+          [(ngModel)]="transfer.originId"
+          #originIdValidation="ngModel"
+          required
+        >
+          <option [ngValue]="0" [selected]="transfer.originId == 0">
+            Selecciona un origen
+          </option>
+          <option
+            *ngFor="let element of origins"
+            [ngValue]="element.id"
+            [selected]="transfer.originId == element.id"
+          >
+            {{ element.type }} {{ element.name }}
+          </option>
+        </select>
+        <mdb-error
+          *ngIf="
+            originIdValidation.invalid &&
+            (originIdValidation.dirty || originIdValidation.touched)
+          "
+          >Campo requerido</mdb-error
+        >
+        <mdb-success
+          *ngIf="
+            originIdValidation.valid &&
+            (originIdValidation.dirty || originIdValidation.touched)
+          "
+        ></mdb-success>
+      </div>
+    </div>
+  </div>  
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label [for]="'categoryId'+transfer.id">Categoría:</label>
+        <select
+          [id]="'categoryId'+transfer.id"
+          class="browser-default custom-select"
+          [name]="'categoryId'+transfer.id"
+          [(ngModel)]="transfer.categoryId"
+          #categoryIdValidation="ngModel"
+          required
+          (change)="method_getProducts()"
+        >
+          <option [ngValue]="0" [selected]="transfer.categoryId  == 0">
+            Selecciona una categoría
+          </option>
+          <option *ngFor="let element of categories" [ngValue]="element.id" [selected]="transfer.categoryId == element.id">
+            {{ element.name }}
+          </option>
+        </select>
+        <mdb-error
+          *ngIf="
+            categoryIdValidation.invalid &&
+            (categoryIdValidation.dirty || categoryIdValidation.touched)
+          "
+          >Campo requerido</mdb-error
+        >
+        <mdb-success
+          *ngIf="
+            categoryIdValidation.valid &&
+            (categoryIdValidation.dirty || categoryIdValidation.touched)
+          "
+        ></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label [for]="'productId'+transfer.id">Producto:</label>
+        <select
+          [id]="'productId'+transfer.id"
+          class="browser-default custom-select"
+          [name]="'productId'+transfer.id"
+          [(ngModel)]="transfer.productId"
+          #productIdValidation="ngModel"
+          required
+          (change)="method_getInventory()">
+          <option [ngValue]="0" [selected]="transfer.productId  == 0">
+            Selecciona un producto
+          </option>
+          <option *ngFor="let element of products" [ngValue]="element.id" [selected]="transfer.productId == element.id">
+            {{ element.name }}
+          </option>
+        </select>
+        <mdb-error
+          *ngIf="
+            productIdValidation.invalid &&
+            (productIdValidation.dirty || productIdValidation.touched)
+          "
+          >Campo requerido</mdb-error
+        >
+        <mdb-success
+          *ngIf="
+            productIdValidation.valid &&
+            (productIdValidation.dirty || productIdValidation.touched)
+          "
+        ></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label [for]="'inventoryTheoretical' + transfer.id">Inventario teórico:</label>
+        <div class="input-group">
+          <input
+            mdbInput
+            type="number"
+            [id]="'inventoryTheoretical' + transfer.id"
+            class="form-control"
+            [name]="'inventoryTheoretical' + transfer.id"
+            [(ngModel)]="transfer.inventoryTheoretical"
+            disabled
+          />
+          <div class="input-group-append">
+            <span class="input-group-text">{{transfer.productUnit}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'quantity' + transfer.id">Cantidad:</label>
+        <div class="input-group">
+          <input
+            mdbInput            
+            type="number"
+            [id]="'quantity' + transfer.id"
+            [ngClass]="{'form-control': true, 
+              'validate-error ng-invalid': (quantityValidation.invalid || quantityValidation.value > transfer.inventoryTheoretical) &&
+                (quantityValidation.dirty || quantityValidation.touched), 
+              'validate-success ng-valid': quantityValidation.valid &&
+                (quantityValidation.dirty || quantityValidation.touched)}"
+            [name]="'quantity' + transfer.id"
+            [(ngModel)]="transfer.quantity"
+            #quantityValidation="ngModel"
+            required
+          />
+          <div class="input-group-append">
+            <span class="input-group-text">{{transfer.productUnit}}</span>
+          </div>
+          <mdb-error
+            *ngIf="
+              (quantityValidation.invalid || quantityValidation.value > transfer.inventoryTheoretical) &&
+              (quantityValidation.dirty || quantityValidation.touched)">
+            <span *ngIf="quantityValidation.invalid">Campo requerido</span>
+            <span *ngIf="quantityValidation.value > transfer.inventoryTheoretical">Debe ser menor o igual al inventario teórico</span>            
+          </mdb-error >
+          <mdb-success
+            *ngIf="
+              quantityValidation.valid &&
+              (quantityValidation.dirty || quantityValidation.touched)
+            "
+          ></mdb-success>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'destinationId' + transfer.id">Destino:</label>
+        <select
+          [id]="'destinationId' + transfer.id"
+          class="browser-default custom-select"
+          [name]="'destinationId' + transfer.id"
+          [(ngModel)]="transfer.destination_id"
+          #destinationIdValidation="ngModel"
+          required
+        >
+          <option [ngValue]="0" [selected]="transfer.destination_id == 0">
+            Selecciona un destino
+          </option>
+          <option
+            *ngFor="let element of destinations"
+            [ngValue]="element.id"
+            [selected]="transfer.destination_id == element.id"
+          >
+            {{ element.type }} {{ element.name }}
+          </option>
+        </select>
+        <mdb-error
+          *ngIf="
+            destinationIdValidation.invalid &&
+            (destinationIdValidation.dirty || destinationIdValidation.touched)
+          "
+          >Campo requerido</mdb-error
+        >
+        <mdb-success
+          *ngIf="
+            destinationIdValidation.valid &&
+            (destinationIdValidation.dirty || destinationIdValidation.touched)
+          "
+        ></mdb-success>
+      </div>
+    </div>
+  </div>
+</div>

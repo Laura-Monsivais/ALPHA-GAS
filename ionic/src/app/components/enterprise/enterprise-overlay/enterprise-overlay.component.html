@@ -1,0 +1,82 @@
+<button
+  mdbBtn
+  type="button"
+  size="md" 
+  color="primary" 
+  outline="true" class="m-0 p-0 waves-dark"
+  mdbWavesEffect
+  (click)="enterpriseOverlayDownload.show()"
+>
+<img 
+  style="height: 35px; width: 35px" 
+  class="img-fluid img-thumbnail rounded-circle" 
+  [src]="method_sanitize(getEnterpriseOverlayFileUrl)" 
+  *ngIf="isPreview"
+>
+<img 
+  style="height: 35px; width: 35px" 
+  class="img-fluid img-thumbnail rounded-circle" 
+  [src]="method_sanitize(getEnterpriseOverlayUrl)" 
+  *ngIf="!isPreview">
+</button>
+<div
+  mdbModal
+  #enterpriseOverlayDownload="mdbModal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myEnterpriseOverlayDownloadLabel"
+  aria-hidden="true"
+  [config]="{ backdrop: false, ignoreBackdropClick: true }"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header border-primary text-primary">
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="enterpriseOverlayDownload.hide()"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myEnterpriseOverlayDownloadLabel">
+          <span *ngIf="isPreview">Previsualizar </span>
+          <span *ngIf="!isPreview">Descargar </span>
+          fondo de la empresa
+        </h4>
+      </div>
+      <div class="modal-body bg-white">
+        <form (ngSubmit)="method_downloadEnterpriseOverlay()">
+          <div class="text-center">
+            <img 
+              class="img-fluid"  
+              [src]="method_sanitize(getEnterpriseOverlayFileUrl)" 
+              *ngIf="isPreview"
+            >
+            <img 
+              class="img-fluid" 
+              [src]="method_sanitize(getEnterpriseOverlayUrl)" 
+              *ngIf="!isPreview">
+          </div>
+          <button
+            mdbBtn
+            type="submit" 
+            color="primary" 
+            outline="true"
+            class="waves-dark" block="true"
+            mdbWavesEffect
+            [disabled]="isLoading"
+            *ngIf="!isPreview"
+          >
+            <mdb-icon fas icon="cloud-download-alt"></mdb-icon>
+            <span> Descargar </span>
+            <span class="spinner-border spinner-border-sm" role="status" *ngIf="isLoading">
+              <span class="sr-only">Cargando...</span>
+            </span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

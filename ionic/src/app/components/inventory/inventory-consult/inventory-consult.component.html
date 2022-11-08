@@ -1,0 +1,110 @@
+<div mdbModal #inventoryInConsult="mdbModal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="myInventoryConsultLabel" aria-hidden="true" [config]="{ backdrop: false, ignoreBackdropClick: true }"
+  *ngIf="rol.key !== 'Client'">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="inventoryInConsult.hide()">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myInventoryConsultLabel">
+          Ver inventario
+        </h4>
+      </div>
+      <div class="modal-body bg-white">
+        <mat-tab-group>
+          <mat-tab label="General">
+            <div class="row">
+              <div class="col-xl-4">
+                <b>Empresa:</b>
+                <p>
+                  {{ inventory.enterpriseName }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Negocio:</b>
+                <p>
+                  {{ inventory.businessName }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>{{inventory.type}}:</b>
+                <p>
+                  {{ inventory.subsidiaryName }}
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-12">
+                <b>Producto:</b>
+                <p>
+                  {{ inventory.productName }}
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-4">
+                <b>Inventario teórico:</b>
+                <p class="text-right">
+                  {{ inventory.inventory_theoretical }} {{  inventory.productUnit }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Inventario real:</b>
+                <p class="text-right">
+                  {{ inventory.inventory_real }} {{  inventory.productUnit }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Diferencia de inventario:</b>
+                <p class="text-right">
+                  {{ inventory.inventory_difference }} {{  inventory.productUnit }}
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-3">
+                <b>Compras:</b>
+                <p class="text-right text-danger">
+                  {{ inventory.buys | currency }} MXN
+                </p>
+              </div>
+              <div class="col-xl-3">
+                <b>Ventas:</b>
+                <p class="text-right text-success">
+                  {{ inventory.sales | currency }} MXN
+                </p>
+              </div>
+              <div class="col-xl-3">
+                <b>Autoconsumos:</b>
+                <p class="text-right text-danger">
+                  {{ inventory.selfconsumptions | currency }} MXN
+                </p>
+              </div>
+              <div class="col-xl-3">
+                <b>Donaciones:</b>
+                <p class="text-right text-danger">
+                  {{ inventory.donations | currency }} MXN
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Creado:</b>
+                <p>
+                  {{ inventory.created_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>
+              <div class="col-xl-6">
+                <b>Modificado:</b>
+                <p>
+                  {{ inventory.updated_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</div>

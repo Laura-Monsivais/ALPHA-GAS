@@ -1,0 +1,310 @@
+<div>
+  <!-- Actions General -->
+  <div class="clearfix">
+    <div class="float-xl-left">
+      <app-self-consumption-insert (emitter_insertedSelfconsumption)="method_insertedSelfconsumption($event)"
+        [gotSelfconsumptionsInInsert]="gotSelfconsumptionsInInsert">
+      </app-self-consumption-insert>
+      <button mdbBtn type="button" size="md" color="success" class="m-0 waves-light d-none d-xl-inline"
+        mdbTooltip="Exportar autoconsumos" mdbWavesEffect (click)="method_exportSelfconsumptions()"
+        [disabled]="isLoading">
+        <mdb-icon fas icon="file-excel"></mdb-icon>
+        <span class="d-none d-xl-inline"> Exportar autoconsumos</span>
+      </button>
+    </div>
+    <div class="float-xl-right form-group">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">
+            <mdb-icon fas icon="search"></mdb-icon>
+          </span>
+        </div>
+        <input type="search" class="form-control" id="search" name="search" [(ngModel)]="selfconsumption.search"
+          placeholder="Buscar autoconsumos" (change)="method_searchSelfconsumptions()">
+        <div class="input-group-append">
+          <button mdbBtn type="button" size="md" color="primary" class="m-0 waves-light"
+            mdbTooltip="Búsqueda de autoconsumos" mdbWavesEffect (click)="searchAdvancedSelfconsumption.toggle()">
+            <mdb-icon fas icon="search-plus"></mdb-icon>
+            <span class="d-none d-xl-inline"> Búsqueda de autoconsumos</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="" mdbCollapse #searchAdvancedSelfconsumption="bs-collapse">
+    <blockquote class="blockquote">
+      <b class="bq-title">Búsqueda de autoconsumos</b> 
+      <form class="form-xl-inline" (ngSubmit)="method_searchAdvancedSelfconsumptions()">
+        <div class="md-form md-outline">
+          <input mdbInput type="number" class="form-control" id="limit" name="limit" [(ngModel)]="selfconsumption.limit">
+          <label for="limit">Registros</label>
+        </div>  
+        <div class="md-form">
+          <select
+            class="browser-default custom-select"
+            [id]="'enterpriseId'"
+            [name]="'enterpriseId'"
+            [(ngModel)]="selfconsumption.enterpriseId"
+            (change)="method_getBusinesses()">
+            <option [ngValue]="null" [selected]="selfconsumption.enterpriseId === null">
+              Todas las empresas
+            </option>
+            <option *ngFor="let element of enterprises" [ngValue]="element.id" [selected]="selfconsumption.enterpriseId == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>
+        <div class="md-form">
+          <select
+            class="browser-default custom-select"
+            [id]="'businessId'"
+            [name]="'businessId'"
+            [(ngModel)]="selfconsumption.businessId"
+            (change)="method_chageBusiness()">
+            <option [ngValue]="null" [selected]="selfconsumption.businessId === null">
+              Todos los negocios
+            </option>
+            <option *ngFor="let element of businesses" [ngValue]="element.id" [selected]="selfconsumption.businessId == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>
+        <div class="md-form">
+          <select
+            class="browser-default custom-select"
+            [id]="'subsidiaryId'"
+            [name]="'subsidiaryId'"
+            [(ngModel)]="selfconsumption.subsidiaryId"
+            (change)="method_getRoutes()">
+            <option [ngValue]="null" [selected]="selfconsumption.subsidiaryId === null">
+              Todas las sucursales
+            </option>
+            <option *ngFor="let element of subsidiaries" [ngValue]="element.id" [selected]="selfconsumption.subsidiaryId == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>
+        <div class="md-form">
+          <select
+            class="browser-default custom-select"
+            [id]="'categoryId'"
+            [name]="'categoryId'"
+            [(ngModel)]="selfconsumption.categoryId"
+            (change)="method_getProducts()">
+            <option [ngValue]="null" [selected]="selfconsumption.categoryId === null">
+              Todas las categorías
+            </option>
+            <option *ngFor="let element of categories" [ngValue]="element.id" [selected]="selfconsumption.categoryId == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>  
+        <div class="md-form">
+          <select
+            class="browser-default custom-select"
+            [id]="'productId'"
+            [name]="'productId'"
+            [(ngModel)]="selfconsumption.productId">
+            <option [ngValue]="null" [selected]="selfconsumption.productId === null">
+              Todos los productos
+            </option>
+            <option *ngFor="let element of products" [ngValue]="element.id" [selected]="selfconsumption.productId == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>  
+        <div class="md-form md-outline">
+          <input mdbInput type="number" class="form-control" id="quantity" name="quantity" [(ngModel)]="selfconsumption.quantity">
+          <label for="quantity">Cantidad</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="number" class="form-control" id="cost" name="cost" [(ngModel)]="selfconsumption.cost">
+          <label for="cost">Costo</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="number" class="form-control" id="total" name="total" [(ngModel)]="selfconsumption.total">
+          <label for="total">Total</label>
+        </div>
+        <div class="md-form">
+          <select
+            class="browser-default custom-select"
+            [id]="'routeId'"
+            [name]="'routeId'"
+            [(ngModel)]="selfconsumption.route_id">
+            <option [ngValue]="null" [selected]="selfconsumption.route_id === null">
+              Todas las rutas
+            </option>
+            <option *ngFor="let element of routes" [ngValue]="element.id" [selected]="selfconsumption.route_id == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>  
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="startStart" name="startStart" [(ngModel)]="selfconsumption.startStart">
+          <label for="startStart">Inicia</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="startEnd" name="startEnd" [(ngModel)]="selfconsumption.startEnd">
+          <label for="startEnd"></label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="endStart" name="endStart" [(ngModel)]="selfconsumption.endStart">
+          <label for="endStart">Termina</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="endEnd" name="endEnd" [(ngModel)]="selfconsumption.endEnd">
+          <label for="endEnd"></label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="number" class="form-control" id="initial_mileage" name="initial_mileage" [(ngModel)]="selfconsumption.initial_mileage">
+          <label for="initial_mileage">K. inicia</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="number" class="form-control" id="end_mileage" name="end_mileage" [(ngModel)]="selfconsumption.end_mileage">
+          <label for="end_mileage">K. final</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="number" class="form-control" id="performance" name="performance" [(ngModel)]="selfconsumption.performance">
+          <label for="performance">Rendimiento</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="createdAtStart" name="createdAtStart" [(ngModel)]="selfconsumption.createdAtStart">
+          <label for="createdAtStart">Creado</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="createdAtEnd" name="createdAtEnd" [(ngModel)]="selfconsumption.createdAtEnd">
+          <label for="createdAtEnd"></label>
+        </div>
+        <button mdbBtn type="submit" size="md" color="primary" class="mt-0 waves-light text-nowrap float-right"
+          mdbWavesEffect [disabled]="isLoading">
+          <mdb-icon fas icon="search"></mdb-icon>
+          <span> Buscar</span>
+          <span class="spinner-border spinner-border-sm" role="status" *ngIf="isLoading">
+            <span class="sr-only">Cargando...</span>
+          </span>
+        </button>
+      </form>
+    </blockquote>
+  </div>
+  <!-- Table -->
+  <div class="table-responsive">
+    <table mdbTable striped="true" hover="true" small="true" #tableEl="mdbTable" id="tableSortExample">
+      <thead>
+        <tr>
+          <th class="text-nowrap" *ngFor="let head of heads; let i = index" aria-controls="tableSortExample"
+            [mdbTableSort]="selfconsumptions" [sortBy]="headsSort[i]">
+            <span>{{ head }} </span>
+            <mdb-icon fas icon="sort"></mdb-icon>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr mdbTableCol *ngFor="let element of selfconsumptions; let i = index">
+          <td *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+            <div class="btn-group" mdbDropdown>
+              <button mdbBtn type="button" size="md" color="light" class="m-0 waves-light text-nowrap" mdbWavesEffect
+                mdbTooltip="Opciones autocounsumo" mdbDropdownToggle>
+                <mdb-icon fas icon="ellipsis-v"></mdb-icon>
+                <span class="d-none d-xl-inline"> Opciones autoconsumo</span>
+              </button>
+              <div class="dropdown-menu">
+                <button mdbBtn type="button" size="md" color="primary" class="m-0 waves-light text-nowrap dropdown-item"
+                  mdbWavesEffect (click)="method_showSelfconsumptionConsult(element.id)"
+                  *ngIf="rol.key === 'Super' || rol.key === 'Director' || rol.key === 'Manager'">
+                  <mdb-icon fas icon="eye"></mdb-icon>
+                  <span> Ver autoconsumo</span>
+                </button>
+                <button mdbBtn type="button" size="md" color="warning" class="m-0 waves-light text-nowrap dropdown-item"
+                  mdbWavesEffect (click)="method_showSelfconsumptionUpdate(element.id)"
+                  *ngIf="rol.key === 'Super' || rol.key === 'Director'">
+                  <mdb-icon fas icon="edit"></mdb-icon>
+                  <span> Modificar autoconsumo</span>
+                </button>
+              </div>
+            </div>
+          </td>
+          <td class="text-nowrap" *ngIf="
+            i + 1 >= mdbTablePagination.firstItemIndex &&
+            i < mdbTablePagination.lastItemIndex
+          ">
+            {{ element.routeName }}
+          </td>
+          <td class="text-nowrap" *ngIf="
+            i + 1 >= mdbTablePagination.firstItemIndex &&
+            i < mdbTablePagination.lastItemIndex
+          ">
+            {{ element.start | date:'d/M/yy' }} - {{ element.end | date:'d/M/yy' }}
+          </td>
+          <td class="text-nowrap" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+            {{ element.enterpriseName }}
+          </td>
+          <td class="text-nowrap" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+            {{ element.businessName }}
+          </td>
+          <td class="text-nowrap" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+            {{ element.subsidiaryName }}
+          </td>
+          <td class="text-nowrap" *ngIf="
+          i + 1 >= mdbTablePagination.firstItemIndex &&
+          i < mdbTablePagination.lastItemIndex
+        ">
+            {{ element.productName }}
+          </td>
+          <td class="text-nowrap text-right text-danger" *ngIf="
+            i + 1 >= mdbTablePagination.firstItemIndex &&
+            i < mdbTablePagination.lastItemIndex
+          ">
+            {{ element.quantity }} {{ element.productUnit }}
+          </td>
+          <td class="text-nowrap text-right" *ngIf="
+          i + 1 >= mdbTablePagination.firstItemIndex &&
+          i < mdbTablePagination.lastItemIndex
+        ">
+            {{ element.cost | currency }} MXN
+          </td>
+          <td class="text-nowrap text-right text-danger" *ngIf="
+        i + 1 >= mdbTablePagination.firstItemIndex &&
+        i < mdbTablePagination.lastItemIndex
+      ">
+            {{ element.total | currency }} MXN
+          </td>
+          <td class="text-nowrap" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+            {{ element.created_at | date:'d/M/yy h:mm a' }}
+          </td>
+          <td class="text-nowrap" *ngIf="
+          i + 1 >= mdbTablePagination.firstItemIndex &&
+          i < mdbTablePagination.lastItemIndex
+        ">
+            {{ element.updated_at | date:'d/M/yy h:mm a' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Table Pagination -->
+  <mdb-table-pagination [tableEl]="tableEl" [searchDataSource]="selfconsumptions"></mdb-table-pagination>
+  <!--Action Particular -->
+  <app-self-consumption-consult [selfconsumptionId]="selfconsumptionId"
+    [showedSelfconsumptionInConsult]="showedSelfconsumptionInConsult"
+    (emitter_gotSelfconsumptionInConsult)="method_gotSelfconsumptionInConsult($event)"></app-self-consumption-consult>
+  <app-self-consumption-update [selfconsumptionId]="selfconsumptionId"
+    [showedSelfconsumptionInUpdate]="showedSelfconsumptionInUpdate"
+    (emitter_gotSelfconsumptionInUpdate)="method_gotSelfconsumptionInUpdate($event)"
+    (emitter_updatedSelfconsumption)="method_updatedSelfconsumption($event)"
+    [gotSelfconsumptionInUpdate]="gotSelfconsumptionsInUpdate"></app-self-consumption-update>
+</div>

@@ -1,0 +1,19 @@
+<div>
+  <app-route-place-form 
+    [routePlace]="routePlace"
+  ></app-route-place-form>
+  <div class="d-flex justify-content-end">
+    <button
+      mdbBtn
+      type="button"
+      size="md"
+      color="info"
+      outline="true" class="m-0 waves-dark"
+      mdbTooltip="Agregar lugar"
+      mdbWavesEffect
+      (click)="method_addRoutePlace()">
+      <mdb-icon fas icon="plus-circle"></mdb-icon>
+      <span class="d-none d-xl-inline"> Agregar lugar</span>
+    </button>
+  </div>
+</div>

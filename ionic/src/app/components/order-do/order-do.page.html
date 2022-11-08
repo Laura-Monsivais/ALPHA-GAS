@@ -1,0 +1,27 @@
+<div class="bg-white content-page">
+  <app-navbar-top></app-navbar-top>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item" routerLink="/cart/order.id">Carrito</li>
+    <li class="breadcrumb-item active" routerLink="/delivery/order.id">Entrega</li>
+  </ol>
+  <div class="d-flex justify-content-center">
+    <h1>Entrega</h1>
+  </div>
+  <div class="container-fluid">
+    <form (ngSubmit)="method_doOrder()"
+    >
+      <app-order-form [order]="order"></app-order-form>
+      <button
+        mdbBtn
+        type="submit"
+        [ngClass]="{'waves-dark': true, 'btn-info': order.id == 0, 'btn-warning': order.id != 0}"
+        block="true"
+        mdbWavesEffect
+      >
+        <span> Confirmar pedido</span>
+      </button>
+    </form>
+  </div>
+  <app-navbar-left></app-navbar-left>
+</div>
+<app-navbar-bottom></app-navbar-bottom>

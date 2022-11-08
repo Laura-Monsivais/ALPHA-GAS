@@ -1,0 +1,256 @@
+<div>
+  <!-- Actions General -->
+  <div class="clearfix">
+    <div class="float-xl-left">
+      <app-service-insert
+        (emitter_insertedService)="method_insertedService($event)"
+        [gotServicesInInsert]="gotServicesInInsert"
+      ></app-service-insert>
+      <button
+        mdbBtn
+        type="button"
+        size="md"
+        color="success"
+        class="m-0 waves-light d-none d-xl-inline"
+        mdbTooltip="Exportar servicios"       
+        mdbWavesEffect
+        (click)="method_exportServices()"
+        [disabled]="isLoading"
+      >
+        <mdb-icon fas icon="file-excel"></mdb-icon>
+        <span class="d-none d-xl-inline"> Exportar servicios</span>
+      </button>
+    </div>
+    <div class="float-xl-right form-group">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">
+            <mdb-icon fas icon="search"></mdb-icon>
+          </span>
+        </div>
+        <input type="search" class="form-control" id="search" name="search" placeholder="Buscar servicios" [(ngModel)]="service.search"
+        (change)="method_searchServices()">
+        <div class="input-group-append">
+          <button
+            mdbBtn
+            type="button"
+            size="md"
+            color="primary"
+            class="m-0 waves-light"
+            mdbTooltip="Búsqueda de servicios"
+            mdbWavesEffect
+            (click)="searchAdvancedServices.toggle()"
+          >
+            <mdb-icon fas icon="search-plus"></mdb-icon>
+            <span class="d-none d-xl-inline"> Búsqueda de servicios</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="" mdbCollapse #searchAdvancedServices="bs-collapse">
+    <blockquote class="blockquote"> 
+      <b class="bq-title">Búsqueda de servicios</b>
+      <form class="form-xl-inline" (ngSubmit)="method_searchAdvancedServices()">
+        <div class="md-form md-outline">
+          <input mdbInput type="number" class="form-control" id="limit" name="limit" [(ngModel)]="service.limit">
+          <label for="limit">Registros</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="name" name="name" [(ngModel)]="service.name">
+          <label for="name">Nombre</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="description" name="description" [(ngModel)]="service.description">
+          <label for="description">Descripción</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="number" class="form-control" id="cost" name="cost" [(ngModel)]="service.cost">
+          <label for="cost">Costo</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="number" class="form-control" id="price" name="price" [(ngModel)]="service.price">
+          <label for="price">Precio</label>
+        </div>
+        <div class="md-form">
+          <select
+            class="browser-default custom-select"
+            [id]="'enterpriseId'"
+            [name]="'enterpriseId'"
+            [(ngModel)]="service.enterprise_id">
+            <option [ngValue]="null" [selected]="service.enterprise_id === null">
+              Todas las empresas
+            </option>
+            <option *ngFor="let element of enterprises" [ngValue]="element.id" [selected]="service.enterprise_id == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="createdAtStart" name="createdAtStart" [(ngModel)]="service.createdAtStart">
+          <label for="createdAtStart">Creado</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="createdAtEnd" name="createdAtEnd" [(ngModel)]="service.createdAtEnd">
+          <label for="createdAtEnd"></label>
+        </div>
+        <button
+          mdbBtn
+          type="submit"
+          size="md" 
+          color="primary" 
+          class="mt-0 waves-light text-nowrap float-right"
+          mdbWavesEffect
+          [disabled]="isLoading"
+        >
+          <mdb-icon fas icon="search"></mdb-icon>
+          <span> Buscar</span>
+          <span 
+          class="spinner-border spinner-border-sm" role="status" *ngIf="isLoading">
+            <span class="sr-only">Cargando...</span>
+          </span>
+        </button>   
+      </form>  
+    </blockquote>
+  </div>
+  <!-- Table -->
+  <div class="table-responsive">
+    <table
+      mdbTable
+      striped="true"
+      hover="true"
+      #tableEl="mdbTable"
+      id="tableSortExample"
+    >
+      <thead>
+        <tr>
+          <th
+            class="text-nowrap"
+            *ngFor="let head of heads; let i = index"
+            aria-controls="tableSortExample"
+            [mdbTableSort]="services"
+            [sortBy]="headsSort[i]"
+          >
+            <span>{{ head }} </span>
+            <mdb-icon fas icon="sort"></mdb-icon>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr mdbTableCol *ngFor="let element of services; let i = index">
+          <td
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+          <div class="btn-group" mdbDropdown>
+            <button 
+              mdbBtn 
+              type="button" 
+              size="md" 
+              color="light" 
+              class="m-0 waves-light text-nowrap"
+              mdbWavesEffect
+              mdbTooltip="Opciones servicio"
+              mdbDropdownToggle>
+              <mdb-icon fas icon="ellipsis-v"></mdb-icon>
+              <span class="d-none d-xl-inline"> Opciones servicio</span>
+            </button>
+            <div class="dropdown-menu">                  
+              <button
+              mdbBtn
+              type="button"
+              size="md"
+              color="primary"
+              class="m-0 waves-light text-nowrap dropdown-item"
+              mdbWavesEffect
+              (click)="method_showServiceConsult(element.id)"
+              *ngIf="rol.key !== 'Client'">
+              <mdb-icon fas icon="eye"></mdb-icon>
+              <span> Ver servicio</span>
+            </button>
+            <button
+            mdbBtn
+            type="button"
+            size="md" 
+            color="warning" 
+            class="m-0 waves-light text-nowrap dropdown-item"
+            mdbWavesEffect
+            (click)="method_showServiceUpdate(element.id)"
+            *ngIf="rol.key === 'Super' || rol.key === 'Director'">
+            <mdb-icon fas icon="edit"></mdb-icon>
+            <span> Modificar servicio</span>
+          </button>
+            </div>
+          </div> 
+          
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.name }}
+          </td>
+          <td
+            class="text-nowrap text-right"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.price | currency }} MXN
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.enterpriseName }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.created_at | date:'d/M/yy h:mm a' }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.updated_at | date:'d/M/yy h:mm a' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Table Pagination -->
+  <mdb-table-pagination
+    [tableEl]="tableEl"
+    [searchDataSource]="services"
+  ></mdb-table-pagination>
+  <!--Action Particular-->
+  <app-service-consult
+    [serviceId]="serviceId"
+    [showedServiceInConsult]="showedServiceInConsult"
+    (emitter_gotServiceInConsult)="method_gotServiceInConsult($event)"
+  ></app-service-consult>
+  <app-service-update
+    [serviceId]="serviceId"
+    [showedServiceInUpdate]="showedServiceInUpdate"
+    (emitter_gotServiceInUpdate)="method_gotServiceInUpdate($event)"
+    (emitter_updatedService)="method_updatedService($event)"
+    [gotServicesInUpdate]="gotServicesInUpdate"
+  ></app-service-update>
+</div>

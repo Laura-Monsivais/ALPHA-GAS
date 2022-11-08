@@ -1,0 +1,135 @@
+<div mdbModal #selfconsumptionConsult="mdbModal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="selfconsumptionConsultLabel" aria-hidden="true"
+  [config]="{ backdrop: false, ignoreBackdropClick: true }"  
+  *ngIf="rol.key === 'Super' || rol.key === 'Director' || rol.key === 'Manager'">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="selfconsumptionConsult.hide()">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="selfconsumptionConsultLabel">
+          Ver autoconsumo
+        </h4>
+      </div>
+      <div class="modal-body bg-white">
+        <mat-tab-group>
+          <mat-tab label="General">
+            <div class="row">
+              <div class="col-xl-4">
+                <b>Empresa:</b>
+                <p>
+                  {{ selfconsumption.enterpriseName }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Negocio:</b>
+                <p>
+                  {{ selfconsumption.businessName }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Sucursal:</b>
+                <p>
+                  {{ selfconsumption.subsidiaryName }}
+                </p>
+              </div>
+            </div>
+            <div>
+              <div class="row">
+                <div class="col-xl-4">
+                  <b>Ruta:</b>
+                  <p>
+                    {{ selfconsumption.routeName }}
+                  </p>
+                </div>
+                <div class="col-xl-4">
+                  <b>Inicia:</b>
+                  <p>
+                    {{ selfconsumption.start | date:'d/M/yy h:mm a' }}
+                  </p>
+                </div>
+                <div class="col-xl-4">
+                  <b>Termina:</b>
+                  <p>
+                    {{ selfconsumption.end | date:'d/M/yy h:mm a' }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Categoría:</b>
+                <p>
+                  {{ selfconsumption.categoryName }}
+                </p>
+              </div>
+              <div class="col-xl-6">
+                <b>Producto:</b>
+                <p>
+                  {{ selfconsumption.productName }}
+                </p>
+              </div>
+            </div>
+            <div>
+              <div class="row">
+                <div class="col-xl-4">
+                  <b>Costo:</b>
+                  <p>
+                    {{ selfconsumption.cost | currency }} MXN
+                  </p>
+                </div>
+                <div class="col-xl-4">
+                  <b>Cantidad:</b>
+                  <p class="text-right text-danger">
+                    {{ selfconsumption.quantity }} {{ selfconsumption.productUnit }}
+                  </p>
+                </div>
+                <div class="col-xl-4">
+                  <b>Total:</b>
+                  <p class="text-right text-danger">
+                    {{ selfconsumption.total | currency }} MXN
+                  </p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4">
+                  <b>Kilometraje inicial:</b>
+                  <p>
+                    {{ selfconsumption.initial_mileage }} 
+                  </p>
+                </div>
+                <div class="col-xl-4">
+                  <b>Kilometraje final:</b>
+                  <p>
+                    {{ selfconsumption.end_mileage }} 
+                  </p>
+                </div>
+                <div class="col-xl-4">
+                  <b>Rendimiento:</b>
+                  <p>
+                    {{ selfconsumption.performance }} Km/{{ selfconsumption.productUnit }}
+                  </p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-4">
+                  <b>Creado:</b>
+                  <p>
+                    {{ selfconsumption.created_at | date:'d/M/yy h:mm a' }}
+                  </p>
+                </div>
+                <div class="col-xl-4">
+                  <b>Modificado:</b>
+                  <p>
+                    {{ selfconsumption.updated_at | date:'d/M/yy h:mm a' }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</div>

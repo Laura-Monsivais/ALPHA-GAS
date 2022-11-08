@@ -1,0 +1,170 @@
+<div *ngIf="rol.key === 'Super' || rol.key === 'Director'">
+  <div class="form-group">
+    <label class="font-weight-bold" [for]="'function'+externalApi.id">Función:</label>
+    <select [id]="'function'+externalApi.id" class="browser-default custom-select" [name]="'method'+externalApi.id"
+      [(ngModel)]="externalApi.function" #functionValidation="ngModel" required>
+      <option [ngValue]="'rechargeCellphone'" [selected]="externalApi.function === 'rechargeCellphone'">Recargar
+        celular</option>
+      <option [ngValue]="'payCFE'" [selected]="externalApi.function === 'payCFE'">Pagar CFE</option>
+      <option [ngValue]="'payTELMEX'" [selected]="externalApi.function === 'payTELMEX'">Pagar TELMEX</option>
+    </select>
+    <mdb-error *ngIf="
+        functionValidation.invalid &&
+        (functionValidation.dirty || functionValidation.touched)
+      ">Campo requerido</mdb-error>
+    <mdb-success *ngIf="
+      functionValidation.valid &&
+        (functionValidation.dirty || functionValidation.touched)
+      "></mdb-success>
+  </div>
+  <div *ngIf="externalApi.function === 'rechargeCellphone'">
+    <div class="row">
+      <div class="col-xl-6">
+        <div class="md-form form-group">
+          <input mdbInput mdbValidate type="text" [id]="'user'+externalApi.id" class="form-control"
+            [name]="'user'+externalApi.id" [(ngModel)]="externalApi.user" #userValidation="ngModel" required />
+          <label class="font-weight-bold" [for]="'user'+externalApi.id">Usuario:</label>
+          <mdb-error *ngIf="
+            userValidation.invalid &&
+              (userValidation.dirty || userValidation.touched)
+            ">Campo requerido</mdb-error>
+          <mdb-success *ngIf="
+            userValidation.valid &&
+              (userValidation.dirty || userValidation.touched)
+            "></mdb-success>
+        </div>
+      </div>
+      <div class="col-xl-6">
+        <div class="md-form form-group">
+          <input mdbInput mdbValidate type="password" [id]="'password'+externalApi.id" class="form-control"
+            [name]="'password'+externalApi.id" [(ngModel)]="externalApi.password" #passwordValidation="ngModel"
+            required />
+          <label class="font-weight-bold" [for]="'password'+externalApi.id">Contraseña:</label>
+          <mdb-error *ngIf="
+            passwordValidation.invalid &&
+                (passwordValidation.dirty || passwordValidation.touched)
+              ">Campo requerido</mdb-error>
+          <mdb-success *ngIf="
+            passwordValidation.valid &&
+                (passwordValidation.dirty || passwordValidation.touched)
+              "></mdb-success>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="externalApi.function === 'payCFE' || externalApi.function === 'payTELMEX'">
+    <div class="row">
+      <div class="col-xl-6">
+        <div class="md-form form-group">
+          <input mdbInput mdbValidate type="text" [id]="'agreement'+externalApi.id" class="form-control"
+            [name]="'agreement'+externalApi.id" [(ngModel)]="externalApi.agreement" #agreementValidation="ngModel" required />
+          <label class="font-weight-bold" [for]="'agreement'+externalApi.id">Convenio:</label>
+          <mdb-error *ngIf="
+          agreementValidation.invalid &&
+              (agreementValidation.dirty || agreementValidation.touched)
+            ">Campo requerido</mdb-error>
+          <mdb-success *ngIf="
+          agreementValidation.valid &&
+              (agreementValidation.dirty || agreementValidation.touched)
+            "></mdb-success>
+        </div>
+      </div>
+      <div class="col-xl-6">
+        <div class="md-form form-group">
+          <input mdbInput mdbValidate type="text" [id]="'reference'+externalApi.id" class="form-control"
+            [name]="'reference'+externalApi.id" [(ngModel)]="externalApi.reference" #referenceValidation="ngModel" required />
+          <label class="font-weight-bold" [for]="'reference'+externalApi.id">Referencia:</label>
+          <mdb-error *ngIf="
+          referenceValidation.invalid &&
+              (referenceValidation.dirty || referenceValidation.touched)
+            ">Campo requerido</mdb-error>
+          <mdb-success *ngIf="
+          referenceValidation.valid &&
+              (referenceValidation.dirty || referenceValidation.touched)
+            "></mdb-success>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-8">
+      <div class="md-form form-group">
+        <input mdbInput mdbValidate type="text" [id]="'url'+externalApi.id" class="form-control"
+          [name]="'url'+externalApi.id" [(ngModel)]="externalApi.url" #urlValidation="ngModel" required />
+        <label class="font-weight-bold" [for]="'url'+externalApi.id">Url:</label>
+        <mdb-error *ngIf="
+            urlValidation.invalid &&
+            (urlValidation.dirty || urlValidation.touched)
+          ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+            urlValidation.valid &&
+            (urlValidation.dirty || urlValidation.touched)
+          "></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'method'+externalApi.id">Método:</label>
+        <select [id]="'method'+externalApi.id" class="browser-default custom-select" [name]="'method'+externalApi.id"
+          [(ngModel)]="externalApi.method" #methodValidation="ngModel" required>
+          <option [ngValue]="'GET'" [selected]="externalApi.method === 'GET'">GET</option>
+          <option [ngValue]="'POST'" [selected]="externalApi.method === 'POST'">POST</option>
+        </select>
+        <mdb-error *ngIf="
+            methodValidation.invalid &&
+            (methodValidation.dirty || methodValidation.touched)
+          ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+            methodValidation.valid &&
+            (methodValidation.dirty || methodValidation.touched)
+          "></mdb-success>
+      </div>
+    </div>
+  </div>
+  <div class="md-form form-group">
+    <textarea mdbInput mdbValidate type="text" class="md-textarea form-control" [id]="'token'+externalApi.id"
+      [name]="'token'+externalApi.id" [(ngModel)]="externalApi.token" #tokenValidation="ngModel" required></textarea>
+    <label class="font-weight-bold" [for]="'token'+externalApi.id">Token:</label>
+    <mdb-error *ngIf="
+        tokenValidation.invalid &&
+        (tokenValidation.dirty || tokenValidation.touched)
+      ">Campo requerido</mdb-error>
+    <mdb-success *ngIf="
+        tokenValidation.valid &&
+        (tokenValidation.dirty || tokenValidation.touched)
+      "></mdb-success>
+  </div>
+  <div class="form-group">
+    <label class="font-weight-bold" [for]="'enterpriseId'+externalApi.id">Empresa:</label>
+    <select class="browser-default custom-select" [id]="'enterpriseId'+externalApi.id"
+      [name]="'enterpriseId'+externalApi.id" [(ngModel)]="externalApi.enterprise_id" #enterpriseIdValidation="ngModel"
+      required [disabled]="rol.key === 'Director'">
+      <option [ngValue]="0" [selected]="externalApi.enterprise_id == 0">Selecciona una empresa</option>
+      <option *ngFor="let element of enterprises" [ngValue]="element.id"
+        [selected]="externalApi.enterprise_id == element.id">
+        {{ element.name }}
+      </option>
+    </select>
+    <mdb-error *ngIf="
+        enterpriseIdValidation.invalid &&
+        (enterpriseIdValidation.dirty || enterpriseIdValidation.touched)
+      ">Campo requerido</mdb-error>
+    <mdb-success *ngIf="
+        enterpriseIdValidation.valid &&
+        (enterpriseIdValidation.dirty || enterpriseIdValidation.touched)
+      "></mdb-success>
+  </div>
+  <div class="form-group green-border-focus">
+    <label class="font-weight-bold" [for]="'documentation'+externalApi.id">Documentación:</label>
+    <textarea class="form-control" [id]="'documentation'+externalApi.id" [name]="'documentation'+externalApi.id"
+      [(ngModel)]="externalApi.documentation" #documentationValidation="ngModel" required rows="3"></textarea>
+  </div>
+  <mdb-error *ngIf="
+  documentationValidation.invalid &&
+  (documentationValidation.dirty || documentationValidation.touched)
+">Campo requerido</mdb-error>
+  <mdb-success *ngIf="
+documentationValidation.valid &&
+  (documentationValidation.dirty || documentationValidation.touched)
+"></mdb-success>
+</div>

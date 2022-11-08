@@ -1,0 +1,75 @@
+<div
+  mdbModal
+  #externalApiConsult="mdbModal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myExternalApiConsultLabel"
+  aria-hidden="true"
+  [config]="{ backdrop: false, ignoreBackdropClick: true }"  
+  *ngIf="rol.key === 'Super' || rol.key === 'Director'"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="externalApiConsult.hide()"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myExternalApiConsultLabel">
+          Ver API
+        </h4>
+      </div>
+      <div class="modal-body bg-white">        
+        <mat-tab-group>
+          <mat-tab label="General">
+            <div class="row">
+              <div class="col-xl-9">
+                <b>Url:</b>
+                <p>
+                  {{ externalApi.url }}
+                </p>
+              </div>
+              <div class="col-xl-3">
+                <b>Método:</b>
+                <p>
+                  {{ externalApi.method }}
+                </p>
+              </div>
+            </div>
+            <div>
+              <b>Token:</b>
+              <p>
+                {{ externalApi.token }}
+              </p>
+            </div>
+            <div>
+              <b>Empresa:</b>
+              <p>
+                {{ externalApi.enterpriseName }}
+              </p>
+            </div>
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Creado:</b>
+                <p>
+                  {{ externalApi.created_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>
+              <div class="col-xl-6">
+                <b>Modificado:</b>
+                <p>
+                  {{ externalApi.updated_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>  
+            </div>
+          </mat-tab>
+        </mat-tab-group>      
+      </div>
+    </div>
+  </div>
+</div>

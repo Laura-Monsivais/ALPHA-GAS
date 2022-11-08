@@ -1,0 +1,61 @@
+<button
+  mdbBtn
+  type="button"
+  size="md" 
+  color="link" 
+  class="waves-light m-0 p-0"
+  mdbTooltip="Información de la promoción"
+  mdbWavesEffect
+  (click)="promotionDownload.show()"
+>
+  <h3 class="m-0" *ngIf="!onlyIcon">
+    <mdb-icon fas icon="info-circle" size="2x"></mdb-icon> {{promotion.name}}
+  </h3>
+  <h6 class="m-0" *ngIf="onlyIcon">
+    <mdb-icon fas icon="info-circle"></mdb-icon> {{promotion.name}}
+  </h6>
+</button>
+<div
+  mdbModal
+  #promotionDownload="mdbModal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myPromotionDownloadLabel"
+  aria-hidden="true"
+  [config]="{ backdrop: false, ignoreBackdropClick: true }"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="promotionDownload.hide()"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myPromotionDownloadLabel">
+          Información de la promoción
+        </h4>
+      </div>
+      <div class="modal-body bg-white">
+        <div>
+          <b>Nombre:</b>
+          <p>{{ promotion.name }}</p>
+        </div>
+        <div class="row">
+          <div class="col-xl-4">
+            <b>Expira:</b>
+            <p>{{ promotion.expires_at | date:'d/M/yy' }}</p>
+          </div>
+          <div class="col-xl-4">
+            <b>Precio:</b>
+            <p>{{ promotion.price | currency }} MXN</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

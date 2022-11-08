@@ -1,0 +1,182 @@
+<div *ngIf="rol.key === 'Super' || rol.key === 'Director'">
+  <div class="row">
+    <div class="col-xl-8">
+      <div class="md-form form-group">
+        <input mdbInput mdbValidate type="text" [id]="'name'+route.id" class="form-control" [name]="'name'+route.id" [(ngModel)]="route.name"
+          #nameValidation="ngModel" required />
+        <label class="font-weight-bold" [for]="'name'+route.id">Nombre:</label>
+        <mdb-error *ngIf="
+            nameValidation.invalid &&
+            (nameValidation.dirty || nameValidation.touched)
+          ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+            nameValidation.valid &&
+            (nameValidation.dirty || nameValidation.touched)
+          "></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'routeTypeId'+route.id">Tipo de ruta:</label>
+        <select
+          [id]="'routeTypeId'+route.id"
+          class="browser-default custom-select"
+          [name]="'routeTypeId'+route.id"
+          [(ngModel)]="route.route_type_id"
+        >
+          <option [ngValue]="0" [selected]="route.route_type_id  == 0">
+            Selecciona un tipo de ruta
+          </option>
+          <option *ngFor="let element of routeTypes" [ngValue]="element.id" [selected]="route.route_type_id == element.id">
+            {{ element.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="md-form form-group">
+        <input 
+          mdbInput 
+          mdbValidate 
+          type="text" 
+          [id]="'maximumCapacity'+route.id" 
+          class="form-control" 
+          [name]="'maximumCapacity'+route.id" 
+          [(ngModel)]="route.maximum_capacity"
+          #maximumCapacityValidation="ngModel"
+          (change)="method_calculateMinimumCapacity()" 
+          required />
+        <label class="font-weight-bold" [for]="'maximumCapacity'+route.id">Capacidad máxima:</label>
+        <mdb-error *ngIf="
+            maximumCapacityValidation.invalid &&
+            (maximumCapacityValidation.dirty || maximumCapacityValidation.touched)
+          ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+            maximumCapacityValidation.valid &&
+            (maximumCapacityValidation.dirty || maximumCapacityValidation.touched)
+          "></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-6">
+      <div class="md-form form-group">
+        <input mdbInput mdbValidate type="text" [id]="'minimumSale'+route.id" class="form-control" [name]="'minimumSale'+route.id" [(ngModel)]="route.minimum_capacity"
+          #minimumSaleValidation="ngModel" required />
+        <label class="font-weight-bold" [for]="'minimumSale'+route.id">Capacidad mínima:</label>
+        <mdb-error *ngIf="
+            minimumSaleValidation.invalid &&
+            (minimumSaleValidation.dirty || minimumSaleValidation.touched)
+          ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+            minimumSaleValidation.valid &&
+            (minimumSaleValidation.dirty || minimumSaleValidation.touched)
+          "></mdb-success>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label [for]="'enterpriseId'+route.id">Empresa:</label>
+        <select
+          [id]="'enterpriseId'+route.id"
+          class="browser-default custom-select"
+          [name]="'enterpriseId'+route.id"
+          [(ngModel)]="route.enterpriseId"
+          [disabled]="rol.key === 'Director'"
+          (change)="method_getBusinesses()"
+        >
+          <option [ngValue]="0" [selected]="route.enterpriseId == 0">
+            Selecciona una empresa
+          </option>
+          <option *ngFor="let element of enterprises" [ngValue]="element.id" [selected]="route.enterpriseId == element.id">
+            {{ element.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="col-xl-4">      
+      <div class="form-group">
+        <label [for]="'businessId' + route.id">Negocio:</label>
+        <select
+          [id]="'businessId' + route.id"
+          class="browser-default custom-select"
+          [name]="'businessId' + route.id"
+          [(ngModel)]="route.businessId"
+          (change)="method_getSubsidiaries()"
+        >
+          <option [ngValue]="0" [selected]="route.businessId == 0">
+            Selecciona un negocio
+          </option>
+          <option
+            *ngFor="let element of businesses"
+            [ngValue]="element.id"
+            [selected]="route.businessId == element.id"
+          >
+            {{ element.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="col-xl-4">      
+      <div class="form-group">
+        <label [for]="'subsidiaryId' + route.id">Sucursal:</label>
+        <select
+          [id]="'subsidiaryId' + route.id"
+          class="browser-default custom-select"
+          [name]="'subsidiaryId' + route.id"
+          [(ngModel)]="route.subsidiaryId"
+          (change)="method_getSessions()"
+        >
+          <option [ngValue]="0" [selected]="route.subsidiaryId == 0">
+            Selecciona una sucursal
+          </option>
+          <option
+            *ngFor="let element of subsidiaries"
+            [ngValue]="element.id"
+            [selected]="route.subsidiaryId == element.id"
+          >
+            {{ element.type }} {{ element.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'sellerId'+route.id">Vendedor:</label>
+        <select
+          [id]="'sellerId'+route.id"
+          class="browser-default custom-select"
+          [name]="'sellerId'+route.id"
+          [(ngModel)]="route.seller_id"
+          (change)="method_getSession()"
+        >
+          <option [ngValue]="0" [selected]="route.seller_id  == 0">
+            Selecciona un vendedor
+          </option>
+          <option *ngFor="let element of sessions" [ngValue]="element.id" [selected]="route.seller_id == element.id">
+            {{ element.userNameComplete }}
+          </option>
+        </select>
+      </div>
+    </div>  
+    <div class="col-xl-6">
+      <div class="md-form form-group">
+        <input mdbInput mdbValidate type="number" [id]="'cellphone'+route.id" class="form-control" [name]="'cellphone'+route.id" [(ngModel)]="route.cellphone"
+          #cellphoneValidation="ngModel" required />
+        <label class="font-weight-bold" [for]="'cellphone'+route.id">Celular:</label>
+        <mdb-error *ngIf="
+            cellphoneValidation.invalid &&
+            (cellphoneValidation.dirty || cellphoneValidation.touched)
+          ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+            cellphoneValidation.valid &&
+            (cellphoneValidation.dirty || cellphoneValidation.touched)
+          "></mdb-success>
+      </div>
+    </div>  
+  </div>
+</div>

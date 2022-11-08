@@ -1,0 +1,219 @@
+<div *ngIf="rol.key === 'Super' || rol.key === 'Director'">
+  <div class="md-form form-group">
+    <input
+      mdbInput
+      mdbValidate
+      type="text"
+      [id]="'name' + promotion.id"
+      class="form-control"
+      [name]="'name' + promotion.id"
+      [(ngModel)]="promotion.name"
+      #nameValidation="ngModel"
+      required
+    />
+    <label class="font-weight-bold" [for]="'name' + promotion.id">Nombre:</label>
+    <mdb-error
+      *ngIf="
+        nameValidation.invalid &&
+        (nameValidation.dirty || nameValidation.touched)
+      "
+      >Campo requerido</mdb-error
+    >
+    <mdb-success
+      *ngIf="
+        nameValidation.valid && (nameValidation.dirty || nameValidation.touched)
+      "
+    ></mdb-success>
+  </div>
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <input
+          mdbInput
+          mdbValidate
+          type="date"
+          class="form-control"
+          [id]="'expiresAt' + promotion.id"
+          [name]="'expiresAt' + promotion.id"
+          [(ngModel)]="promotion.expires_at"
+          #expiresAtValidation="ngModel"
+          required
+        />
+        <label class="font-weight-bold" [for]="'expiresAt' + promotion.id">Expira:</label>
+        <mdb-error
+          *ngIf="
+            expiresAtValidation.invalid &&
+            (expiresAtValidation.dirty || expiresAtValidation.touched)
+          "
+          >Campo requerido</mdb-error
+        >
+        <mdb-success
+          *ngIf="
+            expiresAtValidation.valid &&
+            (expiresAtValidation.dirty || expiresAtValidation.touched)
+          "
+        ></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'cost' + promotion.id">Costo:</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">$</span>
+          </div>
+          <input
+            mdbInput
+            mdbValidate
+            type="number"
+            [id]="'cost' + promotion.id"
+            class="form-control"
+            [name]="'cost' + promotion.id"
+            [(ngModel)]="promotion.cost"
+            #costValidation="ngModel"
+            required
+          />
+          <div class="input-group-append">
+            <span class="input-group-text">MXN</span>
+          </div>
+          <mdb-error
+            *ngIf="
+              costValidation.invalid &&
+              (costValidation.dirty || costValidation.touched)
+            "
+            >Campo requerido</mdb-error
+          >
+          <mdb-success
+            *ngIf="
+              costValidation.valid &&
+              (costValidation.dirty || costValidation.touched)
+            "
+          ></mdb-success>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'price' + promotion.id">Precio:</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">$</span>
+          </div>
+          <input
+            mdbInput
+            mdbValidate
+            type="number"
+            [id]="'price' + promotion.id"
+            class="form-control"
+            [name]="'price' + promotion.id"
+            [(ngModel)]="promotion.price"
+            #priceValidation="ngModel"
+            required
+          />
+          <div class="input-group-append">
+            <span class="input-group-text">MXN</span>
+          </div>
+          <mdb-error
+            *ngIf="
+              priceValidation.invalid &&
+              (priceValidation.dirty || priceValidation.touched)
+            "
+            >Campo requerido</mdb-error
+          >
+          <mdb-success
+            *ngIf="
+              priceValidation.valid &&
+              (priceValidation.dirty || priceValidation.touched)
+            "
+          ></mdb-success>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'enterpriseId' + promotion.id">Empresa:</label>
+        <select
+          [id]="'enterpriseId' + promotion.id"
+          class="browser-default custom-select"
+          [name]="'enterpriseId' + promotion.id"
+          [(ngModel)]="promotion.enterprise_id"
+          #enterpriseIdValidation="ngModel"
+          required
+          [disabled]="rol.key === 'Director'"
+          (change)="method_getBusinesses()"
+        >
+          <option [ngValue]="0" [selected]="promotion.enterprise_id == 0">
+            Selecciona una empresa
+          </option>
+          <option
+            *ngFor="let element of enterprises"
+            [ngValue]="element.id"
+            [selected]="promotion.enterprise_id == element.id"
+          >
+            {{ element.name }}
+          </option>
+        </select>
+        <mdb-error
+          *ngIf="
+            enterpriseIdValidation.invalid &&
+            (enterpriseIdValidation.dirty || enterpriseIdValidation.touched)
+          "
+          >Campo requerido</mdb-error
+        >
+        <mdb-success
+          *ngIf="
+            enterpriseIdValidation.valid &&
+            (enterpriseIdValidation.dirty || enterpriseIdValidation.touched)
+          "
+        ></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'businessId' + promotion.id">Negocio:</label>
+        <select
+          [id]="'businessId' + promotion.id"
+          class="browser-default custom-select"
+          [name]="'businessId' + promotion.id"
+          [(ngModel)]="promotion.business_id"
+          (change)="method_getSubsidiaries()"
+        >
+          <option [ngValue]="0" [selected]="promotion.business_id == 0">
+            Selecciona un negocio
+          </option>
+          <option
+            *ngFor="let element of businesses"
+            [ngValue]="element.id"
+            [selected]="promotion.business_id == element.id"
+          >
+            {{ element.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'subsidiaryId' + promotion.id">Sucursal:</label>
+        <select
+          [id]="'subsidiaryId' + promotion.id"
+          class="browser-default custom-select"
+          [name]="'subsidiaryId' + promotion.id"
+          [(ngModel)]="promotion.subsidiary_id"
+        >
+          <option [ngValue]="0" [selected]="promotion.subsidiary_id == 0">
+            Selecciona una sucursal
+          </option>
+          <option
+            *ngFor="let element of subsidiaries"
+            [ngValue]="element.id"
+            [selected]="promotion.subsidiary_id == element.id"
+          >
+            {{ element.type }} {{ element.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>

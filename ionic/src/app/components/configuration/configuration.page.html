@@ -1,0 +1,25 @@
+<div class="bg-white content-page">
+  <app-navbar-top></app-navbar-top>
+  <div class="d-flex justify-content-center">
+    <h1>Configuración</h1>
+  </div>
+  <div class="container-fluid">         
+    <mat-tab-group>
+      <mat-tab label="Usuario">
+        <app-user-profile></app-user-profile>
+      </mat-tab>
+      <mat-tab label="Sucursal" *ngIf="rol.key !== 'Super' && rol.key !== 'Director'">
+        <app-subsidiary-profile></app-subsidiary-profile>
+      </mat-tab>
+      <mat-tab label="Empresa" *ngIf="rol.key !== 'Super'">
+        <app-enterprise-profile></app-enterprise-profile>
+      </mat-tab>
+      <mat-tab label="Manual">
+        <app-rol-manual></app-rol-manual>
+      </mat-tab>
+    </mat-tab-group>    
+  </div>
+  <app-navbar-left></app-navbar-left>
+</div>
+<app-navbar-bottom></app-navbar-bottom>
+  

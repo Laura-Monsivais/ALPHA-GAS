@@ -1,0 +1,247 @@
+<div class="list-group" *ngIf="saleDetailsNotInventories.length > 0">
+  <div class="list-group-item list-group-item-danger">  
+    Artículos no agregados por falta de inventario
+  </div> 
+  <div class="list-group-item" *ngFor="let element of saleDetailsNotInventories; let i = index">  
+    <div class="d-flex w-100 justify-content-between">
+      <app-product-info [onlyIcon]="true" [product]="element"></app-product-info>
+      <div>          
+        <span class="d-none d-xl-inline">Inventario teórico: </span>
+        <span>{{ element.inventoryTheoretical | number }} {{element.unit}}</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-12">
+        <div>
+          <span class="d-block d-lg-inline">Cantidad: </span>
+          <span>{{ element.quantity | number }} {{element.unit}}</span>
+        </div>
+        <div class="text-danger" *ngIf="element.quantity > element.inventoryTheoretical">
+          Debe ser menor o igual al inventario teórico
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-10">
+        <div *ngIf="addBy === 'quantity'">
+          <span class="d-block d-lg-inline">Monto: </span>
+          <span>{{ element.amount | currency }} MXN</span>
+        </div>
+        <div class="text-danger" *ngIf="element.amount <= 0">
+          Debe ser mayor a cero
+        </div>
+      </div> 
+      <div class="col-xl-2">
+        <div [mdbTooltip]="'Pedido ' + element.orderCode" *ngIf="element.order_id">
+          <mdb-icon fas icon="dolly-flatbed"></mdb-icon>
+          <span class="d-none d-xl-inline"> Pedido {{ element.orderCode }}</span>
+        </div>
+      </div> 
+    </div> 
+  </div> 
+</div> 
+<div class="list-group">
+  <div class="list-group-item list-group-item-secondary">  
+    Promociones
+  </div>  
+  <div class="list-group-item" *ngFor="let element of saleDetailsPromotions; let i = index">    
+    <div class="d-flex w-100 justify-content-between">
+      <app-promotion-info [onlyIcon]="true" [promotion]="element"></app-promotion-info>
+    </div>    
+    <div class="row">
+      <div class="col-xl-12">
+          <span class="d-block d-lg-inline">Cantidad: </span>
+          <span>{{ element.quantity | number }}</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-10">
+        <span class="d-block d-lg-inline">Monto: </span>
+        <span>{{ element.amount | currency }} MXN</span>
+      </div> 
+      <div class="col-xl-2">        
+        <div [mdbTooltip]="'Pedido ' + element.orderCode" *ngIf="element.order_id">
+          <mdb-icon fas icon="dolly-flatbed"></mdb-icon>
+          <span class="d-none d-xl-inline"> Pedido {{ element.orderCode }}</span>
+        </div>
+        <button
+          mdbBtn
+          type="button"
+          size="md"
+          color="danger"
+          outline="true" class="m-0 waves-dark" block="true"
+          mdbTooltip="Quitar promoción"
+          mdbWavesEffect
+          (click)="method_removePromotionSaleDetail(i)"
+          *ngIf="!element.order_id"
+        >
+          <mdb-icon fas icon="minus-circle"></mdb-icon
+          ><span> Quitar promoción</span>
+        </button>
+      </div> 
+    </div>
+  </div>
+  <div class="list-group-item list-group-item-secondary">  
+    Productos
+  </div> 
+  <div class="list-group-item" *ngFor="let element of saleDetailsProducts; let i = index">    
+    <div class="d-flex w-100 justify-content-between">
+      <app-product-info [onlyIcon]="true" [product]="element"></app-product-info>
+      <div>          
+        <span class="d-none d-xl-inline">Inventario teórico: </span>
+        <span>{{ element.inventoryTheoretical | number }} {{element.unit}}</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-12">
+        <div *ngIf="addBy !== 'quantity'">
+          <span class="d-block d-lg-inline">Cantidad: </span>
+          <span>{{ element.quantity | number }} {{element.unit}}</span>
+        </div>
+        <div class="form-group mb-0 row" *ngIf="addBy === 'quantity'">
+          <label [for]="'quantity' + element.id" class="col-sm-3 col-form-label">Cantidad:</label>   
+          <div class="input-group col-sm-9">
+            <input 
+              mdbInput 
+              type="number" 
+              class="form-control"
+              [id]="'quantity' + element.id" 
+              [name]="'quantity' + element.id"          
+              [(ngModel)]="element.quantity"
+              required
+              (change)="method_changeProduct(i, element)"/>     
+            <div class="input-group-apend">
+              <span class="input-group-text">{{element.unit}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="text-danger" *ngIf="element.quantity > element.inventoryTheoretical">
+          Debe ser menor o igual al inventario teórico
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-10">
+        <div *ngIf="addBy === 'quantity'">
+          <span class="d-block d-lg-inline">Monto: </span>
+          <span>{{ element.amount | currency }} MXN</span>
+        </div>
+        <div class="form-group mb-0 row" *ngIf="addBy === 'amountPrice'">
+          <label [for]="'amount' + element.id" class="col-sm-3 col-form-label">Monto:</label>  
+          <div class="input-group col-sm-9">
+            <div class="input-group-prepend">
+              <span class="input-group-text">$</span>
+            </div>
+            <input
+              mdbInput 
+              type="number"
+              class="form-control"
+              [id]="'amount' + element.id" 
+              [name]="'amount' + element.id"    
+              [(ngModel)]="element.amount"
+              (change)="method_changeProduct(i, element)"/>
+            <div class="input-group-apend">
+              <span class="input-group-text">MXN</span>
+            </div>
+          </div>
+        </div>
+        <div class="text-danger" *ngIf="element.amount <= 0">
+          Debe ser mayor a cero
+        </div>
+      </div> 
+      <div class="col-xl-2">
+        <div [mdbTooltip]="'Pedido ' + element.orderCode" *ngIf="element.order_id">
+          <mdb-icon fas icon="dolly-flatbed"></mdb-icon>
+          <span class="d-none d-xl-inline"> Pedido {{ element.orderCode }}</span>
+        </div>
+        <button
+          mdbBtn
+          type="button"
+          size="md"
+          color="danger"
+          outline="true" class="mb-0 waves-dark" block="true"
+          mdbTooltip="Quitar producto"
+          mdbWavesEffect
+          (click)="method_removeProductSaleDetail(i)"
+          *ngIf="!element.order_id">
+          <mdb-icon fas icon="minus-circle"></mdb-icon>
+          <span> Quitar producto</span>
+        </button>
+      </div> 
+    </div> 
+  </div>
+  <div class="list-group-item list-group-item-secondary">  
+    Servicios
+  </div> 
+  <div class="list-group-item" *ngFor="let element of saleDetailsServices; let i = index">    
+    <div class="d-flex w-100 justify-content-between">      
+      <app-service-info [onlyIcon]="true" [service]="element"></app-service-info>
+    </div>
+    <div class="row">
+      <div class="col-xl-12">
+        <div *ngIf="addBy !== 'quantity'">
+          <span class="d-block d-lg-inline">Cantidad: </span>
+          <span>{{ element.quantity | number }}</span>
+        </div>
+        <div class="form-group mb-0 row" *ngIf="addBy === 'quantity'">
+          <label [for]="'quantity' + element.id" class="col-sm-3 col-form-label">Cantidad:</label>   
+          <div class="input-group col-sm-9">
+            <input 
+              mdbInput 
+              type="number" 
+              class="form-control"
+              [id]="'quantity' + element.id" 
+              [name]="'quantity' + element.id"          
+              [(ngModel)]="element.quantity"
+              required
+              (change)="method_changeService(i, element)"/>     
+          </div>
+        </div>
+        <div class="text-danger" *ngIf="element.quantity <= 0">
+          Debe ser mayor a cero
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-10">
+        <div *ngIf="addBy === 'quantity'">
+          <span class="d-block d-lg-inline">Monto: </span>
+          <span>{{ element.amount | currency }} MXN</span>
+        </div>
+        <div class="form-group mb-0 row" *ngIf="addBy === 'amountPrice'">
+          <label [for]="'amount' + element.id" class="col-sm-3 col-form-label">Monto:</label>  
+          <div class="input-group col-sm-9">
+            <div class="input-group-prepend">
+              <span class="input-group-text">$</span>
+            </div>
+            <input
+              mdbInput 
+              type="number"
+              class="form-control"
+              [id]="'amount' + element.id" 
+              [name]="'amount' + element.id"    
+              [(ngModel)]="element.amount"
+              (change)="method_changeService(i, element)"/>
+            <div class="input-group-apend">
+              <span class="input-group-text">MXN</span>
+            </div>
+          </div>
+        </div>
+      </div> 
+      <div class="col-xl-2">
+        <button
+          mdbBtn
+          type="button"
+          size="md"
+          color="danger"
+          outline="true" class="mb-0 waves-dark" block="true"
+          mdbTooltip="Quitar servicio"
+          mdbWavesEffect
+          (click)="method_removeServiceSaleDetail(i)">
+          <mdb-icon fas icon="minus-circle"></mdb-icon>
+          <span> Quitar servicio</span>
+        </button>
+      </div> 
+    </div> 
+  </div>
+</div>

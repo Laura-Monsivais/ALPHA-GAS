@@ -1,0 +1,19 @@
+<div class="bg-white content-page">
+  <app-navbar-top
+    (emitter_isGotArticles)="method_detectIfGotArticle($event)"
+    [isAddedArticle]="isAddedArticle"
+  ></app-navbar-top>
+  <div class="d-flex justify-content-center">
+    <h1>Productos</h1>
+  </div>
+  <div class="container-fluid">
+    <app-product-table *ngIf="rol.key !== 'Client'"></app-product-table>
+    <app-product-card 
+      (emitter_isAddedArticle)="method_detectIfAddedArticle($event)"
+      [isGotArticles]="isGotArticles"
+      *ngIf="rol.key === 'Client'"
+    ></app-product-card>
+  </div>
+  <app-navbar-left></app-navbar-left>
+</div>
+<app-navbar-bottom></app-navbar-bottom>

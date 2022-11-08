@@ -1,0 +1,128 @@
+<div mdbModal #transferConsult="mdbModal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="myTansferConsultLabel" aria-hidden="true" [config]="{ backdrop: false, ignoreBackdropClick: true }"
+  *ngIf="rol.key === 'Super' || rol.key === 'Director' || rol.key === 'Manager'">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="transferConsult.hide()">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myTansferConsultLabel">
+          Ver traspaso
+        </h4>
+      </div>
+      <div class="modal-body bg-white">
+        <mat-tab-group>
+          <mat-tab label="General">
+            <div>
+              <b>Nombre:</b>
+              <p>
+                {{transfer.changeKey}} {{ transfer.name }}
+              </p>
+            </div>
+            <div class="row">
+              <div class="col-xl-4">
+                <b>Empresa:</b>
+                <p>
+                  {{ transfer.enterpriseName }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Negocio:</b>
+                <p>
+                  {{ transfer.businessName }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Origen:</b>
+                <p>
+                  {{ transfer.originName }}
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-4">
+                <b>Categoría:</b>
+                <p>
+                  {{ transfer.categoryName }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Producto:</b>
+                <p>
+                  {{ transfer.productName }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Estatus:</b>
+                <p>
+                  {{ transfer.status }}
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Cantidad:</b>
+                <p class="text-right text-danger">
+                  {{ transfer.quantity | number }} {{ transfer.productUnit }}
+                </p>
+              </div>
+              <div class="col-xl-6">
+                <b>Destino:</b>
+                <p>
+                  {{ transfer.destinationName }}
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Creado:</b>
+                <p>
+                  {{ transfer.created_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>
+              <div class="col-xl-6">
+                <b>Modificado:</b>
+                <p>
+                  {{ transfer.updated_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>
+            </div>
+          </mat-tab>
+          <mat-tab label="Taspaso de entrada" *ngIf="transfer.key === 'Input'">
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Origen:</b>
+                <p>
+                  {{ transfer.originName }}
+                </p>
+              </div>
+              <div class="col-xl-6">
+                <b>Destino:</b>
+                <p>
+                  {{ transfer.destinationName }}
+                </p>
+              </div>
+            </div>
+          </mat-tab>
+          <mat-tab label="Taspaso de salida" *ngIf="transfer.key === 'Output'">
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Origen:</b>
+                <p>
+                  {{ transfer.originName }}
+                </p>
+              </div>
+              <div class="col-xl-6">
+                <b>Destino:</b>
+                <p>
+                  {{ transfer.destinationName }}
+                </p>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</div>

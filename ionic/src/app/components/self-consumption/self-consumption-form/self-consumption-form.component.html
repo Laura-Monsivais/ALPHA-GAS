@@ -1,0 +1,357 @@
+<div *ngIf="rol.key === 'Super' || rol.key === 'Director'">
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label [for]="'enterpriseId' + selfconsumption.id">Empresa:</label>
+        <select [id]="'enterpriseId' + selfconsumption.id" class="browser-default custom-select"
+          [name]="'enterpriseId' + selfconsumption.id" [(ngModel)]="selfconsumption.enterpriseId"
+          #enterpriseIdValidation="ngModel" required [disabled]="rol.key === 'Director'"
+          (change)="method_getBusinesses()">
+          <option [ngValue]="0" [selected]="selfconsumption.enterpriseId == 0">
+            Selecciona una empresa
+          </option>
+          <option *ngFor="let element of enterprises" [ngValue]="element.id"
+            [selected]="selfconsumption.enterpriseId == element.id">
+            {{ element.name }}
+          </option>
+        </select>
+        <mdb-error *ngIf="
+              enterpriseIdValidation.invalid &&
+              (enterpriseIdValidation.dirty || enterpriseIdValidation.touched)
+            ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+              enterpriseIdValidation.valid &&
+              (enterpriseIdValidation.dirty || enterpriseIdValidation.touched)
+            "></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label [for]="'businessId' + selfconsumption.id">Negocio:</label>
+        <select [id]="'businessId' + selfconsumption.id" class="browser-default custom-select"
+          [name]="'businessId' + selfconsumption.id" [(ngModel)]="selfconsumption.businessId"
+          #businessIdValidation="ngModel" (change)="method_chageBusiness()" required>
+          <option [ngValue]="0" [selected]="selfconsumption.businessId == 0">
+            Selecciona un negocio
+          </option>
+          <option *ngFor="let element of businesses" [ngValue]="element.id"
+            [selected]="selfconsumption.businessId == element.id">
+            {{ element.name }}
+          </option>
+        </select>
+        <mdb-error *ngIf="
+        businessIdValidation.invalid &&
+        (businessIdValidation.dirty || businessIdValidation.touched)
+      ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+  businessIdValidation.valid &&
+        (businessIdValidation.dirty || businessIdValidation.touched)
+      "></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label [for]="'subsidiaryId' + selfconsumption.id">Sucursal:</label>
+        <select [id]="'subsidiaryId' + selfconsumption.id" class="browser-default custom-select"
+          [name]="'subsidiaryId' + selfconsumption.id" [(ngModel)]="selfconsumption.subsidiaryId"
+          #subsidiaryIdValidation="ngModel" required
+          (change)="method_chageSubsidiary()">
+          <option [ngValue]="0" [selected]="selfconsumption.subsidiaryId == 0">
+            Selecciona una sucursal
+          </option>
+          <option *ngFor="let element of subsidiaries" [ngValue]="element.id"
+            [selected]="selfconsumption.subsidiaryId == element.id">
+            {{ element.type }} {{ element.name }}
+          </option>
+        </select>
+        <mdb-error *ngIf="
+        subsidiaryIdValidation.invalid &&
+        (subsidiaryIdValidation.dirty || subsidiaryIdValidation.touched)
+      ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+        subsidiaryIdValidation.valid &&
+        (subsidiaryIdValidation.dirty || subsidiaryIdValidation.touched)
+      "></mdb-success>
+      </div>
+    </div>
+  </div>
+  <div class=" row">
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label [for]="'categoryId'+selfconsumption.id">Categoría:</label>
+        <select [id]="'categoryId'+selfconsumption.id" class="browser-default custom-select"
+          [name]="'categoryId'+selfconsumption.id" [(ngModel)]="selfconsumption.categoryId"
+          (change)="method_getProducts()">
+          <option [ngValue]="0" [selected]="selfconsumption.categoryId  == 0">
+            Selecciona una categoría
+          </option>
+          <option *ngFor="let element of categories" [ngValue]="element.id"
+            [selected]="selfconsumption.categoryId == element.id">
+            {{ element.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label [for]="'productId'+selfconsumption.id">Producto:</label>
+        <select [id]="'productId'+selfconsumption.id" class="browser-default custom-select"
+          [name]="'productId'+selfconsumption.id" [(ngModel)]="selfconsumption.productId"
+          (change)="method_getInventory()">
+          <option [ngValue]="0" [selected]="selfconsumption.productId  == 0">
+            Selecciona un producto
+          </option>
+          <option *ngFor="let element of products" [ngValue]="element.id"
+            [selected]="selfconsumption.productId == element.id">
+            {{ element.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label [for]="'inventoryTheoretical' + selfconsumption.id">Inventario teórico:</label>
+        <div class="input-group">
+          <input 
+            mdbInput 
+            type="number" 
+            [id]="'inventoryTheoretical' + selfconsumption.id" 
+            class="form-control"
+            [name]="'inventoryTheoretical' + selfconsumption.id" 
+            [(ngModel)]="selfconsumption.inventoryTheoretical"
+            disabled
+            required/>
+          <div class="input-group-append">
+            <span class="input-group-text">{{selfconsumption.productUnit}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'cost' + selfconsumption.id">Costo:</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">$</span>
+          </div>
+          <input mdbInput mdbValidate type="number" [id]="'cost' + selfconsumption.id" class="form-control"
+            [name]="'cost' + selfconsumption.id" [(ngModel)]="selfconsumption.cost" #costValidation="ngModel"
+            (change)="method_calculateTotal()" required />
+          <div class="input-group-append">
+            <span class="input-group-text">MXN</span>
+          </div>
+          <mdb-error *ngIf="
+                costValidation.invalid &&
+                (costValidation.dirty || costValidation.touched)
+              ">Campo requerido</mdb-error>
+          <mdb-success *ngIf="
+                costValidation.valid &&
+                (costValidation.dirty || costValidation.touched)
+              "></mdb-success>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'quantity'+selfconsumption.id">Cantidad:</label>
+        <div class="input-group">
+          <input 
+            mdbInput 
+            type="number" 
+            [id]="'quantity'+selfconsumption.id"
+            [ngClass]="{'form-control': true, 
+              'validate-error ng-invalid': (quantityValidation.invalid || quantityValidation.value > selfconsumption.inventoryTheoretical) &&
+                (quantityValidation.dirty || quantityValidation.touched), 
+              'validate-success ng-valid': quantityValidation.valid &&
+                (quantityValidation.dirty || quantityValidation.touched)}"
+            [name]="'quantity'+selfconsumption.id" 
+            [(ngModel)]="selfconsumption.quantity" 
+            mdbValidate 
+            #quantityValidation="ngModel"
+            (change)="method_chageQuantity()"
+            required/>
+          <div class="input-group-append">
+            <span class="input-group-text">{{selfconsumption.productUnit}}</span>
+          </div>
+          <mdb-error
+            *ngIf="
+              (quantityValidation.invalid || quantityValidation.value > selfconsumption.inventoryTheoretical) &&
+              (quantityValidation.dirty || quantityValidation.touched)">
+            <span *ngIf="quantityValidation.invalid">Campo requerido</span>
+            <span *ngIf="quantityValidation.value > selfconsumption.inventoryTheoretical">Debe ser menor o igual al inventario teórico</span>            
+          </mdb-error >
+          <mdb-success
+            *ngIf="
+              quantityValidation.valid &&
+              (quantityValidation.dirty || quantityValidation.touched)
+            "
+          ></mdb-success>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'total' + selfconsumption.id">Total:</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">$</span>
+          </div>
+          <input mdbInput mdbValidate type="number" [id]="'total' + selfconsumption.id" class="form-control"
+            [name]="'total' + selfconsumption.id" [(ngModel)]="selfconsumption.total" #totalValidation="ngModel" required
+            disabled />
+          <div class="input-group-append">
+            <span class="input-group-text">MXN</span>
+          </div>
+          <mdb-error *ngIf="
+          totalValidation.invalid &&
+                (totalValidation.dirty || totalValidation.touched)
+              ">Campo requerido</mdb-error>
+          <mdb-success *ngIf="
+          totalValidation.valid &&
+                (totalValidation.dirty || totalValidation.touched)
+              "></mdb-success>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'routeId'+selfconsumption.id">Ruta:</label>
+        <select [id]="'routeId'+selfconsumption.id" class="browser-default custom-select"
+          [name]="'routeId'+selfconsumption.id" [(ngModel)]="selfconsumption.route_id">
+          <option [ngValue]="0" [selected]="selfconsumption.route_id  == 0">
+            Selecciona una ruta
+          </option>
+          <option *ngFor="let element of routes" [ngValue]="element.id"
+            [selected]="selfconsumption.route_id == element.id">
+            {{ element.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <input 
+          mdbInput 
+          mdbValidate 
+          type="date"
+          [id]="'start' + selfconsumption.id" 
+          class="form-control"
+          [name]="'start' + selfconsumption.id" 
+          [(ngModel)]="selfconsumption.start" 
+          #startValidation="ngModel" 
+          required/>
+        <label class="font-weight-bold" [for]="'start' + selfconsumption.id">Inicia:</label>
+        <mdb-error 
+          *ngIf="startValidation.invalid &&
+            (startValidation.dirty || startValidation.touched)">
+            Campo requerido
+        </mdb-error>
+        <mdb-success 
+          *ngIf="startValidation.valid &&
+            (startValidation.dirty || startValidation.touched)">
+        </mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <input 
+          mdbInput 
+          mdbValidate 
+          type="date"
+          [id]="'end' + selfconsumption.id" 
+          class="form-control"
+          [name]="'end' + selfconsumption.id" 
+          [(ngModel)]="selfconsumption.end" 
+          #endValidation="ngModel" 
+          required/>
+        <label class="font-weight-bold" [for]="'end' + selfconsumption.id">Termina:</label>
+        <mdb-error 
+          *ngIf="endValidation.invalid &&
+            (endValidation.dirty || endValidation.touched)">
+            Campo requerido
+        </mdb-error>
+        <mdb-success 
+          *ngIf="endValidation.valid &&
+            (endValidation.dirty || endValidation.touched)">
+        </mdb-success>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <input 
+          mdbInput 
+          mdbValidate 
+          type="number" 
+          [id]="'initial_mileage' + selfconsumption.id" 
+          class="form-control"
+          [name]="'initial_mileage' + selfconsumption.id" 
+          [(ngModel)]="selfconsumption.initial_mileage"
+          #initial_mileageValidation="ngModel"
+          (change)="method_calculatePerformance()" 
+          required/>
+        <label class="font-weight-bold" [for]="'initial_mileage' + selfconsumption.id">Kilometraje inicial:</label>
+        <mdb-error 
+        *ngIf="initial_mileageValidation.invalid &&
+          (initial_mileageValidation.dirty || initial_mileageValidation.touched)">
+          Campo requerido
+        </mdb-error>
+        <mdb-success 
+        *ngIf="initial_mileageValidation.valid &&
+          (initial_mileageValidation.dirty || initial_mileageValidation.touched)">
+        </mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <input 
+          mdbInput 
+          mdbValidate 
+          type="number" 
+          [id]="'end_mileage' + selfconsumption.id" 
+          class="form-control"
+          [name]="'end_mileage' + selfconsumption.id" 
+          [(ngModel)]="selfconsumption.end_mileage"
+          #end_mileageValidation="ngModel" 
+          (change)="method_calculatePerformance()"
+          required/>
+        <label class="font-weight-bold" [for]="'end_mileage' + selfconsumption.id">Kilometraje final:</label>
+      </div>
+      <mdb-error 
+        *ngIf="end_mileageValidation.invalid &&
+          (end_mileageValidation.dirty || end_mileageValidation.touched)">
+        Campo requerido
+      </mdb-error>
+      <mdb-success 
+        *ngIf="end_mileageValidation.valid &&
+          (end_mileageValidation.dirty || end_mileageValidation.touched)">
+      </mdb-success>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'performance' + selfconsumption.id">Rendimiento</label>
+        <div class="input-group">
+          <input mdbInput mdbValidate type="number" [id]="'performance' + selfconsumption.id" class="form-control"
+            [name]="'performance' + selfconsumption.id" [(ngModel)]="selfconsumption.performance"
+            #performanceValidation="ngModel" required disabled />
+          <div class="input-group-append">
+            <span class="input-group-text">Km/{{selfconsumption.productUnit}}</span>
+          </div>
+          <mdb-error *ngIf="
+      performanceValidation.invalid &&
+              (performanceValidation.dirty || performanceValidation.touched)
+            ">Campo requerido</mdb-error>
+          <mdb-success *ngIf="
+      performanceValidation.valid &&
+              (performanceValidation.dirty || performanceValidation.touched)
+            "></mdb-success>
+        </div>
+      </div>
+    </div>
+  </div>  
+</div>

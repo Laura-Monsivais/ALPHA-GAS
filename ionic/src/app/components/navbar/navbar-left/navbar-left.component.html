@@ -1,0 +1,46 @@
+<button
+  mdbBtn
+  type="button"
+  size="md" 
+  color="link"
+  class="toggleNavbarLeft"
+  (click)="method_toggleNavbarLeft()">
+</button>
+<mdb-navbar SideClass="navbar-dark" [containerInside]="false"
+  [ngClass]="{'navbar navbarLeft': true, 'navbarLeftClose': toggleNavbarLeft}"
+  [style.background-image]="method_sanitizeStyle(getEnterpriseOverlayUrl)">  
+  <app-navbar-brand></app-navbar-brand>
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text">
+        <mdb-icon fas icon="search"></mdb-icon>
+      </span>
+    </div>
+    <input 
+      type="search" 
+      class="form-control" 
+      id="searchMenu" 
+      name="searchMenu" 
+      [(ngModel)]="searchMenu" 
+      placeholder="Buscar menú"
+      (change)="method_searchMenus()"/>
+    <!--@todo Falta búsqueda avanzada-->
+  </div>
+  <div class="px-2 menu">
+    <ul class="navbar-nav">
+      <li *ngFor="let item of options" [ngClass]="{'nav-item': true,'active': method_routeActive(item.url)}">
+        <a class="nav-link waves-light d-flex justify-content-between align-items-center" mdbWavesEffect routerLink="/{{item.url}}">
+          <span>
+            <mdb-icon fas icon="{{item.icon}}"></mdb-icon> {{item.title}}
+          </span>
+          <span *ngIf="false">
+            <mdb-badge pill="true" primary="true"></mdb-badge>
+            <mdb-badge pill="true" success="true"></mdb-badge>
+            <mdb-badge pill="true" danger="true"></mdb-badge>
+          </span>
+        </a>
+      </li>
+    </ul>
+  </div> 
+</mdb-navbar>
+<div [ngClass]="{'backdrop': true, 'd-none': toggleNavbarLeft}" (click)="method_toggleNavbarLeft()"></div>

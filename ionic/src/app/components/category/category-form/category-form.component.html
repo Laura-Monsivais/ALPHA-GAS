@@ -1,0 +1,74 @@
+<div *ngIf="rol.key === 'Super' || rol.key === 'Director'">
+  <div class="md-form form-group">
+    <input mdbInput mdbValidate type="text" [id]="'name'+category.id" class="form-control" [name]="'name'+category.id" [(ngModel)]="category.name"
+      #nameValidation="ngModel" required />
+    <label class="font-weight-bold" [for]="'name'+category.id">Nombre:</label>
+    <mdb-error *ngIf="
+        nameValidation.invalid &&
+        (nameValidation.dirty || nameValidation.touched)
+      ">Campo requerido</mdb-error>
+    <mdb-success *ngIf="
+        nameValidation.valid &&
+        (nameValidation.dirty || nameValidation.touched)
+      "></mdb-success>
+  </div>
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label [for]="'enterpriseId'+category.id">Empresa:</label>
+        <select
+          [id]="'enterpriseId'+category.id"
+          class="browser-default custom-select"
+          [name]="'enterpriseId'+category.id"
+          [(ngModel)]="category.enterpriseId"
+          #enterpriseIdValidation="ngModel"
+          required
+          [disabled]="rol.key === 'Director'"
+          (change)="method_getBusinesses()">
+          <option [ngValue]="0" [selected]="category.enterpriseId == 0">
+            Selecciona una empresa
+          </option>
+          <option *ngFor="let element of enterprises" [ngValue]="element.id" [selected]="category.enterpriseId == element.id">
+            {{ element.name }}
+          </option>
+        </select>
+        <mdb-error *ngIf="
+            enterpriseIdValidation.invalid &&
+            (enterpriseIdValidation.dirty || enterpriseIdValidation.touched)
+          ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+            enterpriseIdValidation.valid &&
+            (enterpriseIdValidation.dirty || enterpriseIdValidation.touched)
+          "></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'businessId'+category.id">Negocio:</label>
+        <select
+          [id]="'businessId'+category.id"
+          class="browser-default custom-select"
+          [name]="'businessId'+category.id"
+          [(ngModel)]="category.business_id"
+          #businessIdValidation="ngModel"
+          required
+        >
+          <option [ngValue]="0" [selected]="category.business_id == 0">
+            Selecciona un negocio
+          </option>
+          <option *ngFor="let element of businesses" [ngValue]="element.id" [selected]="category.business_id == element.id">
+            {{ element.name }}
+          </option>
+          <mdb-error *ngIf="
+              businessIdValidation.invalid &&
+              (businessIdValidation.dirty || businessIdValidation.touched)
+            ">Campo requerido</mdb-error>
+          <mdb-success *ngIf="
+              businessIdValidation.valid &&
+              (businessIdValidation.dirty || businessIdValidation.touched)
+            "></mdb-success>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>

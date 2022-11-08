@@ -1,0 +1,40 @@
+.logo {
+    height: 30px; 
+    width: 30px;
+}
+.navbarBrand {
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+@media (max-width: 575px) { //xs 
+    .navbarBrand {
+        width: 90%;
+    }
+}
+@media (min-width: 576px) { //sm
+    .navbarBrand {
+        width: 90%;
+    }
+}
+@media (min-width: 768px) { //md
+    .navbarBrand {
+        width: 90%;
+    }
+}
+@media (min-width: 992px) { //lg
+    .navbarBrand {
+        width: 90%;
+    }
+}
+@media (min-width: 1200px) { //xl
+    .navbarBrand {
+        width: 100%;
+    }
+}
+@media (min-width: 2200px) { //sl
+    .navbarBrand {
+        width: 100%;
+    }
+}

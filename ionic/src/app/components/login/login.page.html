@@ -1,0 +1,101 @@
+<div style="flex: 1 0 auto;">
+  <div class="page-login d-flex flex-column justify-content-center align-items-center"
+    [ngStyle]="{'background-image':'url('+getSiteOverlayUrl+')'}">
+    <form (ngSubmit)="method_login()" class="position-relative fadeInDown" style="overflow-y: auto; max-height: 95vh;">
+      <mdb-card>
+        <mdb-card-header class="bg-info text-white text-center">
+          <mdb-card-title>Iniciar sesión en Grupo EMURCIA</mdb-card-title>          
+        </mdb-card-header>
+        <mdb-card-body>
+          <mdb-carousel style="width: 280px !important;">
+            <mdb-carousel-item *ngFor="let element of enterprises">    
+              <figure class="figure">       
+                <img class="d-block w-100" style="width: 280px !important; height: 180px !important;" [src]="method_getEnterpriseLogoUrl(element.logo)">
+                <figcaption class="figure-caption">{{element.name}}</figcaption>
+              </figure>   
+            </mdb-carousel-item>
+          </mdb-carousel>
+          <div class="md-form">
+            <input
+              mdbInput 
+              type="number" 
+              class="form-control" 
+              id="cellphone"
+              name="cellphone" 
+              [(ngModel)]="user.cellphone" 
+              mdbValidate 
+              #cellphoneValidation="ngModel" 
+              required/>
+            <label for="cellphone">Celular:</label>
+            <mdb-error *ngIf="cellphoneValidation.invalid && (cellphoneValidation.dirty || cellphoneValidation.touched)">
+            </mdb-error>
+            <mdb-success *ngIf="cellphoneValidation.valid && (cellphoneValidation.dirty || cellphoneValidation.touched)">
+            </mdb-success>
+          </div>
+          <div class="md-form">
+            <div class="input-group">
+              <input            
+                mdbInput 
+                [type]="fieldTextType ? 'text' : 'password'" 
+                class="form-control"
+                id="password"
+                name="password" 
+                [(ngModel)]="user.password"
+                mdbValidate 
+                #passwordValidation="ngModel" 
+                required/>
+              <label for="password">Contraseña:</label>
+              <mdb-error *ngIf="passwordValidation.invalid && (passwordValidation.dirty || passwordValidation.touched)">
+              </mdb-error>
+              <mdb-success *ngIf="passwordValidation.valid && (passwordValidation.dirty || passwordValidation.touched)">
+              </mdb-success>
+              <div class="input-group-append">
+                <button
+                  mdbBtn
+                  type="button"
+                  size="md" 
+                  color="primary"
+                  class="waves-light"
+                  mdbWavesEffect
+                  placement="left"
+                  mdbTooltip="Ver contraseña"                  
+                  (click)="toggleFieldTextType()">                               
+                  <mdb-icon
+                    far
+                    icon="eye-slash"
+                    *ngIf="!fieldTextType"
+                  ></mdb-icon>
+                  <mdb-icon
+                    far
+                    icon="eye"
+                    *ngIf="fieldTextType"
+                  ></mdb-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <mdb-checkbox 
+              [default]="true"
+              name="remember_token"  
+              [(ngModel)]="user.remember_token">Recordarme</mdb-checkbox>
+          </div>
+          <button 
+            mdbBtn 
+            type="submit" 
+            color="info" 
+            class="waves-light" block="true"
+            mdbWavesEffect
+            [disabled]="isLoading">
+            <mdb-icon fas icon="sign-in-alt"></mdb-icon>
+            <span> Entrar </span>
+            <span class="spinner-border spinner-border-sm" role="status" *ngIf="isLoading">
+              <span class="sr-only">Cargando...</span>
+            </span>
+          </button>
+        </mdb-card-body>
+      </mdb-card>
+    </form>
+  </div>
+</div>
+<app-navbar-bottom></app-navbar-bottom>

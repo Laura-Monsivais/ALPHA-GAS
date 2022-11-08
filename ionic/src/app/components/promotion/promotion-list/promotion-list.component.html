@@ -1,0 +1,47 @@
+<div *ngIf="rol.key !== 'Client'">
+  <!-- Actions General -->
+  <div class="form-group mb-0 input-group"> 
+    <div class="input-group-prepend">
+      <span class="input-group-text">
+        <mdb-icon fas icon="search"></mdb-icon>
+      </span>
+    </div>
+    <input type="search" class="form-control" id="search" name="search" 
+      [(ngModel)]="promotion.search" placeholder="Buscar promociones" (change)="method_searchAdvancedPromotions()">    
+    <!--@todo Falta búsqueda avanzada-->
+  </div>  
+  <!-- List -->
+  <div class="list-group">
+    <div class="list-group-item" *ngFor="let element of promotions; let i = index">
+      <div class="d-flex w-100 justify-content-between">
+        <app-promotion-info [onlyIcon]="true" [promotion]="element"></app-promotion-info>
+      </div>
+      <div class="row">
+        <div class="col-xl-12">
+            <span class="d-block d-lg-inline">Cantidad: </span>
+            <span>{{ element.quantity | number }}</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-10">
+          <span class="d-block d-lg-inline">Monto: </span>
+          <span>{{ element.amountPrice | currency }} MXN</span>
+        </div> 
+        <div class="col-xl-2">
+          <button
+            mdbBtn
+            type="button"
+            size="md"
+            color="info"
+            outline="true" class="mb-0 waves-dark" block="true"
+            mdbTooltip="Agregar promoción"
+            mdbWavesEffect
+            (click)="method_addPromotionSaleDetail(element)">
+            <mdb-icon fas icon="plus-circle"></mdb-icon>
+            <span class="d-none d-xl-inline"> Agregar promoción</span>
+          </button>
+        </div> 
+      </div> 
+    </div>
+  </div>
+</div>

@@ -1,0 +1,68 @@
+<div *ngIf="rol.key === 'Super'">
+  <div class="md-form form-group">
+    <div class="md-form">
+      <input 
+        mdbInput 
+        type="text" 
+        class="form-control"
+        [id]="'enterpriseName'+enterprise.id" 
+        [name]="'enterpriseName'+enterprise.id" 
+        [(ngModel)]="enterprise.name" 
+        mdbValidate 
+        #enterpriseNameValidation="ngModel"
+        required/>
+      <label class="font-weight-bold" [for]="'enterpriseName'+enterprise.id">Nombre:</label>
+      <mdb-error
+        *ngIf="enterpriseNameValidation.invalid && (enterpriseNameValidation.dirty || enterpriseNameValidation.touched)">
+        Campo requerido
+      </mdb-error>
+      <mdb-success
+        *ngIf="enterpriseNameValidation.valid && (enterpriseNameValidation.dirty || enterpriseNameValidation.touched)">
+      </mdb-success>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label class="font-weight-bold" for="logo">Logo:</label>
+        <div class="input-group">
+          <div class="input-group-prepend">        
+            <app-enterprise-logo
+              [enterpriseLogo]="enterprise.logo"
+              [enterpriseLogoFile]="enterprise.logoFile"
+            ></app-enterprise-logo>
+          </div>
+          <input 
+            mdbInput 
+            type="file" 
+            class="form-control is-valid" 
+            [id]="'enterpriseLogo'+enterprise.id" 
+            [name]="'enterpriseLogo'+enterprise.id" 
+            [(ngModel)]="enterprise.logoFile" 
+            (change)="methods_getLogoFile($event)"/>    
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label class="font-weight-bold" for="overlay">Fondo:</label>
+        <div class="input-group">
+          <div class="input-group-prepend">        
+            <app-enterprise-overlay
+              [enterpriseOverlay]="enterprise.overlay"
+              [enterpriseOverlayFile]="enterprise.overlayFile"
+            ></app-enterprise-overlay>
+          </div>
+          <input 
+            mdbInput 
+            type="file" 
+            class="form-control is-valid" 
+            [id]="'enterpriseOverlay'+enterprise.id" 
+            [name]="'enterpriseOverlay'+enterprise.id"
+            [(ngModel)]="enterprise.overlayFile"
+            (change)="methods_getOverlayFile($event)"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

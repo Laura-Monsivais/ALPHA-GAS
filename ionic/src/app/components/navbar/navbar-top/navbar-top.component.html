@@ -1,0 +1,59 @@
+<mdb-navbar SideClass="navbar navbar-light bg-light sticky-top navbarTop" [containerInside]="false">
+  <app-navbar-brand></app-navbar-brand>
+  <ul class="navbar-nav ml-auto nav-flex-icons">
+    <li [ngClass]="{'nav-item': true, 'active': method_routeActive('cart')}" *ngIf="rol.key === 'Client' && attention.key === 'Order'">
+      <a class="nav-link waves-light" mdbWavesEffect routerLink="/cart/0">
+        <mdb-icon fas icon="shopping-cart"></mdb-icon>
+        <span class="d-none d-xl-inline"> Carrito </span>
+        <mdb-badge primary="true">{{cartQuantity}}</mdb-badge>
+      </a>
+    </li>
+    <li class="nav-item dropdown" dropdown (click)="$event.stopPropagation()">
+      <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+        <mdb-icon fas icon="user-cog"></mdb-icon>
+        <span>{{user.name}}</span>
+        <span class="d-none d-xl-inline"> {{user.lastname1}}</span>
+        <span class="caret"></span>
+      </a>
+      <div *dropdownMenu class="dropdown-menu dropdown-menu-right p-0 dropdown-session" role="menu">
+        <mdb-card class="card-session card-image" [ngStyle]="{'background-image':'url('+getUserCoverUrl+')'}">
+          <div class="p-2 text-center ">
+            <img [src]="getUserAvatarUrl" class="avatar img-fluid img-thumbnail rounded-circle m-1" />
+            <select 
+              class="browser-default custom-select" 
+              name="sessionId"
+              [(ngModel)]="user.session_id"
+              (change)="method_updateUserSessionId()">
+              <option 
+                *ngFor="let element of sessions"
+                [ngValue]="element.id" 
+                [selected]="user.session_id == element.id">
+                <span *ngIf="element.rolKey !== 'Director' && element.rolKey !== 'Super'">
+                  {{ element.rolName + " - " + element.subsidiaryName + " - " + element.businessName + " - " + element.enterpriseName }}
+                </span>
+                <span *ngIf="element.rolKey === 'Director'">
+                  {{ element.rolName + " - " + element.enterpriseName }}
+                </span>
+                <span *ngIf="element.rolKey === 'Super'">
+                  {{ element.rolName }}
+                </span>
+              </option>
+            </select>
+            <div class="d-flex justify-content-center">
+              <div class="btn-group" role="group">
+                <button mdbBtn type="button" color="dark" class="py-2 px-3 waves-light" mdbWavesEffect (click)="method_goToConfiguration()">
+                  <mdb-icon fas icon="cog"></mdb-icon>
+                  <span> Configuración</span>
+                </button>
+                <button mdbBtn type="button" color="info" class="py-2 px-3 waves-light" mdbWavesEffect (click)="method_getLogout()">
+                  <mdb-icon fas icon="sign-out-alt"></mdb-icon>
+                  <span> Salir</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </mdb-card>
+      </div>
+    </li>
+  </ul>
+</mdb-navbar>

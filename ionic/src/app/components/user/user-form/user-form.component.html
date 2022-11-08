@@ -1,0 +1,308 @@
+<div>
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <div class="md-form">
+          <input
+            mdbInput
+            type="text"
+            class="form-control"
+            [id]="'name' + user.id"
+            [name]="'name' + user.id"
+            [(ngModel)]="user.name"
+            mdbValidate
+            #nameValidation="ngModel"
+            required/>
+          <label class="font-weight-bold" [for]="'name'+user.id">Nombre:</label>
+          <mdb-error
+            *ngIf="
+              nameValidation.invalid &&
+              (nameValidation.dirty || nameValidation.touched)
+            "
+            >Campo requerido
+          </mdb-error>
+          <mdb-success
+            *ngIf="
+              nameValidation.valid &&
+              (nameValidation.dirty || nameValidation.touched)
+            "
+            >
+          </mdb-success>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <div class="md-form">
+          <input
+            mdbInput
+            type="text"
+            class="form-control"
+            [id]="'lastname1' + user.id"
+            [name]="'lastname1' + user.id"
+            [(ngModel)]="user.lastname1"
+            mdbValidate
+            #lastname1Validation="ngModel"
+            required/>
+          <label class="font-weight-bold" [for]="'lastname1'+user.id">Primer apellido:</label>
+          <mdb-error
+            *ngIf="
+              lastname1Validation.invalid &&
+              (lastname1Validation.dirty || lastname1Validation.touched)
+            "
+          >
+            Campo requerido</mdb-error
+          >
+          <mdb-success
+            *ngIf="
+              lastname1Validation.valid &&
+              (lastname1Validation.dirty || lastname1Validation.touched)
+            "
+          >
+            </mdb-success
+          >
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="md-form form-group">
+        <div class="md-form">
+          <input
+            mdbInput
+            type="text"
+            class="form-control is-valid"
+            [id]="'lastname2' + user.id"
+            [name]="'lastname2' + user.id"
+            [(ngModel)]="user.lastname2"/>
+          <label class="font-weight-bold" [for]="'lastname2'+user.id">Segundo apellido:</label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="md-form form-group">
+        <div class="md-form">
+          <input
+            mdbInput
+            type="number"
+            class="form-control"
+            [id]="'cellphone' + user.id"
+            [name]="'cellphone' + user.id"
+            [(ngModel)]="user.cellphone"
+            mdbValidate
+            #cellphoneValidation="ngModel"
+            required/>
+          <label class="font-weight-bold" [for]="'cellphone'+user.id">Celular:</label>
+          <mdb-error
+            *ngIf="
+              cellphoneValidation.invalid &&
+              (cellphoneValidation.dirty || cellphoneValidation.touched)
+            "
+          >
+            Campo requerido</mdb-error
+          >
+          <mdb-error *ngIf="user.cellphone < 0">
+            No se permiten negativos</mdb-error
+          >
+          <mdb-success
+            *ngIf="
+              cellphoneValidation.valid &&
+              (cellphoneValidation.dirty || cellphoneValidation.touched) &&
+              user.cellphone > 0
+            "
+          >
+            </mdb-success
+          >
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6">    
+      <div class="md-form">
+        <div class="input-group">        
+          <input 
+            mdbInput 
+            [type]="fieldTextType ? 'text' : 'password'" 
+            class="form-control"
+            [id]="'password'+user.id"
+            [name]="'password'+user.id" 
+            [(ngModel)]="user.password"/>
+          <label class="font-weight-bold" [for]="'password'+user.id">Contraseña:</label>
+          <div class="input-group-append">
+            <button 
+              mdbBtn 
+              type="button" 
+              size="md" 
+              color="primary" 
+              class="waves-light" 
+              mdbWavesEffect 
+              mdbTooltip="Ver contraseña" 
+              (click)="toggleFieldTextType()">                               
+              <mdb-icon
+                far
+                icon="eye-slash"
+                *ngIf="!fieldTextType"
+              ></mdb-icon>
+              <mdb-icon
+                far
+                icon="eye"
+                *ngIf="fieldTextType"
+              ></mdb-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'avatarFile'+user.id">Avatar:</label>
+        <div class="input-group">
+          <div class="input-group-prepend">          
+            <app-user-avatar
+              [userAvatar]="user.avatar"
+              [userAvatarFile]="user.avatarFile"
+            ></app-user-avatar>
+          </div>
+          <input
+            type="file"
+            class="form-control is-valid"
+            [id]="'avatarFile' + user.id"
+            [name]="'avatarFile' + user.id"
+            [(ngModel)]="user.avatarFile"
+            (change)="method_getUserAvatarFile($event)"/>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'coverFile'+user.id">Portada:</label>
+        <div class="input-group">
+          <div class="input-group-prepend">        
+            <app-user-cover
+              [userCover]="user.cover"
+              [userCoverFile]="user.coverFile"
+            ></app-user-cover>
+          </div>
+          <input
+            type="file"
+            class="form-control is-valid"
+            [id]="'coverFile' + user.id"
+            [name]="'coverFile' + user.id"
+            [(ngModel)]="user.coverFile"
+            (change)="method_getUserCoverFile($event)"/>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-3" *ngIf="user.id == 0">
+      <div class="form-group">
+        <label [for]="'enterpriseId' + user.id">Empresa:</label>
+        <select
+          class="browser-default custom-select"
+          [id]="'enterpriseId' + user.id"
+          [name]="'enterpriseId' + user.id"
+          [(ngModel)]="session.enterpriseId"
+          [disabled]="
+            rol.key === 'Director' ||
+            rol.key === 'Manager' ||
+            rol.key === 'Call_Center' ||
+            rol.key === 'Seller' ||
+            rol.key === 'Client'
+          "
+          (change)="method_getBusinesses()"
+          required>
+          <option [ngValue]="0" [selected]="session.enterpriseId == 0">
+            Selecciona una empresa
+          </option>
+          <option
+            *ngFor="let element of enterprises"
+            [ngValue]="element.id"
+            [selected]="session.enterpriseId == element.id"
+          >
+            {{ element.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="col-xl-3" *ngIf="user.id == 0">
+      <div class="form-group">
+        <label [for]="'businessId' + user.id">Negocio:</label>
+        <select
+          class="browser-default custom-select"
+          [id]="'businessId' + user.id"
+          [name]="'businessId' + user.id"
+          [(ngModel)]="session.businessId"
+          [disabled]="rol.key === 'Call_Center' ||
+            rol.key === 'Manager' ||
+            rol.key === 'Seller' ||
+            rol.key === 'Client'
+          "
+          (change)="method_getSubsidiaries()"
+          required>
+          <option [ngValue]="0" [selected]="session.businessId == 0">
+            Selecciona un negocio
+          </option>
+          <option
+            *ngFor="let element of businesses"
+            [ngValue]="element.id"
+            [selected]="session.businessId == element.id"
+          >
+            {{ element.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="col-xl-3" *ngIf="user.id == 0">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'subsidiaryId' + user.id">Sucursal:</label>
+        <select
+          class="browser-default custom-select"
+          [id]="'subsidiaryId' + user.id"
+          [name]="'subsidiaryId' + user.id"
+          [(ngModel)]="session.subsidiary_id"
+          [disabled]="rol.key === 'Call_Center' ||
+            rol.key === 'Manager' ||
+            rol.key === 'Seller' ||
+            rol.key === 'Client'
+          "
+          required>
+          <option [ngValue]="0" [selected]="session.subsidiary_id == 0">
+            Selecciona una sucursal
+          </option>
+          <option
+            *ngFor="let element of subsidiaries"
+            [ngValue]="element.id"
+            [selected]="session.subsidiary_id == element.id"
+          >
+            {{ element.type }} {{ element.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="col-xl-3" *ngIf="user.id == 0">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'rolId' + user.id">Rol:</label>
+        <select
+          class="browser-default custom-select"
+          [id]="'rolId' + user.id"
+          [name]="'rolId' + user.id"
+          [(ngModel)]="session.rol_id"
+          required>
+          <option [ngValue]="0" [selected]="session.rol_id == 0">
+            Selecciona un rol
+          </option>
+          <option
+            *ngFor="let element of roles"
+            [ngValue]="element.id"
+            [selected]="session.rol_id == element.id"
+          >
+            {{ element.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>

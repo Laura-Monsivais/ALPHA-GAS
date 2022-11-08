@@ -1,0 +1,76 @@
+<button
+  mdbBtn
+  type="button"
+  size="md" 
+  color="link" 
+  class="waves-light m-0 p-0"
+  mdbWavesEffect
+  mdbTooltip="Información del producto"
+  (click)="productDownload.show()"
+>
+  <img 
+    class="img-fluid" 
+    [src]="getProductImageUrl" 
+    *ngIf="!onlyIcon">
+  <h6 class="m-0" *ngIf="onlyIcon">
+    <mdb-icon fas icon="info-circle" *ngIf="onlyIcon"></mdb-icon> {{product.name}}
+  </h6>
+</button>
+<div
+  mdbModal
+  #productDownload="mdbModal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myProductDownloadLabel"
+  aria-hidden="true"
+  [config]="{ backdrop: false, ignoreBackdropClick: true }"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="productDownload.hide()"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myProductDownloadLabel">
+          Información del producto
+        </h4>
+      </div>
+      <div class="modal-body bg-white">
+        <div class="text-center">
+          <img 
+            style="height: 100px;" 
+            class="img-fluid" 
+            [src]="getProductImageUrl">
+        </div>  
+        <div>
+          <b>Nombre:</b>
+          <p>{{product.name}}</p>
+        </div>
+        <div>
+          <b>Descripción:</b>
+          <p>{{product.description}}</p>
+        </div>
+        <div class="row">
+          <div class="col-xl-4">
+            <b>Contenido:</b>
+            <p>{{ product.content | number }}</p>
+          </div>
+          <div class="col-xl-4">
+            <b>Unidad:</b>
+            <p>{{product.unit}}</p>
+          </div>
+          <div class="col-xl-4">
+            <b>Precio:</b>
+            <p>{{ product.price | currency }} MXN</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

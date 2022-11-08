@@ -1,0 +1,162 @@
+<div>
+  <!-- Actions General -->
+  <div class="clearfix">
+    <div class="float-xl-left">
+      <button 
+      mdbBtn 
+      type="button" 
+      size="md" 
+      color="info" 
+      class="m-0 waves-light" 
+      mdbTooltip="Crear compra"
+      mdbWavesEffect        
+      (click)="method_goToBuyDo(0)"
+      *ngIf="rol.key === 'Super' || rol.key === 'Director'">
+      <mdb-icon fas icon="pen"></mdb-icon>
+      <span class="d-none d-xl-inline"> Crear compra</span>
+    </button>
+      <button mdbBtn type="button" size="md" color="success" class="m-0 waves-light d-none d-xl-inline"
+        mdbTooltip="Exportar compras" mdbWavesEffect (click)="method_exportBuys()" [disabled]="isLoading">
+        <mdb-icon fas icon="file-excel"></mdb-icon>
+        <span class="d-none d-xl-inline"> Exportar compras</span>
+      </button>
+    </div>
+    <div class="float-xl-right form-group">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">
+            <mdb-icon fas icon="search"></mdb-icon>
+          </span>
+        </div>
+        <input type="search" class="form-control" id="search" name="search" [(ngModel)]="buy.search"
+          placeholder="Buscar compras" (change)="method_searchBuys()">
+        <div class="input-group-append">
+          <button mdbBtn type="button" size="md" color="primary" class="m-0 waves-light"
+            mdbTooltip="Búsqueda de compras" mdbWavesEffect (click)="searchAdvancedBuys.toggle()">
+            <mdb-icon fas icon="search-plus"></mdb-icon>
+            <span class="d-none d-xl-inline"> Búsqueda de compras</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="" mdbCollapse #searchAdvancedBuys="bs-collapse">
+    <mdb-card>
+      <mdb-card-body>
+        <form class="form-xl-inline" (ngSubmit)="method_searchAdvancedBuys()">
+          <div class="md-form md-outline">
+            <input mdbInput type="text" class="form-control" id="name" name="name" [(ngModel)]="buys.name">
+            <label for="name">Nombre</label>
+          </div>
+          <button mdbBtn type="submit" size="md" color="primary" class="mt-0 waves-light text-nowrap float-right"
+            mdbWavesEffect [disabled]="isLoading">
+            <mdb-icon fas icon="search"></mdb-icon>
+            <span> Buscar</span>
+            <span class="spinner-border spinner-border-sm" role="status" *ngIf="isLoading">
+              <span class="sr-only">Cargando...</span>
+            </span>
+          </button>
+        </form>
+      </mdb-card-body>
+    </mdb-card>
+  </div>
+  <!-- Table -->
+  <div class="table-responsive">
+    <table mdbTable striped="true" hover="true" small="true" #tableEl="mdbTable" id="tableSortExample">
+      <thead>
+        <tr>
+          <th class="text-nowrap" *ngFor="let head of heads; let i = index" aria-controls="tableSortExample"
+            [mdbTableSort]="buys" [sortBy]="headsSort[i]">
+            <span>{{ head }} </span>
+            <mdb-icon fas icon="sort"></mdb-icon>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr mdbTableCol *ngFor="let element of buys; let i = index">
+          <td *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+            <div class="btn-group" mdbDropdown>
+              <button mdbBtn type="button" size="md" color="light" class="m-0 waves-light text-nowrap" mdbWavesEffect
+                mdbTooltip="Opciones compras" mdbDropdownToggle>
+                <mdb-icon fas icon="ellipsis-v"></mdb-icon>
+                <span class="d-none d-xl-inline"> Opciones compras</span>
+              </button>
+              <div class="dropdown-menu">
+                <button mdbBtn type="button" size="md" color="primary" class="m-0 waves-light text-nowrap dropdown-item"
+                  mdbWavesEffect (click)="method_showModalBuyConsult(element.id)"
+                  *ngIf="rol.key === 'Super' || rol.key === 'Director' || rol.key === 'Manager'">
+                  <mdb-icon fas icon="eye"></mdb-icon>
+                  <span> Ver compra</span>
+                </button>
+                <button mdbBtn type="button" size="md" color="warning" class="m-0 waves-light text-nowrap dropdown-item"
+                  mdbWavesEffect (click)="method_goToBuyDo(element.id)"
+                  *ngIf="rol.key === 'Super' || rol.key === 'Director'">
+                  <mdb-icon fas icon="edit"></mdb-icon>
+                  <span> Modificar compra</span>
+                </button>
+              </div>
+            </div>
+          </td>
+          <td class="text-nowrap" *ngIf="
+        i + 1 >= mdbTablePagination.firstItemIndex &&
+        i < mdbTablePagination.lastItemIndex
+      ">
+            {{ element.name }}
+          </td>
+          <td class="text-nowrap" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+            {{ element.enterpriseName }}
+          </td>
+          <td class="text-nowrap" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+            {{ element.businessName }}
+          </td>
+          <td class="text-nowrap" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+            {{ element.expectedDestinationName }}
+          </td>
+          <td class="text-nowrap" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+            {{ element.destinationName }}
+          </td>
+          <td class="text-nowrap text-right text-danger" *ngIf="
+          i + 1 >= mdbTablePagination.firstItemIndex &&
+          i < mdbTablePagination.lastItemIndex
+        ">
+            {{ element.total | currency }} MXN
+          </td>
+          <td class="text-nowrap" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+            {{ element.created_at | date:'d/M/yy h:mm a' }}
+          </td>
+          <td class="text-nowrap" *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            ">
+            {{ element.updated_at | date:'d/M/yy h:mm a' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Table Pagination -->
+  <mdb-table-pagination [tableEl]="tableEl" [searchDataSource]="buys"></mdb-table-pagination>
+  <!-- Actions Particular -->
+  <app-buy-consult
+    [buyId]="buyId"
+    [showedModalBuyConsult]="showedModalBuyConsult"
+    (emitter_gotBuyInConsult)="method_detectIfGotBuyInConsult($event)"
+  ></app-buy-consult>

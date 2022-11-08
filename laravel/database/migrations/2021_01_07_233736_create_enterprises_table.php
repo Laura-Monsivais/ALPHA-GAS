@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Query\Expression;
+
+class CreateEnterprisesTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('enterprises', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->bigIncrements('id');
+            $table->string('logo')->nullable();            
+            $table->string('overlay')->nullable();
+            $table->string('name')->unique();
+            $table->dateTime('created_at')->default(new Expression('CURRENT_TIMESTAMP'));
+            $table->dateTime('updated_at')->default(new Expression('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+            $table->dateTime('deleted_at')->nullable();
+        });
+    }
+    
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('enterprises');
+    }
+}

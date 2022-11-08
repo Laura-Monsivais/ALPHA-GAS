@@ -1,0 +1,39 @@
+<div class="d-xl-inline" *ngIf="rol.key === 'Super' || rol.key === 'Director' || rol.key === 'Seller'">
+  <button 
+    mdbBtn 
+    type="button" 
+    size="md" 
+    color="info" 
+    class="m-0 waves-light" 
+    mdbTooltip="Crear venta"
+    mdbWavesEffect        
+    (click)="method_goToSaleDo()"
+    *ngIf="saleId == 0 && !order">
+    <mdb-icon fas icon="pen"></mdb-icon>
+    <span class="d-none d-xl-inline"> Crear venta</span>
+  </button>
+  <button
+    mdbBtn
+    type="button"
+    size="md" 
+    color="info" 
+    class="m-0 waves-light text-nowrap dropdown-item"
+    mdbWavesEffect
+    (click)="method_goToSaleDo()"
+    *ngIf="saleId == 0 && order">
+    <mdb-icon fas icon="credit-card"></mdb-icon>
+    <span> Crear venta</span>
+  </button>
+  <button
+    mdbBtn
+    type="button"
+    size="md" 
+    color="warning" 
+    class="m-0 waves-light text-nowrap dropdown-item"
+    mdbWavesEffect
+    (click)="method_goToSaleDo()"
+    *ngIf="saleId != 0">
+    <mdb-icon fas icon="edit"></mdb-icon>
+    <span> Modificar venta</span>
+  </button>
+</div>

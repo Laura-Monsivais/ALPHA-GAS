@@ -1,0 +1,251 @@
+<div>
+  <!-- Actions General -->
+  <div class="clearfix">
+    <div class="float-xl-left">
+      <app-user-insert 
+        (emitter_insertedUser)="method_insertedUser($event)" 
+        [gotUsersInInsert]="gotUsersInInsert"
+      ></app-user-insert>
+      <button
+        mdbBtn
+        type="button"
+        size="md" 
+        color="success" 
+        class="m-0 waves-light d-none d-xl-inline"
+        mdbTooltip="Exportar usuarios"
+        mdbWavesEffect
+        (click)="method_exportUsers()"
+        [disabled]="isLoading"
+      >
+        <mdb-icon fas icon="file-excel"></mdb-icon>
+        <span class="d-none d-xl-inline"> Exportar usuarios</span>
+      </button>
+    </div>
+    <div class="float-xl-right form-group">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">
+            <mdb-icon fas icon="search"></mdb-icon>
+          </span>
+        </div>
+        <input type="search" class="form-control" id="search" name="search" 
+          [(ngModel)]="user.search" placeholder="Buscar usuarios" (change)="method_searchUsers()">
+        <div class="input-group-append">
+          <button
+            mdbBtn
+            type="button"
+            size="md" 
+            color="primary" 
+            class="m-0 waves-light"
+            mdbTooltip="Búsqueda de usuarios"
+            mdbWavesEffect
+            (click)="searchAdvancedUsers.toggle()"
+          >
+            <mdb-icon fas icon="search-plus"></mdb-icon>
+            <span class="d-none d-xl-inline"> Búsqueda de usuarios</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="" mdbCollapse #searchAdvancedUsers="bs-collapse">
+    <blockquote class="blockquote">  
+      <b class="bq-title">Búsqueda de usuarios</b>  
+      <form class="form-xl-inline" (ngSubmit)="method_searchAdvancedUsers()">
+        <div class="md-form md-outline">
+          <input mdbInput type="number" class="form-control" id="limit" name="limit" [(ngModel)]="user.limit">
+          <label for="limit">Registros</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="name" name="name" [(ngModel)]="user.name">
+          <label for="name">Nombre</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="lastname1" name="lastname1" [(ngModel)]="user.lastname1">
+          <label for="lastname1">Primer apellido</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="lastname2" name="lastname2" [(ngModel)]="user.lastname2">
+          <label for="lastname2">Segundo apellido</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="cellphone" name="cellphone" [(ngModel)]="user.cellphone">
+          <label for="cellphone">Celular</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="createdAtStart" name="createdAtStart" [(ngModel)]="user.createdAtStart">
+          <label for="createdAtStart">Creado</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="createdAtEnd" name="createdAtEnd" [(ngModel)]="user.createdAtEnd">
+          <label for="createdAtEnd"></label>
+        </div>
+        <button
+          mdbBtn
+          type="submit"
+          size="md" 
+          color="primary" 
+          class="mt-0 waves-light text-nowrap float-right"
+          mdbWavesEffect
+          [disabled]="isLoading"
+        >
+          <mdb-icon fas icon="search"></mdb-icon>
+          <span> Buscar</span>
+          <span class="spinner-border spinner-border-sm" role="status" *ngIf="isLoading">
+            <span class="sr-only">Cargando...</span>
+          </span>
+        </button>   
+      </form>  
+    </blockquote>
+  </div>
+  <!-- Table -->
+  <div class="table-responsive">
+    <table
+      mdbTable
+      striped="true"
+      hover="true"
+      small="true"
+      #tableEl="mdbTable"
+      id="tableSortExample"
+    >
+      <thead>
+        <tr>
+          <th
+            class="text-nowrap"
+            *ngFor="let head of heads; let i = index"
+            aria-controls="tableSortExample"
+            [mdbTableSort]="users"
+            [sortBy]="headsSort[i]"
+          >
+            <span>{{ head }} </span>
+            <mdb-icon fas icon="sort"></mdb-icon>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr mdbTableCol *ngFor="let element of users; let i = index">
+          <td
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            <div class="btn-group" mdbDropdown>
+              <button 
+                mdbBtn 
+                type="button" 
+                size="md" 
+                color="light" 
+                class="m-0 waves-light text-nowrap"
+                mdbWavesEffect
+                mdbTooltip="Opciones usuario"
+                mdbDropdownToggle>
+                <mdb-icon fas icon="ellipsis-v"></mdb-icon>
+                <span class="d-none d-xl-inline"> Opciones usuario</span>
+              </button>
+              <div class="dropdown-menu">                  
+                <button
+                  mdbBtn
+                  type="button"
+                  size="md" 
+                  color="primary" 
+                  class="m-0 waves-light text-nowrap dropdown-item"
+                  mdbWavesEffect
+                  (click)="method_showUserConsult(element.id)">
+                  <mdb-icon fas icon="eye"></mdb-icon>
+                  <span> Ver usuario</span>
+                </button>             
+                <button
+                  mdbBtn
+                  type="button"
+                  size="md" 
+                  color="warning" 
+                  class="m-0 waves-light text-nowrap dropdown-item"
+                  mdbWavesEffect
+                  (click)="method_showUserUpdate(element.id)">
+                  <mdb-icon fas icon="edit"></mdb-icon>
+                  <span> Modificar usuario</span>
+                </button>
+              </div>
+            </div>  
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >            
+            <app-user-avatar
+              [userAvatar]="element.avatar"
+              [userAvatarFile]="null"
+            ></app-user-avatar>
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.name }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.lastname1 }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.cellphone }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.created_at | date:'d/M/yy h:mm a' }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.updated_at | date:'d/M/yy h:mm a' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Table Pagination -->
+  <mdb-table-pagination
+    [tableEl]="tableEl"
+    [searchDataSource]="users"
+  ></mdb-table-pagination>
+  <!-- Actions Particular -->
+  <app-user-consult
+    [userId]="userId"
+    [showedUserInConsult]="showedUserInConsult"
+    (emitter_gotUserInConsult)="method_gotUserInConsult($event)"
+  ></app-user-consult>
+  <app-user-update
+    [userId]="userId"
+    [showedUserInUpdate]="showedUserInUpdate"
+    (emitter_gotUserInUpdate)="method_gotUserInUpdate($event)"
+    (emitter_updatedUser)="method_updatedUser($event)"
+    [gotUsersInUpdate]="gotUsersInUpdate"
+  ></app-user-update>
+</div>

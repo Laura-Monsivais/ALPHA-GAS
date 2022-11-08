@@ -1,0 +1,50 @@
+<div>
+  <!-- Actions General -->
+  <div class="input-group"> 
+    <div class="input-group-prepend">
+      <span class="input-group-text">
+        <mdb-icon fas icon="search"></mdb-icon>
+      </span>
+    </div>
+    <input type="search" class="form-control" id="search_session" name="search_session" 
+      [(ngModel)]="session.search" placeholder="Buscar clientes" (change)="method_searchAdvancedSessions()">    
+    <!--@todo Falta búsqueda avanzada-->
+  </div>  
+  <!-- List -->
+  <div class="list-group">
+    <div class="list-group-item" *ngFor="let element of sessions; let i = index">
+      <div class="d-flex w-100 justify-content-between">
+        <div>
+          <app-session-info [onlyIcon]="true" [session]="element"></app-session-info>
+        </div>
+        <button
+          mdbBtn
+          type="button"
+          size="md"
+          color="info"
+          outline="true" class="m-0 waves-dark"
+          mdbTooltip="Agregar cliente"
+          mdbWavesEffect
+          (click)="method_addClientSale(element)"
+          *ngIf="sale.client_id == 0">
+          <mdb-icon fas icon="plus-circle"></mdb-icon>
+          <span class="d-none d-xl-inline"> Agregar cliente</span>
+        </button>
+        <button
+          mdbBtn
+          type="button"
+          size="md"
+          color="danger"
+          outline="true"
+          class="m-0 waves-dark"
+          mdbTooltip="Quitar cliente"
+          mdbWavesEffect
+          (click)="method_removeClientSale()"
+          *ngIf="sale.client_id == element.id">
+          <mdb-icon fas icon="minus-circle"></mdb-icon
+          ><span class="d-none d-xl-inline"> Quitar cliente</span>
+        </button>
+      </div>  
+    </div>
+  </div>
+</div>

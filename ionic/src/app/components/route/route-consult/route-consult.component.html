@@ -1,0 +1,115 @@
+<div
+  mdbModal
+  #routeConsult="mdbModal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myRouteConsultLabel"
+  aria-hidden="true"
+  [config]="{ backdrop: false, ignoreBackdropClick: true }"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="routeConsult.hide()"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myRouteConsultLabel">
+          Ver ruta
+        </h4>
+      </div>
+      <div class="modal-body bg-white">        
+        <mat-tab-group>
+          <mat-tab label="General">
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Nombre:</b>
+                <p>
+                  {{ route.name }}
+                </p>
+              </div>
+              <div class="col-xl-6">
+                <b>Tipo de ruta:</b>
+                <p>
+                  {{ route.routeTypeName }}
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Capacidad máxima:</b>
+                <p>
+                  {{ route.maximum_capacity | number }}
+                </p>
+              </div>
+              <div class="col-xl-6">
+                <b>Capacidad mínima:</b>
+                <p>
+                  {{ route.minimum_capacity | number }}
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-4">
+                <b>Empresa:</b>
+                <p>
+                  {{ route.enterpriseName }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Negocio:</b>
+                <p>
+                  {{ route.businessName }}
+                </p>
+              </div>
+              <div class="col-xl-4">
+                <b>Sucursal:</b>
+                <p>
+                  {{ route.subsidiaryName }}
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Vendedor:</b>
+                <p>
+                  {{ route.sellerNameComplete }}
+                </p>
+              </div>
+              <div class="col-xl-6">
+                <b>Celular:</b>
+                <p>
+                  {{ route.cellphone }}
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-6">
+                <b>Creado:</b>
+                <p>
+                  {{ route.created_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>
+              <div class="col-xl-6">
+                <b>Modificado:</b>
+                <p>
+                  {{ route.updated_at | date:'d/M/yy h:mm a' }}
+                </p>
+              </div>  
+            </div>  
+          </mat-tab>
+          <mat-tab label="Lugares">
+            <app-route-place-table 
+              [routeId]="route.id"
+            ></app-route-place-table>
+          </mat-tab>
+        </mat-tab-group>   
+      </div>
+    </div>
+  </div>
+</div>

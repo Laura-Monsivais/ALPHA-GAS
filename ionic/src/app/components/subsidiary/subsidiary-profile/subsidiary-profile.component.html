@@ -1,0 +1,138 @@
+<form (ngSubmit)="method_updateSubsidiary()">
+  <mdb-card [ngStyle]="{'background-image':'url('+getSubsidiaryOverlayUrl+')', 
+    'background-repeat': 'no-repeat', 
+    'background-position': 'center center', 
+    'background-size': 'cover'}" 
+    class="card-image">
+    <div style="background-color: rgba(0, 0, 0, 0.5)" class="p-3">
+      <div class="row d-flex align-items-center">
+        <div class="col-xl-3">
+          <div class="overlay zoom">
+            <img style="height: 300px; width: 300px" [src]="getSubsidiaryLogoUrl" class="img-fluid img-thumbnail rounded-circle mx-auto d-block" />
+          </div>
+        </div>
+        <div class="col-xl-9">
+          <mdb-card style="background-color: rgba(255, 255, 255, 0.8)">
+            <mdb-card-body>
+              <div *ngIf="rol.key === 'Super' || rol.key === 'Director' || rol.key === 'Manager'">
+                <app-subsidiary-form
+                  [subsidiary]="subsidiary"
+                  [enterprises]="enterprises"
+                  [businesses]="businesses"
+                ></app-subsidiary-form>
+                <div class="alert alert-warning" role="alert">
+                  <mdb-icon fas icon="exclamation-triangle"></mdb-icon>
+                  <p class="d-inline"> Estas a punto de modificar a esta sucursal, ¿estas seguro?</p>
+                  <button
+                    mdbBtn
+                    type="submit"
+                    color="warning"
+                    class="waves-light" block="true"
+                    mdbWavesEffect
+                    [disabled]="isLoading"
+                  >
+                    <mdb-icon fas icon="save"></mdb-icon
+                    ><span> Si, estoy seguro </span>
+                    <span class="spinner-border spinner-border-sm" role="status" *ngIf="isLoading">
+                      <span class="sr-only">Cargando...</span>
+                    </span>
+                  </button>
+                </div>
+              </div>
+              <div *ngIf="rol.key === 'Call_Center' || rol.key === 'Seller' || rol.key === 'Client'">
+                <div>
+                  <b>Nombre:</b>
+                  <p>{{ subsidiary.name }}</p>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4">
+                    <b>Calle:</b>
+                    <p>
+                      {{ subsidiary.street }}
+                    </p>
+                  </div>
+                  <div class="col-xl-4">
+                    <b>Exterior:</b>
+                    <p>
+                      {{ subsidiary.exterior }}
+                    </p>
+                  </div>
+                  <div class="col-xl-4">
+                    <b>Interior:</b>
+                    <p>
+                      {{ subsidiary.interior }}
+                    </p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4">
+                    <b>Código postal:</b>
+                    <p>
+                      {{ subsidiary.postal_code }}
+                    </p>
+                  </div>
+                  <div class="col-xl-4">
+                    <b>Colonia:</b>
+                    <p>
+                      {{ subsidiary.neighborhood }}
+                    </p>
+                  </div>
+                  <div class="col-xl-4">      
+                    <b>Ciudad:</b>
+                    <p>
+                      {{ subsidiary.city }}
+                    </p> 
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-4">
+                    <b>Municipio:</b>
+                    <p>
+                      {{ subsidiary.municipality }}
+                    </p> 
+                  </div>
+                  <div class="col-xl-4">
+                    <b>Estado:</b>
+                    <p>
+                      {{ subsidiary.state }}
+                    </p> 
+                  </div>
+                  <div class="col-xl-4"> 
+                    <b>País:</b>   
+                    <p>
+                      {{ subsidiary.country }}
+                    </p>   
+                  </div>
+                </div>
+                <div>
+                  <b>Referencias:</b>
+                  <p>
+                    {{ subsidiary.is_central }}
+                  </p>   
+                </div>
+                <div>
+                  <b>Referencias:</b>
+                  <p>
+                    {{ subsidiary.references }}
+                  </p>   
+                </div>
+                <div class="row">
+                  <div class="col-xl-6">
+                    <b>Empresa:</b>
+                    <p>
+                      {{ enterprise.name }}
+                    </p>
+                  </div>
+                  <div class="col-xl-6">
+                    <b>Negocio:</b>
+                    <p>{{ business.name }}</p>
+                  </div>
+                </div>
+              </div>    
+            </mdb-card-body>
+          </mdb-card>     
+        </div>
+      </div>   
+    </div>
+  </mdb-card>
+</form>

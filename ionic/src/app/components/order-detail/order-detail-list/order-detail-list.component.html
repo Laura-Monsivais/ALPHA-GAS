@@ -1,0 +1,75 @@
+<div class="list-group" *ngIf="rol.key === 'Client'">
+  <div class="list-group-item list-group-item-secondary">
+    Promociones
+  </div>
+  <div class="list-group-item" *ngFor="let element of promotions; let i = index">    
+    <div class="d-flex w-100 justify-content-between">
+      <app-promotion-info 
+      [onlyIcon]="true" 
+      [promotion]="element">
+    </app-promotion-info>
+    </div>
+    <div class="row">
+      <div class="col-xl-10">
+        <span class="d-block d-lg-inline">Monto: </span>
+        <span class="text-nowrap">{{ element.amount | currency }} MXN</span>
+      </div>
+      <div class="col-xl-2">
+        <button mdbBtn 
+        type="button" 
+        size="md" 
+        color="danger" 
+        outline="true" class="m-0 waves-dark" block="true"
+        mdbTooltip="Quitar promoción" mdbWavesEffect 
+        (click)="method_removePromotionCart(i)">
+        <mdb-icon fas icon="minus-circle"></mdb-icon>
+        <span> Quitar promoción</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="list-group-item list-group-item-secondary">
+  Productos
+</div>
+<div class="list-group-item" *ngFor="let element of products; let i = index">
+  <div class="d-flex w-100 justify-content-between">
+    <app-product-info 
+    [onlyIcon]="true" 
+    [product]="element">
+  </app-product-info>
+  </div>
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="form-group mb-0 row">
+        <label [for]="'quantity' + element.id" class="col-sm-3 col-form-label">Cantidad:</label>
+        <div class="input-group col-sm-9">
+          <input mdbInput type="number" class="form-control" [id]="'quantity' + element.id"
+            [name]="'quantity' + element.id" [(ngModel)]="element.quantity"
+            (change)="method_changeProductCart(i, element)" />
+          <div class="input-group-apend">
+            <span class="input-group-text">{{element.unit}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-10">
+      <span class="d-block d-lg-inline">Monto: </span>
+      <span class="text-nowrap">{{ element.amount | currency }} MXN</span>
+    </div>
+    <div class="col-xl-2">
+      <button mdbBtn 
+      type="button" 
+      size="md" 
+      color="danger" 
+      outline="true" class="mb-0 waves-dark" block="true"
+      mdbTooltip="Quitar producto" mdbWavesEffect 
+      (click)="method_removeProductCart(i)">
+      <mdb-icon fas icon="minus-circle"></mdb-icon>
+      <span> Quitar producto</span>
+      </button>
+    </div>
+  </div>
+</div>

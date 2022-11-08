@@ -1,0 +1,77 @@
+<button
+  mdbBtn
+  type="button"
+  size="md" 
+  color="link" 
+  class="waves-light m-0 p-0"
+  mdbTooltip="Información del lugar"
+  mdbWavesEffect
+  (click)="routePlaceDownload.show()"  
+  *ngIf="rol.key === 'Super' || rol.key === 'Director'"
+>
+  <h3 class="m-0" *ngIf="!onlyIcon">
+    <mdb-icon fas icon="info-circle" size="2x"></mdb-icon> {{routePlace.municipality}}
+  </h3>
+  <h6 class="m-0" *ngIf="onlyIcon">
+    <mdb-icon fas icon="info-circle"></mdb-icon> {{routePlace.municipality}}
+  </h6>
+</button>
+<div
+  mdbModal
+  #routePlaceDownload="mdbModal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myPromotionDownloadLabel"
+  aria-hidden="true"
+  [config]="{ backdrop: false, ignoreBackdropClick: true }"  
+  *ngIf="rol.key === 'Super' || rol.key === 'Director'"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="routePlaceDownload.hide()"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myPromotionDownloadLabel">
+          Información del lugar
+        </h4>
+      </div>
+      <div class="modal-body bg-white">
+        <div class="row">
+          <div class="col-xl-4">
+            <b>País:</b>
+            <p>{{ routePlace.country }}</p>
+          </div>
+          <div class="col-xl-4">
+            <b>Estado:</b>
+            <p>{{ routePlace.state }}</p>
+          </div>
+          <div class="col-xl-4">
+            <b>Municipio:</b>
+            <p>{{ routePlace.municipality }}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-4">
+            <b>Ciudad:</b>
+            <p>{{ routePlace.city }}</p>
+          </div>
+          <div class="col-xl-4">
+            <b>Colonia:</b>
+            <p>{{ routePlace.neighborhood }}</p>
+          </div>
+          <div class="col-xl-4">
+            <b>Código postal:</b>
+            <p>{{ routePlace.postal_code }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

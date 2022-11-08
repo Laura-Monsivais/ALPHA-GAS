@@ -1,0 +1,23 @@
+<div class="list-group" *ngIf="rol.key === 'Super' || rol.key === 'Director'">
+  <div class="list-group-item" *ngFor="let element of routePlaces; let i = index">    
+    <div class="d-flex w-100 justify-content-between">
+      <div>
+        <app-route-place-info [onlyIcon]="true" [routePlace]="element"></app-route-place-info>
+      </div> 
+      <button
+        mdbBtn
+        type="button"
+        size="md"
+        color="danger"
+        outline="true"
+        class="m-0 waves-dark"
+        mdbTooltip="Quitar lugar"
+        mdbWavesEffect
+        (click)="method_removeRoutePlace(i)"
+      >
+        <mdb-icon fas icon="minus-circle"></mdb-icon
+        ><span class="d-none d-xl-inline"> Quitar lugar</span>
+      </button>
+    </div>
+  </div>
+</div>

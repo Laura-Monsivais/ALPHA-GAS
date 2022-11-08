@@ -1,0 +1,14 @@
+<div>
+  <app-route-place-do 
+    [routePlace]="routePlace"
+    [routePlaces]="routePlaces"
+    (emitter_addedRoutePlace)="method_addedRoutePlace($event)" 
+  ></app-route-place-do>  
+  <div class="d-flex justify-content-center">
+    <h1>Lugares de ruta</h1>
+  </div>
+  <app-route-place-list 
+    [routePlaces]="routePlaces"
+    (emitter_removededRoutePlace)="method_removededRoutePlace($event)"
+  ></app-route-place-list>
+</div>

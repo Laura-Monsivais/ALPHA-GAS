@@ -1,0 +1,336 @@
+<div>
+  <!-- Actions General -->
+  <div class="clearfix">
+    <div class="float-xl-left">
+      <app-subsidiary-insert
+        (emitter_insertedSubsidiary)="method_insertedSubsidiary($event)" 
+        [gotSubsidiariesInInsert]="gotSubsidiariesInInsert"
+      ></app-subsidiary-insert>
+      <button
+        mdbBtn
+        type="button"
+        size="md"
+        color="success"
+        class="m-0 waves-light d-none d-xl-inline"
+        mdbTooltip="Exportar sucursales"       
+        mdbWavesEffect
+        (click)="method_exportSubsidiaries()"
+        [disabled]="isLoading"
+      >
+        <mdb-icon fas icon="file-excel"></mdb-icon>
+        <span class="d-none d-xl-inline"> Exportar sucursales</span>
+      </button>
+    </div>
+    <div class="float-xl-right form-group">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">
+            <mdb-icon fas icon="search"></mdb-icon>
+          </span>
+        </div>
+        <input type="search" class="form-control" id="search" name="search" 
+          [(ngModel)]="subsidiary.search" placeholder="Buscar sucursales" (change)="method_searchSubsidiaries()">
+        <div class="input-group-append">
+          <button
+            mdbBtn
+            type="button"
+            size="md"
+            color="primary"
+            class="m-0 waves-light"
+            mdbTooltip="Búsqueda de sucursales"
+            mdbWavesEffect
+            (click)="searchAdvancedSubsidiaries.toggle()"
+          >
+            <mdb-icon fas icon="search-plus"></mdb-icon>
+            <span class="d-none d-xl-inline"> Búsqueda de sucursales</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="" mdbCollapse #searchAdvancedSubsidiaries="bs-collapse">
+    <blockquote class="blockquote">
+      <b class="bq-title">Búsqueda de sucursales</b>    
+      <form class="form-xl-inline" (ngSubmit)="method_searchAdvancedSubsidiaries()">
+        <div class="md-form md-outline">
+          <input mdbInput type="number" class="form-control" id="limit" name="limit" [(ngModel)]="subsidiary.limit">
+          <label for="limit">Registros</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="name" name="name" [(ngModel)]="subsidiary.name">
+          <label for="name">Nombre</label>
+        </div>
+        <div class="md-form">
+          <select
+            class="browser-default custom-select"
+            [id]="'isCentral'"
+            [name]="'isCentral'"
+            [(ngModel)]="subsidiary.is_central">
+            <option [ngValue]="null" [selected]="subsidiary.is_central === null">
+              Selecciona ¿Es central?
+            </option>
+            <option [ngValue]="false">
+              No es central
+            </option>
+            <option [ngValue]="true">
+              Si es central
+            </option>
+          </select>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="street" name="street" [(ngModel)]="subsidiary.street">
+          <label for="street">Calle</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="exterior" name="exterior" [(ngModel)]="subsidiary.exterior">
+          <label for="exterior">Exterior</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="interior" name="interior" [(ngModel)]="subsidiary.interior">
+          <label for="interior">Interior</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="postal_code" name="postal_code" [(ngModel)]="subsidiary.postal_code">
+          <label for="postal_code">Código postal</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="neighborhood" name="neighborhood" [(ngModel)]="subsidiary.neighborhood">
+          <label for="neighborhood">Colonia</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="city" name="city" [(ngModel)]="subsidiary.city">
+          <label for="city">Ciudad</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="municipality" name="municipality" [(ngModel)]="subsidiary.municipality">
+          <label for="municipality">Municipio</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="state" name="state" [(ngModel)]="subsidiary.state">
+          <label for="state">Estado</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="country" name="country" [(ngModel)]="subsidiary.country">
+          <label for="country">País</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="text" class="form-control" id="references" name="references" [(ngModel)]="subsidiary.references">
+          <label for="references">Referencias</label>
+        </div>
+        <div class="md-form">
+          <select
+            class="browser-default custom-select"
+            [id]="'enterpriseId'"
+            [name]="'enterpriseId'"
+            [(ngModel)]="subsidiary.enterpriseId"
+            (change)="method_getBusinesses()">
+            <option [ngValue]="null" [selected]="subsidiary.enterpriseId === null">
+              Todas las empresas
+            </option>
+            <option *ngFor="let element of enterprises" [ngValue]="element.id" [selected]="subsidiary.enterpriseId == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>
+        <div class="md-form">
+          <select
+            class="browser-default custom-select"
+            [id]="'businessId'"
+            [name]="'businessId'"
+            [(ngModel)]="subsidiary.business_id">
+            <option [ngValue]="null" [selected]="subsidiary.business_id === null">
+              Todos los negocios
+            </option>
+            <option *ngFor="let element of businesses" [ngValue]="element.id" [selected]="subsidiary.business_id == element.id">
+              {{ element.name }}
+            </option>
+          </select>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="createdAtStart" name="createdAtStart" [(ngModel)]="subsidiary.createdAtStart">
+          <label for="createdAtStart">Creado</label>
+        </div>
+        <div class="md-form md-outline">
+          <input mdbInput type="date" class="form-control" id="createdAtEnd" name="createdAtEnd" [(ngModel)]="subsidiary.createdAtEnd">
+          <label for="createdAtEnd"></label>
+        </div>
+        <button
+          mdbBtn
+          type="submit"
+          size="md" 
+          color="primary" 
+          class="mt-0 waves-light text-nowrap float-right"
+          mdbWavesEffect
+          [disabled]="isLoading"
+        >
+          <mdb-icon fas icon="search"></mdb-icon>
+          <span> Buscar</span>
+          <span class="spinner-border spinner-border-sm" role="status" *ngIf="isLoading">
+            <span class="sr-only">Cargando...</span>
+          </span>
+        </button>   
+      </form>  
+    </blockquote>
+  </div>
+  <!-- Table -->
+  <div class="table-responsive">
+    <table
+      mdbTable
+      striped="true"
+      hover="true"
+      small="true"
+      #tableEl="mdbTable"
+      id="tableSortExample"
+    >
+      <thead>
+        <tr>
+          <th
+            class="text-nowrap"
+            *ngFor="let head of heads; let i = index"
+            aria-controls="tableSortExample"
+            [mdbTableSort]="subsidiaries"
+            [sortBy]="headsSort[i]"
+          >
+            <span>{{ head }} </span>
+            <mdb-icon fas icon="sort"></mdb-icon>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr mdbTableCol *ngFor="let element of subsidiaries; let i = index">
+          <td
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            <div class="btn-group" mdbDropdown>
+              <button 
+                mdbBtn 
+                type="button" 
+                size="md" 
+                color="light" 
+                class="m-0 waves-light text-nowrap"
+                mdbWavesEffect
+                mdbTooltip="Opciones sucursal"
+                mdbDropdownToggle>
+                <mdb-icon fas icon="ellipsis-v"></mdb-icon>
+                <span class="d-none d-xl-inline"> Opciones sucursal</span>
+              </button>
+              <div class="dropdown-menu">                  
+                <button
+                  mdbBtn
+                  type="button"
+                  size="md"
+                  color="primary"
+                  class="m-0 waves-light text-nowrap dropdown-item"
+                  mdbWavesEffect
+                  (click)="method_showSubsidiaryConsult(element.id)"
+                  *ngIf="rol.key === 'Super' || rol.key === 'Director'">
+                  <mdb-icon fas icon="eye"></mdb-icon>
+                  <span> Ver sucursal</span>
+                </button>
+                <button
+                  mdbBtn
+                  type="button"
+                  size="md" 
+                  color="warning" 
+                  class="m-0 waves-light text-nowrap dropdown-item"
+                  mdbWavesEffect
+                  (click)="method_showSubsidiaryUpdate(element.id)"
+                  *ngIf="rol.key === 'Super' || rol.key === 'Director'">
+                  <mdb-icon fas icon="edit"></mdb-icon>
+                  <span> Modificar sucursal</span>
+                </button>
+              </div>
+            </div>
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            <app-subsidiary-logo
+              [subsidiaryLogo]="element.logo"
+              [subsidiaryLogoFile]="null"
+            ></app-subsidiary-logo>
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.name }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.isCentral }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.enterpriseName }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.businessName }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.created_at | date:'d/M/yy h:mm a' }}
+          </td>
+          <td
+            class="text-nowrap"
+            *ngIf="
+              i + 1 >= mdbTablePagination.firstItemIndex &&
+              i < mdbTablePagination.lastItemIndex
+            "
+          >
+            {{ element.updated_at | date:'d/M/yy h:mm a' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Table Pagination -->
+  <mdb-table-pagination
+    [tableEl]="tableEl"
+    [searchDataSource]="subsidiaries"
+  ></mdb-table-pagination>
+  <!-- Actions Particular -->
+  <app-subsidiary-consult
+    [subsidiaryId]="subsidiaryId"
+    [showedSubsidiaryInConsult]="showedSubsidiaryInConsult"
+    (emitter_gotSubsidiaryInConsult)="method_gotSubsidiaryInConsult($event)"
+  ></app-subsidiary-consult>
+  <app-subsidiary-update
+    [subsidiaryId]="subsidiaryId"
+    [showedSubsidiaryInUpdate]="showedSubsidiaryInUpdate"
+    (emitter_gotSubsidiaryInUpdate)="method_gotSubsidiaryInUpdate($event)"
+    (emitter_updatedSubsidiary)="method_updatedSubsidiary($event)"
+    [gotSubsidiariesInUpdate]="gotSubsidiariesInUpdate"
+  ></app-subsidiary-update>
+</div>

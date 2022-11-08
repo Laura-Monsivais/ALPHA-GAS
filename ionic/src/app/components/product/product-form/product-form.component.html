@@ -1,0 +1,222 @@
+<div *ngIf="rol.key === 'Super' || rol.key === 'Director'">
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="md-form form-group">
+        <input mdbInput mdbValidate type="text" [id]="'name'+product.id" class="form-control" [name]="'name'+product.id" [(ngModel)]="product.name"
+          #nameValidation="ngModel" required />
+        <label class="font-weight-bold" [for]="'name'+product.id">Nombre:</label>
+        <mdb-error *ngIf="
+            nameValidation.invalid &&
+            (nameValidation.dirty || nameValidation.touched)
+          ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+            nameValidation.valid &&
+            (nameValidation.dirty || nameValidation.touched)
+          "></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label class="font-weight-bold" for="image">Imagen:</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <app-product-image
+              [productImage]="product.image"
+              [productImageFile]="product.imageFile"
+            ></app-product-image>
+          </div>
+          <input type="file" [id]="'image'+product.id" class="form-control" [name]="'image'+product.id" [(ngModel)]="product.imageFile" (change)="method_getProductImageFile($event)"/>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="md-form form-group">
+    <textarea mdbInput type="text" [id]="'description'+product.id" class="md-textarea form-control is-valid" [name]="'description'+product.id" [(ngModel)]="product.description"></textarea>
+    <label class="font-weight-bold" for="description">Descripción:</label>
+  </div>
+  <div class="row">
+    <div class="col-xl-6"> 
+      <div class="md-form form-group">
+        <input mdbInput mdbValidate type="number" [id]="'content'+product.id" class="form-control is valid" [name]="'content'+product.id" [(ngModel)]="product.content"/>
+        <label class="font-weight-bold" [for]="'content'+product.id">Contenido:</label>
+      </div>
+    </div>
+    <div class="col-xl-6">
+      <div class="md-form form-group">
+        <input 
+          mdbInput 
+          mdbValidate 
+          type="search" 
+          [id]="'unit'+product.id" 
+          class="form-control" 
+          [name]="'unit'+product.id" 
+          [(ngModel)]="product.unit"
+          #unitValidation="ngModel"          
+          list="units"
+          required />
+        <datalist id="units">
+          <option *ngFor="let element of units" [ngValue]="element">
+            {{ element }}
+          </option>
+        </datalist>
+        <label class="font-weight-bold" [for]="'unit'+product.id">Unidad:</label>
+        <mdb-error *ngIf="
+            unitValidation.invalid &&
+            (unitValidation.dirty || unitValidation.touched)
+          ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+            unitValidation.valid &&
+            (unitValidation.dirty || unitValidation.touched)
+          "></mdb-success>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-6">      
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'cost' + product.id">Costo:</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">$</span>
+          </div>
+          <input
+            mdbInput
+            mdbValidate
+            type="number"
+            [id]="'cost' + product.id"
+            class="form-control"
+            [name]="'cost' + product.id"
+            [(ngModel)]="product.cost"
+            #costValidation="ngModel"
+            required
+          />
+          <div class="input-group-append">
+            <span class="input-group-text">MXN</span>
+          </div>
+          <mdb-error
+            *ngIf="
+              costValidation.invalid &&
+              (costValidation.dirty || costValidation.touched)
+            "
+            >Campo requerido</mdb-error
+          >
+          <mdb-success
+            *ngIf="
+              costValidation.valid &&
+              (costValidation.dirty || costValidation.touched)
+            "
+          ></mdb-success>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'price' + product.id">Precio:</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">$</span>
+          </div>
+          <input
+            mdbInput
+            mdbValidate
+            type="number"
+            [id]="'price' + product.id"
+            class="form-control"
+            [name]="'price' + product.id"
+            [(ngModel)]="product.price"
+            #priceValidation="ngModel"
+            required
+          />
+          <div class="input-group-append">
+            <span class="input-group-text">MXN</span>
+          </div>
+          <mdb-error
+            *ngIf="
+              priceValidation.invalid &&
+              (priceValidation.dirty || priceValidation.touched)
+            "
+            >Campo requerido</mdb-error
+          >
+          <mdb-success
+            *ngIf="
+              priceValidation.valid &&
+              (priceValidation.dirty || priceValidation.touched)
+            "
+          ></mdb-success>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label [for]="'enterpriseId'+product.id">Empresa:</label>
+        <select
+          [id]="'enterpriseId'+product.id"
+          class="browser-default custom-select"
+          [name]="'enterpriseId'+product.id"
+          [(ngModel)]="product.enterpriseId"
+          #enterpriseIdValidation="ngModel"
+          required
+          [disabled]="rol.key === 'Director'"
+          (change)="method_getBusinesses()"
+        >
+          <option [ngValue]="0" [selected]="product.enterpriseId  == 0">
+            Selecciona una empresa
+          </option>
+          <option *ngFor="let element of enterprises" [ngValue]="element.id" [selected]="product.enterpriseId == element.id">
+            {{ element.name }}
+          </option>
+        </select>
+        <mdb-error *ngIf="
+            enterpriseIdValidation.invalid &&
+            (enterpriseIdValidation.dirty || enterpriseIdValidation.touched)
+          ">Campo requerido</mdb-error>
+        <mdb-success *ngIf="
+            enterpriseIdValidation.valid &&
+            (enterpriseIdValidation.dirty || enterpriseIdValidation.touched)
+          "></mdb-success>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'businessId'+product.id">Negocio:</label>
+        <select
+          [id]="'businessId'+product.id"
+          class="browser-default custom-select"
+          [name]="'businessId'+product.id"
+          [(ngModel)]="product.business_id"
+          (change)="method_getCategories()"
+        >
+          <option [ngValue]="0" [selected]="product.business_id == 0">
+            Selecciona un negocio
+          </option>
+          <option 
+            *ngFor="let element of businesses" 
+            [ngValue]="element.id" 
+            [selected]="product.business_id == element.id">
+            {{ element.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="col-xl-4">
+      <div class="form-group">
+        <label class="font-weight-bold" [for]="'categoryId'+product.id">Categoría:</label>
+        <select
+          [id]="'categoryId'+product.id"
+          class="browser-default custom-select"
+          [name]="'categoryId'+product.id"
+          [(ngModel)]="product.category_id"
+        >
+          <option [ngValue]="0" [selected]="product.category_id  == 0">
+            Selecciona una categoría
+          </option>
+          <option *ngFor="let element of categories" [ngValue]="element.id" [selected]="product.category_id == element.id">
+            {{ element.name }}
+          </option>
+        </select>
+      </div>
+    </div>    
+  </div>
+</div>
